@@ -86,6 +86,7 @@
   </header>
 
   <main id="topo" class="container">
+    <!-- HERO -->
     <section class="hero">
       <div>
         <span class="tag">Atendemos RS e Brasil</span>
@@ -105,15 +106,139 @@
       <div class="card">
         <h3 style="margin-top:0">Por que escolher a VOA?</h3>
         <ul style="margin:0 0 8px 18px;line-height:1.7;color:var(--muted)">
-          <li>Equipe certificada (ABRACO N2, NR33, NR35, HUET/T-HUET, PBSC)</li>
-          <li>Inspeção visual e PM (partículas magnéticas) com laudos e fotos</li>
+          <li>Equipe certificada (ABRACO N2, NACE/AMPP Level 2, HUET/T-HUET, PBSC)</li>
+          <li>Químico com especialidade em engenharia de materiais</li>
           <li>Experiência em FPSOs, estaleiros e plantas onshore</li>
           <li>Criação e revisão de documentação técnica</li>
         </ul>
         <a class="btn" href="https://wa.me/5551992701366?text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento" target="_blank" rel="noopener">Falar no WhatsApp</a>
       </div>
     </section>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos" class="features">
+      <h2>Serviços</h2>
+      <div class="grid cols-3">
+        <article class="card">
+          <h3>Inspeção de Pintura</h3>
+          <p>Acompanhamento de projetos, medição de espessura, aderência, perfil de rugosidade e integridade. Relatórios fotográficos e recomendações técnicas.</p>
+        </article>
+        <article class="card">
+          <h3>Surveys & Avaliações</h3>
+          <p>Levantamentos de condição de superfícies e revestimentos em <strong>FPSOs</strong> e plantas onshore para planejamento de manutenção.</p>
+        </article>
+        <article class="card">
+          <h3>Documentação Técnica</h3>
+          <p>Criação e revisão de <strong>ITPs</strong>, procedimentos, relatórios e dossiês de qualidade alinhados às normas <strong>ABNT/AMPP</strong>.</p>
+        </article>
+        <article class="card">
+          <h3>Gestão de Manutenção & QA/QC</h3>
+          <p>Planejamento, supervisão de jateamento/pintura (incl. robotizado), controle de qualidade e interface com contratadas.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="sobre" class="about">
+      <div>
+        <h2>Sobre a VOA</h2>
+        <p>Sou <strong>Vagner Oliveira Almeida</strong> (VOA), inspector de pintura e especialista em documentação técnica, com atuação em óleo & gás, energia e construção. Disponível para viagens, com CNH, e experiência em liderança de equipes e interface com fornecedores.</p>
+        <ul style="color:var(--muted);line-height:1.8">
+          <li>Base em Marau/RS • Atendimento nacional</li>
+          <li>Certificações: <strong>NACE/AMPP Coating Inspector Level 2</strong>,<strong>ABRACO SNQC CP N2 </strong> , HUET/T-HUET, Platform Basic Safety</li>
+          <li>Competências: VT (visual de solda), PM (partículas magnéticas), elaboração/revisão de Procedimentos e especificações e relatórios</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Certificações & Normas</h3>
+        <div class="grid" style="grid-template-columns:repeat(2,1fr);gap:10px">
+          <span class="tag">ABRACO N2</span>
+          <span class="tag">NACE/AMPP N2</span>
+          <span class="tag">HUET/T-HUET</span>
+          <span class="tag">PBSC</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTFÓLIO -->
+    <section id="portfolio" class="portfolio">
+      <h2>Projetos em destaque</h2>
+      <div class="grid cols-3">
+        <div class="item">
+          <strong>Surveys de tanques de carga — SBM (Brasil & Angola)</strong>
+          <p>Execução de <em>surveys</em> e relatórios de condição, com recomendações de manutenção e priorização de intervenções.</p>
+        </div>
+        <div class="item">
+          <strong>Manutenção de tanques — Equinor (FPSO Peregrino)</strong>
+          <p>Acompanhamento de manutenção com <em>jateamento robotizado</em> (Beerenberg), liderança de equipes e controle de qualidade.</p>
+        </div>
+        <div class="item">
+          <strong>Documentação & ITPs</strong>
+          <p>Criação e revisão de procedimentos, ITPs e dossiês de qualidade alinhados aos requisitos do cliente e normas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="contact">
+      <h2>Fale com a VOA</h2>
+      <form id="form-contato" onsubmit="enviarFormulario(event)">
+        <div>
+          <label for="nome">Seu nome</label>
+          <input id="nome" name="nome" required placeholder="Seu nome completo" />
+        </div>
+        <div>
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" required placeholder="voce@exemplo.com" />
+        </div>
+        <div>
+          <label for="telefone">Telefone/WhatsApp</label>
+          <input id="telefone" name="telefone" placeholder="(XX) XXXXX-XXXX" />
+        </div>
+        <div>
+          <label for="mensagem">Mensagem</label>
+          <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn" type="submit">Enviar mensagem</button>
+          <a class="btn secondary" href="https://wa.me/5551992701366?text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+        <p id="status" aria-live="polite" style="margin:8px 0 0;color:var(--muted)"></p>
+      </form>
+    </section>
   </main>
 
+  <!-- RODAPÉ -->
+  <footer>
+    <div class="container">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+        <small>© <span id="ano"></span> VOA - Vagner Oliveira Almeida LTDA. Todos os direitos reservados.</small>
+        <small><a href="#topo">Voltar ao topo ↑</a></small>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BOTÃO WHATSAPP FLUTUANTE -->
+  <div class="whats">
+    <a href="https://wa.me/5551992701366?text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento" target="_blank" rel="noopener">
+      WhatsApp
+    </a>
+  </div>
+
+  <script>
+    // Atualiza ano no rodapé
+    document.getElementById('ano').textContent = new Date().getFullYear();
+
+    // Formulário abre o e-mail do usuário (mailto)
+    function enviarFormulario(e){
+      e.preventDefault();
+      const dados = Object.fromEntries(new FormData(e.target));
+      const assunto = encodeURIComponent('Contato pelo site');
+      const corpo = encodeURIComponent(`Nome: ${dados.nome}\nEmail: ${dados.email}\nTelefone: ${dados.telefone || '-'}\nMensagem: ${dados.mensagem}`);
+      window.location.href = `mailto:vagner.almeida@yahoo.com?subject=${assunto}&body=${corpo}`;
+      document.getElementById('status').textContent = 'Abrimos seu aplicativo de e-mail para enviar a mensagem. Se preferir, use o botão de WhatsApp.';
+      e.target.reset();
+    }
+  </script>
 </body>
 </html>
