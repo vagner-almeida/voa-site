@@ -1,244 +1,708 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
+  <title>VOA – Inspeção de Pintura e Consultoria em Revestimentos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VOA | Inspeção de Pintura, Surveys e Documentação Técnica</title>
-  <meta name="description" content="VOA — Inspeção de pintura, surveys, criação e revisão de documentação técnica para óleo & gás, energia e indústria." />
-  <meta name="keywords" content="inspeção de pintura, surveys, documentação técnica, relatórios, Marau, Rio Grande do Sul, FPSO, onshore, offshore" />
-  <meta name="author" content="Vagner Oliveira Almeida LTDA (VOA)" />
-  <link rel="icon" href="/assets/favicon.ico" />
-  <style>
-    :root{
-      --bg:#0f172a;
-      --card:#111827;
-      --soft:#1f2937;
-      --text:#e5e7eb;
-      --muted:#9ca3af;
-      --brand:#0a4fa3; /* azul Metasa */
-      --brand-2:#2f6fcb; /* azul mais claro */
-      --accent:#f28e00; /* laranja Jotun */
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;scroll-behavior:smooth}
-    a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
-    .container{width:min(1100px,92vw);margin:0 auto}
-    .btn{display:inline-block;padding:14px 20px;border-radius:999px;background:linear-gradient(135deg,var(--accent),#ffb347);color:#fff;font-weight:700;box-shadow:var(--shadow);transition:.2s transform}
-    .btn:hover{transform:translateY(-2px)}
-    .btn.secondary{background:transparent;border:1px solid #334155;color:var(--text)}
-    header{position:sticky;top:0;backdrop-filter:saturate(180%) blur(12px);background:rgba(8,13,23,.6);z-index:50;border-bottom:1px solid #111827}
-    nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:800}
-    .logo-dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--accent))}
-    .nav-links{display:flex;gap:18px}
-    .nav-links a{padding:8px 12px;border-radius:999px}
-    .nav-links a:hover{background:#111827}
-    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center;padding:64px 0}
-    .hero h1{font-size:clamp(30px,4vw,48px);line-height:1.1;margin:0 0 14px}
-    .hero p{color:var(--muted);font-size:18px;margin:0 0 22px}
-    .hero .card{background:linear-gradient(180deg,#0b1222,#0a0f1a);border:1px solid #1f2937;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
-    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
-    .kpi{background:#0b1221;border:1px solid #1f2937;border-radius:14px;padding:14px;text-align:center}
-    section{padding:72px 0;border-top:1px solid #111827}
-    h2{font-size:clamp(24px,3vw,34px);margin:0 0 24px}
-    .grid{display:grid;gap:18px}
-    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
-    .card{background:var(--card);border:1px solid #1f2937;border-radius:var(--radius);padding:20px}
-    .card h3{margin:0 0 8px}
-    .features .card p{color:var(--muted)}
-    .about{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-    .portfolio .item{background:#0b1221;border:1px dashed #334155;border-radius:14px;padding:14px}
-    .cta{display:flex;gap:12px;flex-wrap:wrap}
-    .contact form{display:grid;gap:12px}
-    input,textarea{background:#0b1221;color:var(--text);border:1px solid #334155;border-radius:12px;padding:12px}
-    label{font-size:14px;color:var(--muted)}
-    footer{padding:40px 0;border-top:1px solid #111827;color:#94a3b8}
-    .whats{position:fixed;bottom:20px;right:20px}
-    .whats a{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:999px;font-weight:800;box-shadow:var(--shadow)}
-    .tag{display:inline-block;font-size:12px;padding:6px 10px;border:1px solid #334155;border-radius:999px;color:#9ca3af}
-    @media(max-width:900px){
-      .hero{grid-template-columns:1fr}
-      .about{grid-template-columns:1fr}
-      .grid.cols-3{grid-template-columns:1fr}
-    }
-  </style>
+  <meta name="description" content="VOA – Consultoria independente em inspeção de pintura, TLI, surveys e documentação técnica para FPSOs, navios, tanques e estruturas industriais." />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header>
-    <div class="container">
-      <nav>
-        <a class="logo" href="#topo" aria-label="Voltar ao topo">
-          <span class="logo-dot"></span>
-          <span>VOA</span>
-        </a>
-        <div class="nav-links">
-          <a href="#servicos">Serviços</a>
-          <a href="#sobre">Sobre</a>
-          <a href="#portfolio">Portfólio</a>
-          <a href="#contato">Contato</a>
-          <a href="ponto-de-orvalho.html">Ponto de Orvalho</a>
-        </div>
-      </nav>
+
+<header>
+  <div class="nav-container">
+    <div class="logo">
+      <img src="assets/logo-voa.png" alt="Logo VOA" style="height:65px; width:auto;">
     </div>
-  </header>
+    <nav>
+      <ul>
+        <li><a href="#home" data-i18n="nav.home">Início</a></li>
+        <li><a href="#sobre" data-i18n="nav.about">Sobre</a></li>
+        <li><a href="#servicos" data-i18n="nav.services">Serviços</a></li>
+        <li><a href="#setores" data-i18n="nav.sectors">Setores</a></li>
+        <li><a href="#clientes" data-i18n="nav.clients">Clientes</a></li>
+        <li><a href="#conteudo" data-i18n="nav.content">Conteúdo</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-switch">
+        <button type="button" class="lang-active" data-lang-btn="pt">PT</button>
+        <span>|</span>
+        <button type="button" data-lang-btn="en">EN</button>
+      </div>
+      <button class="nav-cta" onclick="document.getElementById('contato').scrollIntoView({behavior:'smooth'});">
+        <span data-i18n="nav.cta">Fale com a VOA</span>
+      </button>
+    </div>
+  </div>
+</header>
 
-  <main id="topo" class="container">
-    <!-- HERO -->
-    <section class="hero">
+<main id="home">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
       <div>
-        <span class="tag">Atendemos RS e Brasil</span>
-        <h1>Inspeção de pintura, <span style="color:var(--brand)">surveys</span> e documentação técnica com foco em qualidade, segurança e prazo.</h1>
-        <p>Mais de 20 anos de experiência em inspeção e pintura industrial, surveys em FPSOs e plantas onshore, criação e revisão de documentação técnica.</p>
-        <div class="cta">
-          <a class="btn" href="#contato">Solicitar orçamento</a>
-          <a class="btn secondary" href="#portfolio">Ver projetos</a>
-          <a class="btn secondary" href="ponto-de-orvalho.html">Calcular Ponto de Orvalho</a>
+        <div class="eyebrow" data-i18n="hero.eyebrow">
+          Consultoria independente em revestimentos
         </div>
-        <div class="kpis">
-          <div class="kpi"><strong>+20</strong><br><small>Anos de experiência</small></div>
-          <div class="kpi"><strong>FPSO & Onshore</strong><br><small>Óleo & Gás e Indústria</small></div>
-          <div class="kpi"><strong>24h</strong><br><small>Resposta média</small></div>
+        <h1 data-i18n="hero.title">
+          Inspeção de pintura, TLI e suporte técnico para ativos críticos.
+        </h1>
+        <p data-i18n="hero.text">
+          A VOA apoia armadores, operadores de FPSO, estaleiros e indústrias na gestão de revestimentos
+          e na integridade de tanques, conveses e estruturas. Do planejamento ao relatório final, com foco
+          em rastreabilidade, segurança e performance de longo prazo.
+        </p>
+
+        <div class="hero-cta-row">
+          <button class="btn-primary" onclick="document.getElementById('contato').scrollIntoView({behavior:'smooth'});">
+            <span>●</span> <span data-i18n="hero.btnPrimary">Agendar conversa</span>
+          </button>
+          <button class="btn-secondary" onclick="document.getElementById('servicos').scrollIntoView({behavior:'smooth'});">
+            <span data-i18n="hero.btnSecondary">Ver serviços de inspeção →</span>
+          </button>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="hero-metric">
+            <strong data-i18n="hero.metric1Strong">10+ anos</strong>
+            <span data-i18n="hero.metric1Text">experiência em inspeção de pintura offshore e naval</span>
+          </div>
+          <div class="hero-metric">
+            <strong data-i18n="hero.metric2Strong">FPSO / Navios</strong>
+            <span data-i18n="hero.metric2Text">foco em TLI, surveys e documentação para tanques</span>
+          </div>
+          <div class="hero-metric">
+            <strong data-i18n="hero.metric3Strong">Brasil & Global</strong>
+            <span data-i18n="hero.metric3Text">suporte em projetos locais e internacionais</span>
+          </div>
         </div>
       </div>
-      <div class="card">
-        <h3 style="margin-top:0">Por que escolher a VOA?</h3>
-        <ul style="margin:0 0 8px 18px;line-height:1.7;color:var(--muted)">
-          <li>Equipe certificada (ABRACO N2, NACE/AMPP Level 2, HUET/T-HUET, PBSC)</li>
-          <li>Químico com especialidade em engenharia de materiais</li>
-          <li>Experiência em FPSOs, estaleiros e plantas onshore</li>
-          <li>Criação e revisão de documentação técnica</li>
+
+      <aside class="hero-card">
+        <div class="hero-pill" data-i18n="hero.cardPill">O que a VOA entrega</div>
+        <h2 data-i18n="hero.cardTitle">Proteção do ativo e do contrato.</h2>
+        <p data-i18n="hero.cardText">
+          Inspeções estruturadas, croquis rastreáveis, evidências fotográficas e relatórios técnicos que
+          sustentam decisões operacionais, de manutenção e de claims.
+        </p>
+        <ul class="hero-list">
+          <li data-i18n="hero.cardItem1">TLI completo: cells, bays, DFT, pit gauge e evidências.</li>
+          <li data-i18n="hero.cardItem2">Suporte a armadores, operadores e estaleiros.</li>
+          <li data-i18n="hero.cardItem3">Relatórios em inglês ou português, alinhados a normas e especificações.</li>
         </ul>
-        <a class="btn" href="https://wa.me/5551992701366?text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento" target="_blank" rel="noopener">Falar no WhatsApp</a>
-      </div>
-    </section>
+      </aside>
+    </div>
+  </section>
 
-    <!-- SERVIÇOS -->
-    <section id="servicos" class="features">
-      <h2>Serviços</h2>
-      <div class="grid cols-3">
-        <article class="card">
-          <h3>Inspeção de Pintura</h3>
-          <p>Acompanhamento de projetos, medição de espessura, aderência, perfil de rugosidade e integridade. Relatórios fotográficos e recomendações técnicas.</p>
-        </article>
-        <article class="card">
-          <h3>Surveys & Avaliações</h3>
-          <p>Levantamentos de condição de superfícies e revestimentos em <strong>FPSOs</strong> e plantas onshore para planejamento de manutenção.</p>
-        </article>
-        <article class="card">
-          <h3>Documentação Técnica</h3>
-          <p>Criação e revisão de <strong>ITPs</strong>, procedimentos, relatórios e dossiês de qualidade alinhados às normas <strong>ABNT/AMPP</strong>.</p>
-        </article>
-        <article class="card">
-          <h3>Gestão de Manutenção & QA/QC</h3>
-          <p>Planejamento, supervisão de jateamento/pintura (incl. robotizado), controle de qualidade e interface com contratadas.</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- SOBRE -->
-    <section id="sobre" class="about">
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="section-inner two-col">
       <div>
-        <h2>Sobre a VOA</h2>
-        <p>Sou <strong>Vagner Oliveira Almeida</strong> (VOA), inspector de pintura e especialista em documentação técnica, com atuação em óleo & gás, energia e construção. Disponível para viagens, com CNH, e experiência em liderança de equipes e interface com fornecedores.</p>
-        <ul style="color:var(--muted);line-height:1.8">
-          <li>Base em Marau/RS • Atendimento nacional</li>
-          <li>Certificações: <strong>NACE/AMPP Coating Inspector Level 2</strong>,<strong>ABRACO SNQC CP N2 </strong> , HUET/T-HUET, Platform Basic Safety</li>
-          <li>Competências: VT (visual de solda), PM (partículas magnéticas), elaboração/revisão de Procedimentos e especificações e relatórios</li>
-        </ul>
+        <div class="pill" data-i18n="about.pill">Quem somos</div>
+        <div class="section-header">
+          <h2 data-i18n="about.title">VOA – Especialista em inspeção de pintura e TLI.</h2>
+          <p data-i18n="about.text1">
+            A VOA reúne experiência prática de campo em FPSOs, navios e estruturas industriais com
+            leitura crítica de especificações, normas e requisitos contratuais. O resultado é um
+            olhar independente que protege o desempenho do revestimento e a posição técnica do cliente.
+          </p>
+        </div>
+        <p style="font-size:0.95rem; color:var(--voa-grey);" data-i18n="about.text2">
+          Atuamos desde a preparação de escopos de inspeção, planejamento de bays e cells, acompanhamento
+          de limpeza e ventilação, até a emissão de relatórios finais de TLI e suporte em discussões
+          técnicas com operadores, estaleiros, fabricantes de tinta e terceiros.
+        </p>
       </div>
-      <div class="card">
-        <h3 style="margin-top:0">Certificações & Normas</h3>
-        <div class="grid" style="grid-template-columns:repeat(2,1fr);gap:10px">
-          <span class="tag">ABRACO N2</span>
-          <span class="tag">NACE/AMPP N2</span>
-          <span class="tag">HUET/T-HUET</span>
-          <span class="tag">PBSC</span>
-        </div>
-      </div>
-    </section>
 
-    <!-- PORTFÓLIO -->
-    <section id="portfolio" class="portfolio">
-      <h2>Projetos em destaque</h2>
-      <div class="grid cols-3">
-        <div class="item">
-          <strong>Surveys de tanques de carga — SBM (Brasil & Angola)</strong>
-          <p>Execução de <em>surveys</em> e relatórios de condição, com recomendações de manutenção e priorização de intervenções.</p>
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-tag" data-i18n="about.card1Tag">Experiência</div>
+          <h3 data-i18n="about.card1Title">Inspeção de tanques</h3>
+          <p data-i18n="about.card1Text">
+            Atuação em TLI, reparos e surveys em COTs, slops e tanques de carga em FPSOs e navios.
+          </p>
         </div>
-        <div class="item">
-          <strong>Manutenção de tanques — Equinor (FPSO Peregrino)</strong>
-          <p>Acompanhamento de manutenção com <em>jateamento robotizado</em> (Beerenberg), liderança de equipes e controle de qualidade.</p>
+        <div class="card">
+          <div class="card-tag" data-i18n="about.card2Tag">Qualificações</div>
+          <h3 data-i18n="about.card2Title">Inspetor de pintura qualificado</h3>
+          <p data-i18n="about.card2Text">
+            Formação e certificações em inspeção de pintura e revestimentos conforme normas reconhecidas.
+          </p>
         </div>
-        <div class="item">
-          <strong>Documentação & ITPs</strong>
-          <p>Criação e revisão de procedimentos, ITPs e dossiês de qualidade alinhados aos requisitos do cliente e normas.</p>
+        <div class="card">
+          <div class="card-tag" data-i18n="about.card3Tag">Entrega</div>
+          <h3 data-i18n="about.card3Title">Documentação robusta</h3>
+          <p data-i18n="about.card3Text">
+            Relatórios, timesheets, croquis e registros fotográficos organizados para auditorias e claims.
+          </p>
         </div>
-      </div>
-    </section>
-
-    <!-- CONTATO -->
-    <section id="contato" class="contact">
-      <h2>Fale com a VOA</h2>
-      <form id="form-contato" onsubmit="enviarFormulario(event)">
-        <div>
-          <label for="nome">Seu nome</label>
-          <input id="nome" name="nome" required placeholder="Seu nome completo" />
-        </div>
-        <div>
-          <label for="email">E-mail</label>
-          <input id="email" name="email" type="email" required placeholder="voce@exemplo.com" />
-        </div>
-        <div>
-          <label for="telefone">Telefone/WhatsApp</label>
-          <input id="telefone" name="telefone" placeholder="(XX) XXXXX-XXXX" />
-        </div>
-        <div>
-          <label for="mensagem">Mensagem</label>
-          <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-          <button class="btn" type="submit">Enviar mensagem</button>
-          <a class="btn secondary" href="https://wa.me/5551992701366?text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento" target="_blank" rel="noopener">WhatsApp</a>
-        </div>
-        <p id="status" aria-live="polite" style="margin:8px 0 0;color:var(--muted)"></p>
-      </form>
-    </section>
-  </main>
-
-  <!-- RODAPÉ -->
-  <footer>
-    <div class="container">
-      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
-        <small>© <span id="ano"></span> VOA - Vagner Oliveira Almeida LTDA. Todos os direitos reservados.</small>
-        <small><a href="#topo">Voltar ao topo ↑</a></small>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <!-- BOTÃO WHATSAPP FLUTUANTE -->
-  <div class="whats">
-    <a href="https://wa.me/5551992701366?text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento" target="_blank" rel="noopener">
-      WhatsApp
-    </a>
+  <!-- SERVIÇOS -->
+  <section id="servicos" class="bg-light">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="pill" data-i18n="services.pill">Serviços</div>
+        <h2 data-i18n="services.title">O que a VOA faz.</h2>
+        <p data-i18n="services.text">
+          Serviços focados na integridade de revestimentos, performance de pintura e clareza documental
+          ao longo do ciclo de vida do ativo.
+        </p>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3 data-i18n="services.card1Title">Inspeção de pintura & TLI</h3>
+          <p data-i18n="services.card1Text">
+            Inspeção visual e instrumental em tanques, convés e estruturas, com mapeamento por cells/bays,
+            DFT, pit gauge, testes de aderência e verificação de especificações.
+          </p>
+          <div class="badge-row">
+            <span class="badge" data-i18n="services.card1Badge1">Tank Lining Inspection</span>
+            <span class="badge" data-i18n="services.card1Badge2">DFT / CQM / Pull-off</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="services.card2Title">Surveys e perícias de pintura</h3>
+          <p data-i18n="services.card2Text">
+            Avaliação independente de falhas de revestimento, identificação de causas prováveis e
+            suporte técnico em discussões entre operador, estaleiro e fabricante de tinta.
+          </p>
+          <div class="badge-row">
+            <span class="badge" data-i18n="services.card2Badge1">Falhas em serviço</span>
+            <span class="badge" data-i18n="services.card2Badge2">Root cause</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="services.card3Title">Documentação técnica & relatórios</h3>
+          <p data-i18n="services.card3Text">
+            Elaboração e revisão de relatórios de inspeção, flash reports, databooks, croquis e
+            timesheets, garantindo rastreabilidade e alinhamento contratual.
+          </p>
+          <div class="badge-row">
+            <span class="badge" data-i18n="services.card3Badge1">Relatórios bilíngues</span>
+            <span class="badge" data-i18n="services.card3Badge2">Evidências fotográficas</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="services.card4Title">Especificação e suporte a projetos</h3>
+          <p data-i18n="services.card4Text">
+            Apoio na escolha de sistemas de pintura, leitura crítica de especificações, P&IDs, PINTs,
+            procedimentos de aplicação e planos de inspeção e teste (PIT).
+          </p>
+          <div class="badge-row">
+            <span class="badge" data-i18n="services.card4Badge1">FPSO / Offshore</span>
+            <span class="badge" data-i18n="services.card4Badge2">Naval / Estaleiros</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="services.card5Title">Suporte a claims e disputas técnicas</h3>
+          <p data-i18n="services.card5Text">
+            Organização de evidências, relatórios técnicos e histórico de inspeções para suporte a
+            claims, disputas contratuais e negociações entre as partes.
+          </p>
+          <div class="badge-row">
+            <span class="badge" data-i18n="services.card5Badge1">Claims de pintura</span>
+            <span class="badge" data-i18n="services.card5Badge2">Base técnica</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="services.card6Title">Treinamentos & coaching</h3>
+          <p data-i18n="services.card6Text">
+            Capacitação prática para times de inspeção, supervisores e aplicadores sobre critérios
+            de aceitação, registro de defeitos e boas práticas de documentação.
+          </p>
+          <div class="badge-row">
+            <span class="badge" data-i18n="services.card6Badge1">Workshops</span>
+            <span class="badge" data-i18n="services.card6Badge2">Treino in loco</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETORES -->
+  <section id="setores">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="pill" data-i18n="sectors.pill">Setores</div>
+        <h2 data-i18n="sectors.title">Setores em que a VOA atua.</h2>
+        <p data-i18n="sectors.text">
+          Apoiamos ativos onde o revestimento é crítico para segurança, continuidade operacional
+          e proteção de investimento.
+        </p>
+      </div>
+
+      <div class="grid grid-4">
+        <div class="card">
+          <div class="card-tag" data-i18n="sectors.card1Tag">Energia & Offshore</div>
+          <h3 data-i18n="sectors.card1Title">FPSO, FSO e plataformas</h3>
+          <p data-i18n="sectors.card1Text">
+            TLI, surveys e inspeções em tanques de carga, slops, água produzida e estruturas offshore.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-tag" data-i18n="sectors.card2Tag">Naval</div>
+          <h3 data-i18n="sectors.card2Title">Navios & estaleiros</h3>
+          <p data-i18n="sectors.card2Text">
+            Suporte a novos projetos e reparos em docagem, com foco em tanques e conveses.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-tag" data-i18n="sectors.card3Tag">Indústria & Infraestrutura</div>
+          <h3 data-i18n="sectors.card3Title">Tanques e estruturas</h3>
+          <p data-i18n="sectors.card3Text">
+            Avaliação e inspeção de revestimentos em tanques industriais, estruturas metálicas e piping.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-tag" data-i18n="sectors.card4Tag">Fabricantes & tecnologia</div>
+          <h3 data-i18n="sectors.card4Title">Coatings & sistemas</h3>
+          <p data-i18n="sectors.card4Text">
+            Interface técnica com fabricantes de tinta e análise de desempenho em serviço.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENTES -->
+  <section id="clientes" class="bg-light">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="pill" data-i18n="clients.pill">Clientes</div>
+        <h2 data-i18n="clients.title">Com quem a VOA se conecta.</h2>
+        <p data-i18n="clients.text">
+          A VOA trabalha lado a lado com operadores, estaleiros, fabricantes de tinta e empresas
+          de engenharia, atuando como elo técnico independente.
+        </p>
+      </div>
+
+      <div class="clients-row">
+        <span data-i18n="clients.lead">Atuando como parceiro técnico de:</span>
+        <div class="client-logo" data-i18n="clients.box1">Operadores FPSO</div>
+        <div class="client-logo" data-i18n="clients.box2">Estaleiros</div>
+        <div class="client-logo" data-i18n="clients.box3">Fabricantes de tinta</div>
+        <div class="client-logo" data-i18n="clients.box4">Engenharia / EPC</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEÚDO / LATEST -->
+  <section id="conteudo">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="pill" data-i18n="content.pill">Conteúdo</div>
+        <h2 data-i18n="content.title">Insights e materiais técnicos.</h2>
+        <p data-i18n="content.text">
+          Publicações, relatórios e ferramentas práticas relacionados a inspeção de pintura e TLI.
+        </p>
+      </div>
+
+      <div class="two-col">
+        <div class="latest-list">
+          <div class="latest-item">
+            <small data-i18n="content.item1Meta">Artigo técnico · Em breve</small>
+            <a href="#" data-i18n="content.item1Title">Boas práticas para TLI em tanques de carga de FPSOs</a>
+          </div>
+          <div class="latest-item">
+            <small data-i18n="content.item2Meta">Ferramenta · Em breve</small>
+            <a href="#" data-i18n="content.item2Title">Calculadora de ponto de orvalho e condições de aplicação</a>
+          </div>
+          <div class="latest-item">
+            <small data-i18n="content.item3Meta">Case · Em breve</small>
+            <a href="#" data-i18n="content.item3Title">Survey de tanque após 5 anos em serviço – lições aprendidas</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="content.cardTitle">Quer levar esse conteúdo para seu time?</h3>
+          <p data-i18n="content.cardText">
+            Workshops internos, sessões de perguntas e respostas e treinamentos focados em critérios de aceitação,
+            registro de defeitos, leitura de especificações e melhoria da documentação de campo.
+          </p>
+          <a class="card-link" href="#contato">
+            <span data-i18n="content.cardLink">Falar sobre treinamento</span> <span>→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato" class="cta-section">
+    <div class="section-inner">
+      <div class="cta-box">
+        <div>
+          <h2 data-i18n="contact.title">Fale com a VOA sobre seu próximo projeto de pintura.</h2>
+          <p data-i18n="contact.text">
+            Uma conversa técnica inicial já ajuda a alinhar expectativas, escopo de inspeção e tipo de
+            entrega documental necessária para o seu ativo.
+          </p>
+          <div class="cta-details">
+            <p><strong data-i18n="contact.emailLabel">E-mail:</strong>
+              <a href="mailto:vagner.almeida@yahoo.com">vagner.almeida@yahoo.com</a>
+            </p>
+            <p><strong data-i18n="contact.phoneLabel">Telefone / WhatsApp:</strong>
+              <a href="https://wa.me/5551992701366" target="_blank">+55 51 99270-1366</a>
+            </p>
+          </div>
+        </div>
+        <div>
+          <p class="cta-list-intro" data-i18n="contact.listIntro">
+            Envie um e-mail com:
+          </p>
+          <ul class="cta-list">
+            <li data-i18n="contact.item1">Tipo de ativo (FPSO, navio, tanque industrial, etc.).</li>
+            <li data-i18n="contact.item2">Escopo desejado (TLI, survey, suporte a claim, etc.).</li>
+            <li data-i18n="contact.item3">Localização do ativo e janela de trabalho.</li>
+          </ul>
+          <p class="cta-footer" data-i18n="contact.footer">
+            A VOA retorna com uma sugestão de abordagem de inspeção e formatos de relatório possíveis.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="logo logo-footer">
+        <img src="assets/logo-voa.png" alt="Logo VOA" style="height:40px; width:auto;">
+      </div>
+      <p data-i18n="footer.text">
+        VOA é uma consultoria independente focada em inspeção de pintura, TLI, surveys e documentação
+        técnica para ativos onde o desempenho do revestimento é crítico.
+      </p>
+    </div>
+    <div>
+      <h3 data-i18n="footer.mapTitle">Mapa do site</h3>
+      <div class="footer-links">
+        <a href="#home" data-i18n="footer.home">Início</a>
+        <a href="#sobre" data-i18n="footer.about">Sobre</a>
+        <a href="#servicos" data-i18n="footer.services">Serviços</a>
+        <a href="#setores" data-i18n="footer.sectors">Setores</a>
+        <a href="#clientes" data-i18n="footer.clients">Clientes</a>
+        <a href="#conteudo" data-i18n="footer.content">Conteúdo</a>
+        <a href="#contato" data-i18n="footer.contact">Contato</a>
+      </div>
+    </div>
   </div>
 
-  <script>
-    // Atualiza ano no rodapé
-    document.getElementById('ano').textContent = new Date().getFullYear();
+  <div class="footer-bottom">
+    <span>
+      © <span id="year"></span>
+      <span data-i18n="footer.copy">VOA – Vagner Oliveira Almeida LTDA. Todos os direitos reservados.</span>
+    </span>
+    <span class="footer-note" data-i18n="footer.note">Site em desenvolvimento contínuo.</span>
+  </div>
+</footer>
 
-    // Formulário abre o e-mail do usuário (mailto)
-    function enviarFormulario(e){
-      e.preventDefault();
-      const dados = Object.fromEntries(new FormData(e.target));
-      const assunto = encodeURIComponent('Contato pelo site');
-      const corpo = encodeURIComponent(`Nome: ${dados.nome}\nEmail: ${dados.email}\nTelefone: ${dados.telefone || '-'}\nMensagem: ${dados.mensagem}`);
-      window.location.href = `mailto:vagner.almeida@yahoo.com?subject=${assunto}&body=${corpo}`;
-      document.getElementById('status').textContent = 'Abrimos seu aplicativo de e-mail para enviar a mensagem. Se preferir, use o botão de WhatsApp.';
-      e.target.reset();
+<script>
+  const i18n = {
+    pt: {
+      "nav.home": "Início",
+      "nav.about": "Sobre",
+      "nav.services": "Serviços",
+      "nav.sectors": "Setores",
+      "nav.clients": "Clientes",
+      "nav.content": "Conteúdo",
+      "nav.cta": "Fale com a VOA",
+
+      "hero.eyebrow": "Consultoria independente em revestimentos",
+      "hero.title": "Inspeção de pintura, TLI e suporte técnico para ativos críticos.",
+      "hero.text": "A VOA apoia armadores, operadores de FPSO, estaleiros e indústrias na gestão de revestimentos e na integridade de tanques, conveses e estruturas. Do planejamento ao relatório final, com foco em rastreabilidade, segurança e performance de longo prazo.",
+      "hero.btnPrimary": "Agendar conversa",
+      "hero.btnSecondary": "Ver serviços de inspeção →",
+      "hero.metric1Strong": "10+ anos",
+      "hero.metric1Text": "experiência em inspeção de pintura offshore e naval",
+      "hero.metric2Strong": "FPSO / Navios",
+      "hero.metric2Text": "foco em TLI, surveys e documentação para tanques",
+      "hero.metric3Strong": "Brasil & Global",
+      "hero.metric3Text": "suporte em projetos locais e internacionais",
+      "hero.cardPill": "O que a VOA entrega",
+      "hero.cardTitle": "Proteção do ativo e do contrato.",
+      "hero.cardText": "Inspeções estruturadas, croquis rastreáveis, evidências fotográficas e relatórios técnicos que sustentam decisões operacionais, de manutenção e de claims.",
+      "hero.cardItem1": "TLI completo: cells, bays, DFT, pit gauge e evidências.",
+      "hero.cardItem2": "Suporte a armadores, operadores e estaleiros.",
+      "hero.cardItem3": "Relatórios em inglês ou português, alinhados a normas e especificações.",
+
+      "about.pill": "Quem somos",
+      "about.title": "VOA – Especialista em inspeção de pintura e TLI.",
+      "about.text1": "A VOA reúne experiência prática de campo em FPSOs, navios e estruturas industriais com leitura crítica de especificações, normas e requisitos contratuais. O resultado é um olhar independente que protege o desempenho do revestimento e a posição técnica do cliente.",
+      "about.text2": "Atuamos desde a preparação de escopos de inspeção, planejamento de bays e cells, acompanhamento de limpeza e ventilação, até a emissão de relatórios finais de TLI e suporte em discussões técnicas com operadores, estaleiros, fabricantes de tinta e terceiros.",
+      "about.card1Tag": "Experiência",
+      "about.card1Title": "Inspeção de tanques",
+      "about.card1Text": "Atuação em TLI, reparos e surveys em COTs, slops e tanques de carga em FPSOs e navios.",
+      "about.card2Tag": "Qualificações",
+      "about.card2Title": "Inspetor de pintura qualificado",
+      "about.card2Text": "Formação e certificações em inspeção de pintura e revestimentos conforme normas reconhecidas.",
+      "about.card3Tag": "Entrega",
+      "about.card3Title": "Documentação robusta",
+      "about.card3Text": "Relatórios, timesheets, croquis e registros fotográficos organizados para auditorias e claims.",
+
+      "services.pill": "Serviços",
+      "services.title": "O que a VOA faz.",
+      "services.text": "Serviços focados na integridade de revestimentos, performance de pintura e clareza documental ao longo do ciclo de vida do ativo.",
+      "services.card1Title": "Inspeção de pintura & TLI",
+      "services.card1Text": "Inspeção visual e instrumental em tanques, convés e estruturas, com mapeamento por cells/bays, DFT, pit gauge, testes de aderência e verificação de especificações.",
+      "services.card1Badge1": "Tank Lining Inspection",
+      "services.card1Badge2": "DFT / CQM / Pull-off",
+      "services.card2Title": "Surveys e perícias de pintura",
+      "services.card2Text": "Avaliação independente de falhas de revestimento, identificação de causas prováveis e suporte técnico em discussões entre operador, estaleiro e fabricante de tinta.",
+      "services.card2Badge1": "Falhas em serviço",
+      "services.card2Badge2": "Root cause",
+      "services.card3Title": "Documentação técnica & relatórios",
+      "services.card3Text": "Elaboração e revisão de relatórios de inspeção, flash reports, databooks, croquis e timesheets, garantindo rastreabilidade e alinhamento contratual.",
+      "services.card3Badge1": "Relatórios bilíngues",
+      "services.card3Badge2": "Evidências fotográficas",
+      "services.card4Title": "Especificação e suporte a projetos",
+      "services.card4Text": "Apoio na escolha de sistemas de pintura, leitura crítica de especificações, P&IDs, PINTs, procedimentos de aplicação e planos de inspeção e teste (PIT).",
+      "services.card4Badge1": "FPSO / Offshore",
+      "services.card4Badge2": "Naval / Estaleiros",
+      "services.card5Title": "Suporte a claims e disputas técnicas",
+      "services.card5Text": "Organização de evidências, relatórios técnicos e histórico de inspeções para suporte a claims, disputas contratuais e negociações entre as partes.",
+      "services.card5Badge1": "Claims de pintura",
+      "services.card5Badge2": "Base técnica",
+      "services.card6Title": "Treinamentos & coaching",
+      "services.card6Text": "Capacitação prática para times de inspeção, supervisores e aplicadores sobre critérios de aceitação, registro de defeitos e boas práticas de documentação.",
+      "services.card6Badge1": "Workshops",
+      "services.card6Badge2": "Treino in loco",
+
+      "sectors.pill": "Setores",
+      "sectors.title": "Setores em que a VOA atua.",
+      "sectors.text": "Apoiamos ativos onde o revestimento é crítico para segurança, continuidade operacional e proteção de investimento.",
+      "sectors.card1Tag": "Energia & Offshore",
+      "sectors.card1Title": "FPSO, FSO e plataformas",
+      "sectors.card1Text": "TLI, surveys e inspeções em tanques de carga, slops, água produzida e estruturas offshore.",
+      "sectors.card2Tag": "Naval",
+      "sectors.card2Title": "Navios & estaleiros",
+      "sectors.card2Text": "Suporte a novos projetos e reparos em docagem, com foco em tanques e conveses.",
+      "sectors.card3Tag": "Indústria & Infraestrutura",
+      "sectors.card3Title": "Tanques e estruturas",
+      "sectors.card3Text": "Avaliação e inspeção de revestimentos em tanques industriais, estruturas metálicas e piping.",
+      "sectors.card4Tag": "Fabricantes & tecnologia",
+      "sectors.card4Title": "Coatings & sistemas",
+      "sectors.card4Text": "Interface técnica com fabricantes de tinta e análise de desempenho em serviço.",
+
+      "clients.pill": "Clientes",
+      "clients.title": "Com quem a VOA se conecta.",
+      "clients.text": "A VOA trabalha lado a lado com operadores, estaleiros, fabricantes de tinta e empresas de engenharia, atuando como elo técnico independente.",
+      "clients.lead": "Atuando como parceiro técnico de:",
+      "clients.box1": "Operadores FPSO",
+      "clients.box2": "Estaleiros",
+      "clients.box3": "Fabricantes de tinta",
+      "clients.box4": "Engenharia / EPC",
+
+      "content.pill": "Conteúdo",
+      "content.title": "Insights e materiais técnicos.",
+      "content.text": "Publicações, relatórios e ferramentas práticas relacionados a inspeção de pintura e TLI.",
+      "content.item1Meta": "Artigo técnico · Em breve",
+      "content.item1Title": "Boas práticas para TLI em tanques de carga de FPSOs",
+      "content.item2Meta": "Ferramenta · Em breve",
+      "content.item2Title": "Calculadora de ponto de orvalho e condições de aplicação",
+      "content.item3Meta": "Case · Em breve",
+      "content.item3Title": "Survey de tanque após 5 anos em serviço – lições aprendidas",
+      "content.cardTitle": "Quer levar esse conteúdo para seu time?",
+      "content.cardText": "Workshops internos, sessões de perguntas e respostas e treinamentos focados em critérios de aceitação, registro de defeitos, leitura de especificações e melhoria da documentação de campo.",
+      "content.cardLink": "Falar sobre treinamento",
+
+      "contact.title": "Fale com a VOA sobre seu próximo projeto de pintura.",
+      "contact.text": "Uma conversa técnica inicial já ajuda a alinhar expectativas, escopo de inspeção e tipo de entrega documental necessária para o seu ativo.",
+      "contact.emailLabel": "E-mail:",
+      "contact.phoneLabel": "Telefone / WhatsApp:",
+      "contact.listIntro": "Envie um e-mail com:",
+      "contact.item1": "Tipo de ativo (FPSO, navio, tanque industrial, etc.).",
+      "contact.item2": "Escopo desejado (TLI, survey, suporte a claim, etc.).",
+      "contact.item3": "Localização do ativo e janela de trabalho.",
+      "contact.footer": "A VOA retorna com uma sugestão de abordagem de inspeção e formatos de relatório possíveis.",
+
+      "footer.text": "VOA é uma consultoria independente focada em inspeção de pintura, TLI, surveys e documentação técnica para ativos onde o desempenho do revestimento é crítico.",
+      "footer.mapTitle": "Mapa do site",
+      "footer.home": "Início",
+      "footer.about": "Sobre",
+      "footer.services": "Serviços",
+      "footer.sectors": "Setores",
+      "footer.clients": "Clientes",
+      "footer.content": "Conteúdo",
+      "footer.contact": "Contato",
+      "footer.copy": "VOA – Vagner Oliveira Almeida LTDA. Todos os direitos reservados.",
+      "footer.note": "Site em desenvolvimento contínuo."
+    },
+
+    en: {
+      "nav.home": "Home",
+      "nav.about": "About",
+      "nav.services": "Services",
+      "nav.sectors": "Sectors",
+      "nav.clients": "Clients",
+      "nav.content": "Insights",
+      "nav.cta": "Talk to VOA",
+
+      "hero.eyebrow": "Independent coating consultancy",
+      "hero.title": "Coating inspection, TLI and technical support for critical assets.",
+      "hero.text": "VOA supports shipowners, FPSO operators, shipyards and industry in managing coatings and ensuring the integrity of tanks, decks and structures. From planning to the final report, with a focus on traceability, safety and long-term performance.",
+      "hero.btnPrimary": "Schedule a call",
+      "hero.btnSecondary": "View inspection services →",
+      "hero.metric1Strong": "10+ years",
+      "hero.metric1Text": "experience in offshore and marine coating inspection",
+      "hero.metric2Strong": "FPSOs / Vessels",
+      "hero.metric2Text": "focus on TLI, surveys and tank documentation",
+      "hero.metric3Strong": "Brazil & Global",
+      "hero.metric3Text": "support for local and international projects",
+      "hero.cardPill": "What VOA delivers",
+      "hero.cardTitle": "Protection of the asset and the contract.",
+      "hero.cardText": "Structured inspections, traceable sketches, photographic evidence and technical reports that support operational, maintenance and claim decisions.",
+      "hero.cardItem1": "Full TLI: cells, bays, DFT, pit gauge and evidence.",
+      "hero.cardItem2": "Support for owners, operators and shipyards.",
+      "hero.cardItem3": "Reports in English or Portuguese, aligned with standards and specifications.",
+
+      "about.pill": "About",
+      "about.title": "VOA – Specialist in coating inspection and TLI.",
+      "about.text1": "VOA combines hands-on field experience in FPSOs, vessels and industrial structures with a critical reading of specifications, standards and contractual requirements. The result is an independent view that protects coating performance and the client’s technical position.",
+      "about.text2": "We work from inspection scope preparation, bay and cell planning, cleaning and ventilation follow-up, through to final TLI reports and technical discussions with operators, yards, paint manufacturers and third parties.",
+      "about.card1Tag": "Experience",
+      "about.card1Title": "Tank inspection",
+      "about.card1Text": "TLI, repair and survey experience in COTs, slops and cargo tanks on FPSOs and vessels.",
+      "about.card2Tag": "Qualifications",
+      "about.card2Title": "Qualified coating inspector",
+      "about.card2Text": "Training and certifications in coating and painting inspection according to recognized standards.",
+      "about.card3Tag": "Delivery",
+      "about.card3Title": "Robust documentation",
+      "about.card3Text": "Reports, timesheets, sketches and photo records structured for audits and claims.",
+
+      "services.pill": "Services",
+      "services.title": "What VOA does.",
+      "services.text": "Services focused on coating integrity, paint performance and clear documentation throughout the asset life cycle.",
+      "services.card1Title": "Coating inspection & TLI",
+      "services.card1Text": "Visual and instrumental inspection of tanks, decks and structures, with cell/bay mapping, DFT, pit gauge, adhesion testing and specification verification.",
+      "services.card1Badge1": "Tank Lining Inspection",
+      "services.card1Badge2": "DFT / CQM / Pull-off",
+      "services.card2Title": "Coating surveys and investigations",
+      "services.card2Text": "Independent assessment of coating failures, identification of likely causes and technical support in discussions between operator, shipyard and paint supplier.",
+      "services.card2Badge1": "In-service failures",
+      "services.card2Badge2": "Root cause",
+      "services.card3Title": "Technical documentation & reporting",
+      "services.card3Text": "Preparation and review of inspection reports, flash reports, databooks, sketches and timesheets, ensuring traceability and contractual alignment.",
+      "services.card3Badge1": "Bilingual reports",
+      "services.card3Badge2": "Photo evidence",
+      "services.card4Title": "Specification and project support",
+      "services.card4Text": "Support in coating system selection, critical review of specifications, P&IDs, painting documents, application procedures and inspection & test plans.",
+      "services.card4Badge1": "FPSO / Offshore",
+      "services.card4Badge2": "Marine / Shipyards",
+      "services.card5Title": "Support for claims and technical disputes",
+      "services.card5Text": "Compilation of evidence, technical reports and inspection history to support coating-related claims, contractual disputes and negotiations.",
+      "services.card5Badge1": "Coating claims",
+      "services.card5Badge2": "Technical basis",
+      "services.card6Title": "Training & coaching",
+      "services.card6Text": "Practical training for inspection teams, supervisors and applicators on acceptance criteria, defect recording and documentation best practices.",
+      "services.card6Badge1": "Workshops",
+      "services.card6Badge2": "On-site training",
+
+      "sectors.pill": "Sectors",
+      "sectors.title": "Sectors where VOA operates.",
+      "sectors.text": "We support assets where coating performance is critical for safety, uptime and protection of investment.",
+      "sectors.card1Tag": "Energy & Offshore",
+      "sectors.card1Title": "FPSOs, FSOs and platforms",
+      "sectors.card1Text": "TLI, surveys and inspections of cargo, slop and produced-water tanks and offshore structures.",
+      "sectors.card2Tag": "Marine",
+      "sectors.card2Title": "Vessels & shipyards",
+      "sectors.card2Text": "Support for newbuilds and dock repairs, with a focus on tanks and decks.",
+      "sectors.card3Tag": "Industry & Infrastructure",
+      "sectors.card3Title": "Tanks and structures",
+      "sectors.card3Text": "Assessment and inspection of coatings on industrial tanks, steel structures and piping.",
+      "sectors.card4Tag": "Manufacturers & technology",
+      "sectors.card4Title": "Coatings & systems",
+      "sectors.card4Text": "Technical interface with paint manufacturers and performance assessment in service.",
+
+      "clients.pill": "Clients",
+      "clients.title": "Who VOA works with.",
+      "clients.text": "VOA works side by side with operators, shipyards, paint manufacturers and engineering companies, acting as an independent technical link.",
+      "clients.lead": "Acting as a technical partner for:",
+      "clients.box1": "FPSO operators",
+      "clients.box2": "Shipyards",
+      "clients.box3": "Paint manufacturers",
+      "clients.box4": "Engineering / EPC",
+
+      "content.pill": "Insights",
+      "content.title": "Insights and technical material.",
+      "content.text": "Publications, reports and practical tools related to coating inspection and TLI.",
+      "content.item1Meta": "Technical article · Coming soon",
+      "content.item1Title": "Good practices for TLI in FPSO cargo tanks",
+      "content.item2Meta": "Tool · Coming soon",
+      "content.item2Title": "Dew point calculator and application conditions",
+      "content.item3Meta": "Case study · Coming soon",
+      "content.item3Title": "Tank survey after 5 years in service – lessons learned",
+      "content.cardTitle": "Want to bring this knowledge to your team?",
+      "content.cardText": "In-house workshops, Q&A sessions and trainings focused on acceptance criteria, defect logging, specification reading and better field documentation.",
+      "content.cardLink": "Discuss training",
+
+      "contact.title": "Talk to VOA about your next coating project.",
+      "contact.text": "An initial technical call already helps align expectations, inspection scope and the type of documentation your asset will need.",
+      "contact.emailLabel": "Email:",
+      "contact.phoneLabel": "Phone / WhatsApp:",
+      "contact.listIntro": "Include in your email:",
+      "contact.item1": "Asset type (FPSO, vessel, industrial tank, etc.).",
+      "contact.item2": "Desired scope (TLI, survey, claim support, etc.).",
+      "contact.item3": "Asset location and work window.",
+      "contact.footer": "VOA will reply with a suggested inspection approach and possible report formats.",
+
+      "footer.text": "VOA is an independent consultancy focused on coating inspection, TLI, surveys and technical documentation for assets where coating performance is critical.",
+      "footer.mapTitle": "Site map",
+      "footer.home": "Home",
+      "footer.about": "About",
+      "footer.services": "Services",
+      "footer.sectors": "Sectors",
+      "footer.clients": "Clients",
+      "footer.content": "Insights",
+      "footer.contact": "Contact",
+      "footer.copy": "VOA – Vagner Oliveira Almeida LTDA. All rights reserved.",
+      "footer.note": "Website under continuous development."
     }
-  </script>
+  };
+
+  function applyLanguage(lang) {
+    const strings = i18n[lang];
+    if (!strings) return;
+
+    document.documentElement.lang = (lang === "pt") ? "pt-BR" : "en";
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (strings[key]) {
+        el.textContent = strings[key];
+      }
+    });
+
+    document.querySelectorAll("[data-lang-btn]").forEach(btn => {
+      btn.classList.toggle("lang-active", btn.getAttribute("data-lang-btn") === lang);
+    });
+  }
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  document.querySelectorAll("[data-lang-btn]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const lang = btn.getAttribute("data-lang-btn");
+      applyLanguage(lang);
+    });
+  });
+
+  applyLanguage("pt");
+</script>
+
 </body>
 </html>
