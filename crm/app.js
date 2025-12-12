@@ -3,15 +3,13 @@
 // e preencha abaixo:
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAwvxuh4tyYS5EX23ZTb-CXvvNP0ywHEw",
-  authDomain: "voa-crm-d7fee.firebaseapp.com",
-  projectId: "voa-crm-d7fee",
-  storageBucket: "voa-crm-d7fee.appspot.com",
-  messagingSenderId: "550857032162",
-  appId: "1:550857032162:web:b9de48e67581eebdfe1bb",
-  measurementId: "G-G6FCPJRPZX"
+  apiKey: "SUA_API_KEY_AQUI",
+  authDomain: "SEU_PROJETO.firebaseapp.com",
+  projectId: "SEU_PROJETO",
+  storageBucket: "SEU_PROJETO.appspot.com",
+  messagingSenderId: "XXXXXXXXXXXX",
+  appId: "1:XXXXXXXXXXXX:web:YYYYYYYYYYYYYY"
 };
-
 
 // Inicializa Firebase
 firebase.initializeApp(firebaseConfig);
@@ -417,4 +415,3 @@ exportBtn.addEventListener("click", () => {
   link.click();
   document.body.removeChild(link);
 });
-
