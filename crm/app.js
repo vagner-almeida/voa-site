@@ -9,7 +9,6 @@ const firebaseConfig = {
   measurementId: "G-G6FCPJRPZX"
 };
 
-// NÃO PODE EXISTIR OUTRO firebase.initializeApp EM NENHUM LUGAR
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
@@ -291,3 +290,13 @@ exportBtn.addEventListener("click", () => {
       r.contactPerson || "",
       r.email || "",
       r.phone || "",
+      r.address || "",
+      r.city || "",
+      r.state || "",
+      r.country || "",
+      (r.notes || "").replace(/\r?\n/g, " "),
+      created
+    ];
+  });
+
+  const csv = [header, ...
