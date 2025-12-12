@@ -1,12 +1,13 @@
 window.addEventListener("DOMContentLoaded", () => {
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAwvxuh4tyYS5EX23ZTb-CXvvNP0ywHEw",
+  apiKey: "AIzaSyAWxvuxHtqyYES0X23ZTb-CXvNPhOywHEw",
   authDomain: "voa-crm-d7fee.firebaseapp.com",
   projectId: "voa-crm-d7fee",
-  storageBucket: "voa-crm-d7fee.appspot.com",
-  messagingSenderId: "550857032162",
-  appId: "1:550857032162:web:b9de48e67581eebdfe1bb"
+  storageBucket: "voa-crm-d7fee.firebasestorage.app",
+  messagingSenderId: "550057032162",
+  appId: "1:550057032162:web:b9ed48e687518eebdfe1bb",
+  measurementId: "G-G0FCPJRPZX"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -177,3 +178,4 @@ exportB.onclick = () => {
 };
 
 });
+
