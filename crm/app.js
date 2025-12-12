@@ -6,8 +6,8 @@ const firebaseConfig = {
   projectId: "voa-crm-d7fee",
   storageBucket: "voa-crm-d7fee.firebasestorage.app",
   messagingSenderId: "550057032162",
-  appId: "1:550057032162:web:b9ed48e687518eebdfe1bb",
-  measurementId: "G-G0FCPJRPZX"
+  appId: "1:550057032162:web:8c1ddd385fafe30fdfe1bb",
+  measurementId: "G-D1YBCZNBQM"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -178,4 +178,5 @@ exportB.onclick = () => {
 };
 
 });
+
 
