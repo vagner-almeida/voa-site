@@ -6,7 +6,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAwvxuh4tyYS5EX23ZTb-CXvvNP0ywHEw",
   authDomain: "voa-crm-d7fee.firebaseapp.com",
   projectId: "voa-crm-d7fee",
-  storageBucket: "voa-crm-d7fee.firebasestorage.app",
+  storageBucket: "voa-crm-d7fee.appspot.com",
   messagingSenderId: "550857032162",
   appId: "1:550857032162:web:b9de48e67581eebdfe1bb",
   measurementId: "G-G6FCPJRPZX"
@@ -417,3 +417,4 @@ exportBtn.addEventListener("click", () => {
   link.click();
   document.body.removeChild(link);
 });
+
