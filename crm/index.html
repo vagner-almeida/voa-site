@@ -2,179 +2,84 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>VOA CRM - Clientes e Fornecedores</title>
+  <title>VOA CRM</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDKs (COMPAT) -->
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
-
-  
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo-voa">
-        <span class="v">V</span><span class="o">O</span><span class="a">A</span><span class="ltda">Ltda</span>
-      </div>
-      <div class="brand-text">
-        <h1>VOA CRM</h1>
-        <p>Cadastro de clientes e fornecedores</p>
-      </div>
-    </div>
-    <div class="user-area">
-      <span id="user-email"></span>
-      <button id="logout-btn" class="btn secondary hidden">Sair</button>
-    </div>
-  </header>
 
-  <!-- Tela de login -->
-  <main id="auth-section" class="card auth-card">
-    <h2>Acesso restrito</h2>
-    <p class="muted">Faça login para acessar o cadastro.</p>
-    <form id="login-form" class="form-grid">
-      <label>
-        E-mail
-        <input type="email" id="login-email" required />
-      </label>
-      <label>
-        Senha
-        <input type="password" id="login-password" required />
-      </label>
-      <button type="submit" class="btn primary full">Entrar</button>
-      <button type="button" id="create-user-btn" class="btn ghost full">
-        Criar usuário (apenas admin)
-      </button>
-      <p id="auth-message" class="message"></p>
-    </form>
-  </main>
+<header class="topbar">
+  <h1>VOA CRM</h1>
+</header>
 
-  <!-- Tela principal do sistema -->
-  <main id="app-section" class="hidden">
-    <section class="tabs">
-      <button class="tab-btn active" data-tab="clients">Clientes</button>
-      <button class="tab-btn" data-tab="suppliers">Fornecedores</button>
-    </section>
+<!-- LOGIN -->
+<section id="auth-section" class="card">
+  <h2>Acesso restrito</h2>
 
-    <!-- Formulário -->
-    <section class="card">
-      <h2 id="form-title">Novo cliente</h2>
-      <form id="entity-form" class="form-grid">
-        <input type="hidden" id="entity-id" />
+  <form id="login-form">
+    <input id="login-email" type="email" placeholder="E-mail" required />
+    <input id="login-password" type="password" placeholder="Senha" required />
+    <button type="submit">Entrar</button>
+  </form>
 
-        <div class="form-row">
-          <label>
-            Tipo de registro
-            <select id="entity-type">
-              <option value="client">Cliente</option>
-              <option value="supplier">Fornecedor</option>
-            </select>
-          </label>
+  <button id="create-user-btn">Criar usuário (admin)</button>
+  <p id="auth-message"></p>
+</section>
 
-          <label>
-            Pessoa
-            <select id="person-type">
-              <option value="juridica">Jurídica (CNPJ)</option>
-              <option value="fisica">Física (CPF)</option>
-            </select>
-          </label>
-        </div>
+<!-- APP -->
+<section id="app-section" class="hidden">
 
-        <label>
-          Nome / Razão social
-          <input type="text" id="name" required />
-        </label>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="clients">Clientes</button>
+    <button class="tab-btn" data-tab="suppliers">Fornecedores</button>
+  </div>
 
-        <label>
-          CNPJ / CPF
-          <input type="text" id="document" />
-        </label>
+  <form id="entity-form" class="card">
+    <input type="hidden" id="entity-id" />
 
-        <label>
-          Responsável / Contato
-          <input type="text" id="contact-person" />
-        </label>
+    <input id="name" placeholder="Nome / Razão Social" required />
+    <input id="document" placeholder="CPF / CNPJ" />
+    <input id="contact-person" placeholder="Contato" />
+    <input id="email" placeholder="E-mail" />
+    <input id="phone" placeholder="Telefone" />
+    <input id="city" placeholder="Cidade" />
 
-        <div class="form-row">
-          <label>
-            E-mail
-            <input type="email" id="email" />
-          </label>
+    <button type="submit">Salvar</button>
+    <button type="button" id="clear-btn">Limpar</button>
 
-          <label>
-            Telefone / WhatsApp
-            <input type="tel" id="phone" />
-          </label>
-        </div>
+    <p id="form-message"></p>
+  </form>
 
-        <label>
-          Endereço
-          <input type="text" id="address" />
-        </label>
+  <div class="card">
+    <input id="search" placeholder="Buscar..." />
+    <button id="export-btn">Exportar CSV</button>
 
-        <div class="form-row">
-          <label>
-            Cidade
-            <input type="text" id="city" />
-          </label>
-          <label>
-            Estado
-            <input type="text" id="state" maxlength="2" />
-          </label>
-          <label>
-            País
-            <input type="text" id="country" value="Brasil" />
-          </label>
-        </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Documento</th>
+          <th>Cidade</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="entity-tbody"></tbody>
+    </table>
 
-        <label>
-          Observações
-          <textarea id="notes" rows="3"></textarea>
-        </label>
+    <p id="list-message"></p>
+  </div>
 
-        <div class="form-actions">
-          <button type="submit" class="btn primary" id="save-btn">Salvar</button>
-          <button type="button" class="btn secondary" id="clear-btn">Limpar</button>
-          <span id="form-message" class="message"></span>
-        </div>
-      </form>
-    </section>
+  <button id="logout-btn">Sair</button>
+</section>
 
-    <!-- Lista -->
-    <section class="card">
-      <div class="list-header">
-        <h2 id="list-title">Clientes cadastrados</h2>
-        <div class="list-controls">
-          <input type="text" id="search" placeholder="Buscar por nome, CNPJ/CPF ou cidade..." />
-          <button id="export-btn" class="btn ghost">Exportar CSV</button>
-        </div>
-      </div>
+<!-- IMPORTANTE: cache-buster -->
+<script src="app.js?v=3"></script>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>CNPJ/CPF</th>
-              <th>Contato</th>
-              <th>Cidade</th>
-              <th>Tipo</th>
-              <th>Criado em</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="entity-tbody">
-            <!-- preenchido via JS -->
-          </tbody>
-        </table>
-      </div>
-      <p id="list-message" class="message"></p>
-    </section>
-  </main>
-
-  <!-- Configuração do Firebase + lógica do app -->
-  <script src="app.js"></script>
 </body>
 </html>
