@@ -4,9 +4,9 @@ const firebaseConfig = {
   apiKey: "AIzaSyAWxvuxHtqyYES0X23ZTb-CXvNPhOywHEw",
   authDomain: "voa-crm-d7fee.firebaseapp.com",
   projectId: "voa-crm-d7fee",
-  storageBucket: "voa-crm-d7fee.firebasestorage.app",
-  messagingSenderId: "550057032162",
-  appId: "1:550057032162:web:8c1ddd385fafe30fdfe1bb",
+  storageBucket: "voa-crm-d7fee.appspot.com",
+  messagingSenderId: "550857032162",
+  appId: "1:550857032162:web:8c1ddd385fafe30fdfe1bb",
   measurementId: "G-D1YBCZNBQM"
 };
 
@@ -178,5 +178,6 @@ exportB.onclick = () => {
 };
 
 });
+
 
 
