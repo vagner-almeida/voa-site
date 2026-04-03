@@ -240,6 +240,7 @@
     .tool-stripe { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
     .ts-blue { background: linear-gradient(90deg, var(--v), #2480d6); }
     .ts-mag  { background: linear-gradient(90deg, var(--a), #d93080); }
+    .ts-teal { background: linear-gradient(90deg, #0a7a6a, #0fb89e); }
     .tool-eye {
       font-family: 'DM Mono', monospace; font-size: 0.63rem;
       letter-spacing: 0.12em; text-transform: uppercase; color: var(--v);
@@ -261,6 +262,9 @@
     .btn-launch.blue { background: var(--v); box-shadow: 0 3px 12px rgba(0,87,168,0.22); }
     .btn-launch.blue:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 7px 18px rgba(0,87,168,0.32); }
     .btn-launch.mag { background: var(--a); box-shadow: 0 3px 12px rgba(194,0,107,0.2); }
+    .btn-launch.mag:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 7px 18px rgba(194,0,107,0.3); }
+    .btn-launch.teal { background: #0a7a6a; box-shadow: 0 3px 12px rgba(10,122,106,0.22); }
+    .btn-launch.teal:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 7px 18px rgba(10,122,106,0.32); }
     .btn-launch.mag:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 7px 18px rgba(194,0,107,0.3); }
     .t-note { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text3); letter-spacing: 0.04em; text-align: center; }
 
@@ -525,6 +529,25 @@
         <div class="t-note">Acesso direto</div>
       </div>
     </div>
+
+    <div class="tool-card">
+      <div class="tool-stripe ts-teal"></div>
+      <div>
+        <div class="tool-eye" style="color:#0a7a6a;">Calculadora · Gratuita</div>
+        <div class="tool-title" data-i18n="tools.t3title">Comparador de Tintas</div>
+        <div class="tool-desc">Compara até 5 tintas calculando rendimento teórico e prático, WFT, custo por m² e custo total de material. Baseado em SV, DFT e eficiência de aplicação.</div>
+        <div class="chips">
+          <span class="chip chip-n">Rendimento RT/RP</span>
+          <span class="chip chip-n">WFT</span>
+          <span class="chip chip-n">Custo por m²</span>
+          <span class="chip chip-n">Até 5 tintas</span>
+        </div>
+      </div>
+      <div class="tool-cta">
+        <a href="comparador/index.html" class="btn-launch teal" data-i18n="tools.t3btn">◆ &nbsp;Abrir comparador</a>
+        <div class="t-note">Sem cadastro · Uso imediato</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -644,6 +667,8 @@
       'svc3.title':'Documentação & relatórios','svc4.title':'Suporte a projetos',
       'svc5.title':'Claims & disputas técnicas','svc6.title':'Treinamentos & coaching',
       'ct.h2':'Vamos conversar sobre seu projeto.',
+      'tools.t3title':'Comparador de Tintas',
+      'tools.t3btn':'◆  Abrir comparador',
       'ct.btn':'→  Enviar e-mail agora',
     },
     en: {
@@ -673,6 +698,8 @@
       'svc1.title':'Coating inspection & TLI','svc2.title':'Surveys and investigations',
       'svc3.title':'Documentation & reports','svc4.title':'Project support',
       'svc5.title':'Claims & technical disputes','svc6.title':'Training & coaching',
+      'tools.t3title':'Paint Comparator',
+      'tools.t3btn':'◆  Open comparator',
       'ct.h2':"Let's talk about your project.",
       'ct.btn':'→  Send email now',
     }
