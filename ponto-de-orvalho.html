@@ -278,6 +278,12 @@
     .fu { opacity:0; animation: fadeUp 0.45s ease forwards; }
     .d1 { animation-delay:0.07s; } .d2 { animation-delay:0.15s; } .d3 { animation-delay:0.25s; }
 
+
+    /* ── LANG TOGGLE (padrão VOA) ── */
+    .lang-toggle{display:flex;background:rgba(0,0,0,0.05);border:1.5px solid var(--border);border-radius:8px;padding:2px;gap:2px;flex-shrink:0}
+    .lang-btn{padding:4px 10px;font-size:10px;letter-spacing:.07em;border:none;background:transparent;color:var(--text3);cursor:pointer;font-family:'DM Mono',monospace;font-weight:600;border-radius:5px;transition:all .15s;white-space:nowrap}
+    .lang-btn.active{background:var(--o);color:#fff;font-weight:bold}
+    .lang-btn:not(.active):hover{color:var(--text);background:rgba(0,0,0,0.05)}
     @media (max-width: 600px) {
       .input-grid { grid-template-columns: 1fr; }
       .kpi-grid { grid-template-columns: 1fr; }
@@ -302,9 +308,9 @@
         <a href="index.html#contato">Contato</a>
       </div>
       <div style="display:flex;align-items:center;gap:0.55rem;">
-        <div class="lang-sw">
-          <button id="btn-pt" class="active" onclick="setLang('pt')">PT</button>
-          <button id="btn-en" onclick="setLang('en')">EN</button>
+        <div class="lang-toggle">
+          <button class="lang-btn active" id="lb-pt" onclick="setLang('pt')">PT</button>
+          <button class="lang-btn" id="lb-en" onclick="setLang('en')">EN</button>
         </div>
         <a href="index.html" class="nav-home" id="nav-home-btn">← Início</a>
       </div>
@@ -542,8 +548,8 @@
     LANG = lang;
     const s = STR[lang];
     document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
-    document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
-    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('lb-pt').classList.toggle('active', lang === 'pt');
+    document.getElementById('lb-en').classList.toggle('active', lang === 'en');
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (s[key] !== undefined) el.textContent = s[key];
