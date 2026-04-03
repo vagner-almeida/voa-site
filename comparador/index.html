@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Comparador de Tintas — VOA</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f2f4f7;--card:#ffffff;--border:#cdd3dd;--border-light:#e4e8ef;
+  --text:#1a2332;--muted:#6b7a90;--dim:#a0aabb;
+  --blue:#0057A8;--blue-light:#e8f0fb;
+  --orange:#F47920;--orange-light:#fff3ea;
+  --magenta:#C2006B;--magenta-light:#fce8f3;
+  --teal:#0a7a6a;--teal-light:#e6f5f3;
+  --purple:#5c2d9e;--purple-light:#f0eafd;
+  --green:#1a7a4a;--green-light:#e6f7ef;
+  --font:Syne,sans-serif;--mono:'DM Mono',monospace;
+  --r:6px;--rl:10px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding:0 0 60px}
+
+/* TOPBAR */
+.topbar{background:var(--blue);padding:14px 28px;display:flex;align-items:center;gap:14px}
+.topbar .logo{font-size:18px;font-weight:700;color:#fff;letter-spacing:.12em}
+.topbar .logo span{color:var(--orange)}
+.topbar .subtitle{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.08em;margin-top:1px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.topbar .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:4px;letter-spacing:.06em}
+.lang-toggle{display:flex;border:1px solid rgba(255,255,255,.25);border-radius:4px;overflow:hidden}
+.lang-btn{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;padding:4px 10px;background:transparent;border:none;color:rgba(255,255,255,.55);cursor:pointer;transition:all .15s}
+.lang-btn.active{background:var(--orange);color:#fff}
+.lang-btn:not(.active):hover{background:rgba(255,255,255,.12);color:#fff}
+
+/* LAYOUT */
+.wrap{max-width:1100px;margin:0 auto;padding:28px 20px}
+.section-title{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* FÓRMULAS */
+.formula-strip{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:18px 22px;margin-bottom:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.fml{border-left:3px solid var(--blue);padding-left:12px}
+.fml.or{border-color:var(--orange)}.fml.mg{border-color:var(--magenta)}.fml.gn{border-color:var(--green)}
+.fml-name{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.fml-eq{font-family:var(--mono);font-size:13px;color:var(--text);font-weight:500;line-height:1.5}
+.fml-desc{font-size:11px;color:var(--dim);margin-top:4px;line-height:1.5}
+
+/* GLOBAL */
+.global-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.field input{font-family:var(--mono);font-size:13px;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r);background:#fff;color:var(--text);outline:none;transition:border .15s}
+.field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,87,168,.1)}
+.field .unit{font-size:10px;color:var(--dim);margin-top:2px;font-family:var(--mono)}
+.eff-explain{background:var(--orange-light);border:1px solid rgba(248,121,32,.2);border-left:4px solid var(--orange);border-radius:var(--r);padding:10px 14px;font-size:11px;color:#8a4400;line-height:1.6;font-family:var(--mono);margin-bottom:24px}
+
+/* PAINT CARDS */
+.paints-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin-bottom:16px}
+.paint-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
+.pc-head{padding:11px 14px;display:flex;align-items:center;gap:10px}
+.pc-num{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.pc-name-in{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.35);color:#fff;font-family:var(--font);font-size:14px;font-weight:600;flex:1;outline:none;padding:2px 4px;min-width:0}
+.pc-name-in::placeholder{color:rgba(255,255,255,.5)}
+.pc-remove{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:4px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;line-height:1;flex-shrink:0;transition:background .15s;font-family:monospace}
+.pc-remove:hover{background:rgba(255,255,255,.32)}
+.pc-body{padding:14px}
+.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pc-field label{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.pc-field input{width:100%;font-family:var(--mono);font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);outline:none;transition:border .15s}
+.pc-field input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(0,87,168,.1)}
+.pc-field .hint{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px}
+.pc-head[data-c="0"]{background:var(--blue)}
+.pc-head[data-c="1"]{background:var(--orange)}
+.pc-head[data-c="2"]{background:var(--magenta)}
+.pc-head[data-c="3"]{background:var(--teal)}
+.pc-head[data-c="4"]{background:var(--purple)}
+
+/* ADD BTN */
+.btn-add{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px dashed var(--border);border-radius:var(--rl);padding:14px 20px;cursor:pointer;font-family:var(--font);font-size:13px;font-weight:600;color:var(--muted);width:100%;margin-bottom:24px;transition:all .15s}
+.btn-add:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.btn-add .plus{width:28px;height:28px;border-radius:50%;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:all .15s;line-height:1}
+.btn-add:hover .plus{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* BTNS */
+.btn-row{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.btn{font-family:var(--font);font-size:13px;font-weight:600;padding:10px 22px;border-radius:var(--r);cursor:pointer;border:none;transition:all .15s;letter-spacing:.03em}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#004a90}
+.btn-secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--bg);border-color:var(--blue);color:var(--blue)}
+
+/* RESULTS */
+.results-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:20px;overflow-x:auto}
+.res-table{width:100%;border-collapse:collapse;min-width:480px}
+.res-table th{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:10px 16px;text-align:left;border-bottom:1px solid var(--border-light);background:var(--bg);white-space:nowrap}
+.res-table td{padding:11px 16px;border-bottom:1px solid var(--border-light);font-size:13px;vertical-align:middle}
+.res-table tr:last-child td{border-bottom:none}
+.row-label{font-size:11px;color:var(--muted);font-family:var(--mono);font-weight:500}
+.formula-ref{font-family:var(--mono);font-size:10px;color:var(--dim);display:block;margin-top:1px}
+.val-cell{font-family:var(--mono);font-weight:500;font-size:14px}
+.val-cell.best{color:var(--green)}
+.pill{display:inline-block;font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:3px;font-weight:500}
+.p0{background:var(--blue-light);color:var(--blue)}.p1{background:var(--orange-light);color:#b85500}
+.p2{background:var(--magenta-light);color:#8a004b}.p3{background:var(--teal-light);color:var(--teal)}.p4{background:var(--purple-light);color:var(--purple)}
+.badge-best{display:inline-block;background:var(--green-light);color:var(--green);font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:3px;margin-left:6px}
+.info-box{background:var(--blue-light);border:1px solid rgba(0,87,168,.2);border-left:4px solid var(--blue);border-radius:var(--r);padding:12px 16px;font-size:12px;color:var(--blue);line-height:1.7;font-family:var(--mono);margin-bottom:20px}
+
+/* VIS */
+.vis-block{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:20px;margin-bottom:24px}
+.vis-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.vis-row:last-child{margin-bottom:0}
+.vis-label{font-family:var(--mono);font-size:11px;color:var(--muted);width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vis-bar-wrap{flex:1;height:22px;background:var(--bg);border-radius:4px;overflow:hidden}
+.vis-bar{height:100%;border-radius:4px;transition:width .4s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;min-width:50px}
+.vis-bar span{font-family:var(--mono);font-size:10px;color:#fff;font-weight:500;white-space:nowrap}
+.b0{background:var(--blue)}.b1{background:var(--orange)}.b2{background:var(--magenta)}.b3{background:var(--teal)}.b4{background:var(--purple)}
+
+/* BREAKDOWN */
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:24px}
+.bk-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:16px}
+.bk-card-title{font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.bk-dot{width:10px;height:10px;border-radius:50%}
+.d0{background:var(--blue)}.d1{background:var(--orange)}.d2{background:var(--magenta)}.d3{background:var(--teal)}.d4{background:var(--purple)}
+.bk-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border-light);font-size:12px}
+.bk-row:last-child{border-bottom:none;padding-top:8px;font-weight:700;font-size:13px}
+.bk-label{color:var(--muted)}
+.bk-val{font-family:var(--mono);color:var(--text)}
+.bk-calc{font-family:var(--mono);font-size:10px;color:var(--dim);text-align:right}
+.legend-row{display:flex;gap:14px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-family:var(--mono)}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+
+@media(max-width:600px){.paints-grid{grid-template-columns:1fr}.topbar{padding:12px 16px}.wrap{padding:16px}.formula-strip{grid-template-columns:1fr}}
+
+/* ── BOTÃO VOLTAR INÍCIO ── */
+.btn-home-top{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.22);
+  color:#fff;padding:5px 12px;border-radius:6px;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:0.07em;text-transform:uppercase;
+  text-decoration:none;white-space:nowrap;
+  transition:background 0.15s;
+}
+.btn-home-top:hover{background:rgba(255,255,255,0.22);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="logo">V<span>O</span>A</div>
+    <div class="subtitle">VAGNER OLIVEIRA ALMEIDA LTDA.</div>
+  </div>
+  <div class="topbar-right">
+    <div class="badge" data-i18n="badge">COMPARADOR DE TINTAS v1.1</div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('pt')">PT</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="../index.html" class="btn-home-top" id="btn-home">← Início</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="section-title" data-i18n="sec_formulas">Fórmulas utilizadas</div>
+  <div class="formula-strip">
+    <div class="fml">
+      <div class="fml-name" data-i18n="fml1_name">RENDIMENTO TEÓRICO</div>
+      <div class="fml-eq">RT = (SV / 100 × 1000) ÷ DFT</div>
+      <div class="fml-desc" data-i18n="fml1_desc">RT em m²/L · SV em % · DFT em µm<br>Cobertura teórica sem perdas de aplicação</div>
+    </div>
+    <div class="fml or">
+      <div class="fml-name" data-i18n="fml2_name">RENDIMENTO PRÁTICO</div>
+      <div class="fml-eq">RP = RT × η</div>
+      <div class="fml-desc" data-i18n="fml2_desc">η = eficiência de aplicação (decimal)<br>Airless: ~75% · Rolo: ~65% · Broxa: ~60%</div>
+    </div>
+    <div class="fml mg">
+      <div class="fml-name" data-i18n="fml3_name">ESPESSURA ÚMIDA (WFT)</div>
+      <div class="fml-eq">WFT = DFT ÷ (SV / 100)</div>
+      <div class="fml-desc" data-i18n="fml3_desc">Espessura úmida para atingir o DFT alvo<br>Referência para calibração do pente</div>
+    </div>
+    <div class="fml gn">
+      <div class="fml-name" data-i18n="fml4_name">CUSTO POR M²</div>
+      <div class="fml-eq">C/m² = Preço/L ÷ RP</div>
+      <div class="fml-desc" data-i18n="fml4_desc">Custo real de material por m² aplicado<br>Já considera as perdas via eficiência η</div>
+    </div>
+  </div>
+
+  <div class="section-title" data-i18n="sec_params">Parâmetros da obra</div>
+  <div class="global-row">
+    <div class="field">
+      <label data-i18n="lbl_area">Área total</label>
+      <input type="number" id="g-area" value="500" min="1" step="10"/>
+      <div class="unit" data-i18n="unit_area">m²</div>
+    </div>
+    <div class="field">
+      <label data-i18n="lbl_eff">Eficiência de aplicação (η)</label>
+      <input type="number" id="g-eff" value="75" min="30" max="100" step="1"/>
+      <div class="unit">%</div>
+    </div>
+    <div class="field">
+      <label data-i18n="lbl_waste">Perda de estoque</label>
+      <input type="number" id="g-waste" value="5" min="0" max="30" step="1"/>
+      <div class="unit" data-i18n="unit_waste">% (sobra de lata, respingo)</div>
+    </div>
+  </div>
+  <div class="eff-explain" data-i18n="eff_note">η (eta): Airless profissional ≈ 75–80% · Rolo ≈ 60–70% · Broxa ≈ 55–65%. Perda de estoque é calculada separadamente — refere-se à tinta que sobra na lata ou é descartada após o serviço.</div>
+
+  <div class="section-title" data-i18n="sec_paints">Tintas para comparar</div>
+  <div class="paints-grid" id="paints-grid"></div>
+
+  <button class="btn-add" id="btn-add" onclick="adicionarTinta()">
+    <div class="plus">+</div>
+    <span data-i18n="btn_add">Adicionar produto</span>
+  </button>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="calcular()" data-i18n="btn_calc">Calcular e Comparar</button>
+    <button class="btn btn-secondary" onclick="limpar()" data-i18n="btn_clear">Limpar resultados</button>
+  </div>
+
+  <div id="results-area" style="display:none">
+    <div class="section-title" data-i18n="sec_results">Resultados comparativos</div>
+    <div class="info-box" id="info-box"></div>
+    <div class="results-wrap">
+      <table class="res-table">
+        <thead><tr id="thead-row"><th style="width:220px" data-i18n="th_param">Parâmetro</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-title" data-i18n="sec_vis">Visualização</div>
+    <div class="vis-block">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+        <div class="legend-row" id="legend-row"></div>
+        <select id="vis-metric" onchange="renderVis()" style="font-family:var(--mono);font-size:12px;padding:5px 10px;border:1px solid var(--border);border-radius:var(--r);background:#fff;color:var(--text);outline:none">
+          <option value="rt" data-i18n="opt_rt">Rendimento Teórico (m²/L)</option>
+          <option value="rp" data-i18n="opt_rp">Rendimento Prático (m²/L)</option>
+          <option value="wft" data-i18n="opt_wft">WFT — Espessura Úmida (µm)</option>
+          <option value="vol" data-i18n="opt_vol">Volume necessário (L)</option>
+          <option value="cost_m2" data-i18n="opt_cost">Custo por m² (R$)</option>
+          <option value="total" data-i18n="opt_total">Custo total material (R$)</option>
+          <option value="sv" data-i18n="opt_sv">Sólidos por Volume (%)</option>
+        </select>
+      </div>
+      <div id="vis-area"></div>
+    </div>
+
+    <div class="section-title" data-i18n="sec_breakdown">Detalhamento das fórmulas</div>
+    <div class="breakdown" id="breakdown"></div>
+  </div>
+
+</div>
+
+<script>
+var currentLang = 'pt';
+var paintCount = 0;
+var lastResults = [];
+var MAX = 5;
+
+var PAL = [
+  {c:'0',pill:'p0',bar:'b0',dot:'d0'},
+  {c:'1',pill:'p1',bar:'b1',dot:'d1'},
+  {c:'2',pill:'p2',bar:'b2',dot:'d2'},
+  {c:'3',pill:'p3',bar:'b3',dot:'d3'},
+  {c:'4',pill:'p4',bar:'b4',dot:'d4'}
+];
+
+var STRINGS = {
+  pt: {
+    badge: 'COMPARADOR DE TINTAS v1.1',
+    sec_formulas: 'Fórmulas utilizadas',
+    fml1_name: 'RENDIMENTO TEÓRICO',
+    fml1_desc: 'RT em m²/L · SV em % · DFT em µm\nCobertura teórica sem perdas de aplicação',
+    fml2_name: 'RENDIMENTO PRÁTICO',
+    fml2_desc: 'η = eficiência de aplicação (decimal)\nAirless: ~75% · Rolo: ~65% · Broxa: ~60%',
+    fml3_name: 'ESPESSURA ÚMIDA (WFT)',
+    fml3_desc: 'Espessura úmida para atingir o DFT alvo\nReferência para calibração do pente',
+    fml4_name: 'CUSTO POR M²',
+    fml4_desc: 'Custo real de material por m² aplicado\nJá considera as perdas via eficiência η',
+    sec_params: 'Parâmetros da obra',
+    lbl_area: 'Área total',
+    unit_area: 'm²',
+    lbl_eff: 'Eficiência de aplicação (η)',
+    lbl_waste: 'Perda de estoque',
+    unit_waste: '% (sobra de lata, respingo)',
+    eff_note: 'η (eta): Airless profissional ≈ 75–80% · Rolo ≈ 60–70% · Broxa ≈ 55–65%. Perda de estoque é calculada separadamente — refere-se à tinta que sobra na lata ou é descartada após o serviço.',
+    sec_paints: 'Tintas para comparar',
+    btn_add: 'Adicionar produto',
+    btn_calc: 'Calcular e Comparar',
+    btn_clear: 'Limpar resultados',
+    sec_results: 'Resultados comparativos',
+    th_param: 'Parâmetro',
+    sec_vis: 'Visualização',
+    opt_rt: 'Rendimento Teórico (m²/L)',
+    opt_rp: 'Rendimento Prático (m²/L)',
+    opt_wft: 'WFT — Espessura Úmida (µm)',
+    opt_vol: 'Volume necessário (L)',
+    opt_cost: 'Custo por m² (R$)',
+    opt_total: 'Custo total material (R$)',
+    opt_sv: 'Sólidos por Volume (%)',
+    sec_breakdown: 'Detalhamento das fórmulas',
+    /* card fields */
+    lbl_sv: 'SV — Sólidos por Volume',
+    hint_sv: '% vol.',
+    lbl_dft: 'DFT alvo',
+    hint_dft: 'µm (espessura seca)',
+    lbl_price: 'Preço',
+    hint_price: 'R$/litro',
+    paint_default: 'Tinta',
+    /* table rows */
+    row_sv: 'Sólidos por Volume', row_sv_fml: 'Dado do fabricante (TDS)',
+    row_rt: 'Rendimento Teórico', row_rt_fml: 'RT = (SV/100 × 1000) ÷ DFT',
+    row_rp: 'Rendimento Prático',
+    row_wft: 'Espessura Úmida (WFT)', row_wft_fml: 'WFT = DFT ÷ (SV/100)',
+    row_vol: 'Volume necessário',
+    row_cost: 'Custo por m²', row_cost_fml: 'C/m² = Preço/L ÷ RP',
+    row_total: 'Custo total material', row_total_fml: '= Preço/L × Volume total',
+    badge_best: '✓ melhor',
+    /* info box */
+    analysis: 'ANÁLISE',
+    lowest_cost: 'apresenta o menor custo por m²',
+    saving: 'economia de',
+    total_saving: 'no total de material em relação a',
+    area_label: 'Área',
+    loss_label: 'Perda',
+    /* breakdown */
+    bk_sv: 'SV (Sólidos por Vol.)',
+    bk_sv_calc: 'dado do fabricante (TDS)',
+    bk_dft: 'DFT alvo',
+    bk_dft_calc: 'espessura seca especificada',
+    bk_wft: 'WFT necessária',
+    bk_rt: 'Rendimento Teórico',
+    bk_rp: 'Rendimento Prático',
+    bk_vol: 'Volume',
+    bk_price: 'Preço',
+    bk_cost: 'Custo por m²',
+    bk_total: 'Custo total material',
+    /* alerts */
+    alert_min: 'Preencha ao menos 2 tintas com SV, DFT e Preço.',
+    alert_max: 'Máximo de 5 tintas.'
+  },
+  en: {
+    badge: 'PAINT COMPARATOR v1.1',
+    sec_formulas: 'Formulas used',
+    fml1_name: 'THEORETICAL SPREAD RATE',
+    fml1_desc: 'TSR in m²/L · VS in % · DFT in µm\nTheoretical coverage with no application losses',
+    fml2_name: 'PRACTICAL SPREAD RATE',
+    fml2_desc: 'η = application efficiency (decimal)\nAirless: ~75% · Roller: ~65% · Brush: ~60%',
+    fml3_name: 'WET FILM THICKNESS (WFT)',
+    fml3_desc: 'WFT required to achieve the target DFT\nReference for wet film gauge calibration',
+    fml4_name: 'COST PER M²',
+    fml4_desc: 'Actual material cost per m² applied\nAlready accounts for losses via efficiency η',
+    sec_params: 'Project parameters',
+    lbl_area: 'Total area',
+    unit_area: 'm²',
+    lbl_eff: 'Application efficiency (η)',
+    lbl_waste: 'Stock loss',
+    unit_waste: '% (leftover, overspray)',
+    eff_note: 'η (eta): Professional airless ≈ 75–80% · Roller ≈ 60–70% · Brush ≈ 55–65%. Stock loss is calculated separately — refers to paint left in the can or discarded after work.',
+    sec_paints: 'Paints to compare',
+    btn_add: 'Add product',
+    btn_calc: 'Calculate & Compare',
+    btn_clear: 'Clear results',
+    sec_results: 'Comparative results',
+    th_param: 'Parameter',
+    sec_vis: 'Visualization',
+    opt_rt: 'Theoretical Spread Rate (m²/L)',
+    opt_rp: 'Practical Spread Rate (m²/L)',
+    opt_wft: 'WFT — Wet Film Thickness (µm)',
+    opt_vol: 'Volume required (L)',
+    opt_cost: 'Cost per m² (R$)',
+    opt_total: 'Total material cost (R$)',
+    opt_sv: 'Volume Solids (%)',
+    sec_breakdown: 'Formula breakdown',
+    /* card fields */
+    lbl_sv: 'VS — Volume Solids',
+    hint_sv: '% vol.',
+    lbl_dft: 'Target DFT',
+    hint_dft: 'µm (dry film thickness)',
+    lbl_price: 'Price',
+    hint_price: 'R$/litre',
+    paint_default: 'Paint',
+    /* table rows */
+    row_sv: 'Volume Solids', row_sv_fml: 'Manufacturer data (TDS)',
+    row_rt: 'Theoretical Spread Rate', row_rt_fml: 'TSR = (VS/100 × 1000) ÷ DFT',
+    row_rp: 'Practical Spread Rate',
+    row_wft: 'Wet Film Thickness (WFT)', row_wft_fml: 'WFT = DFT ÷ (VS/100)',
+    row_vol: 'Volume required',
+    row_cost: 'Cost per m²', row_cost_fml: 'C/m² = Price/L ÷ PSR',
+    row_total: 'Total material cost', row_total_fml: '= Price/L × Total volume',
+    badge_best: '✓ best',
+    /* info box */
+    analysis: 'ANALYSIS',
+    lowest_cost: 'has the lowest cost per m²',
+    saving: 'saving',
+    total_saving: 'in total material cost compared to',
+    area_label: 'Area',
+    loss_label: 'Loss',
+    /* breakdown */
+    bk_sv: 'VS (Volume Solids)',
+    bk_sv_calc: 'manufacturer data (TDS)',
+    bk_dft: 'Target DFT',
+    bk_dft_calc: 'specified dry film thickness',
+    bk_wft: 'Required WFT',
+    bk_rt: 'Theoretical Spread Rate',
+    bk_rp: 'Practical Spread Rate',
+    bk_vol: 'Volume',
+    bk_price: 'Price',
+    bk_cost: 'Cost per m²',
+    bk_total: 'Total material cost',
+    /* alerts */
+    alert_min: 'Fill in at least 2 paints with VS, DFT and Price.',
+    alert_max: 'Maximum of 5 paints.'
+  }
+};
+
+function t(key) { return STRINGS[currentLang][key] || key; }
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.classList.toggle('active', b.textContent === lang.toUpperCase());
+  });
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    var val = t(key);
+    if (el.tagName === 'OPTION') {
+      el.textContent = val;
+    } else {
+      el.innerHTML = val.replace(/\n/g, '<br>');
+    }
+  });
+  /* update card field labels & placeholders */
+  document.querySelectorAll('.paint-card').forEach(function(card, i) {
+    var labels = card.querySelectorAll('.pc-field label');
+    var hints = card.querySelectorAll('.pc-field .hint');
+    if (labels[0]) labels[0].textContent = t('lbl_sv');
+    if (hints[0]) hints[0].textContent = t('hint_sv');
+    if (labels[1]) labels[1].textContent = t('lbl_dft');
+    if (hints[1]) hints[1].textContent = t('hint_dft');
+    if (labels[2]) labels[2].textContent = t('lbl_price');
+    if (hints[2]) hints[2].textContent = t('hint_price');
+    var nameIn = card.querySelector('.pc-name-in');
+    if (nameIn && nameIn.value.match(/^(Tinta|Paint) \d+$/)) {
+      nameIn.value = t('paint_default') + ' ' + (i + 1);
+    }
+  });
+  /* traduz botão home */
+  var homeBtn = document.getElementById('btn-home');
+  if (homeBtn) homeBtn.textContent = lang === 'en' ? '← Home' : '← Início';
+  /* re-render results if visible */
+  if (lastResults.length && document.getElementById('results-area').style.display !== 'none') {
+    renderTable();
+    renderVis();
+    renderBreakdown();
+  }
+}
+
+/* ── CARDS ── */
+function adicionarTinta() {
+  if (paintCount >= MAX) { alert(t('alert_max')); return; }
+  var num = paintCount + 1;
+  var idx = paintCount;
+  var p = PAL[idx % PAL.length];
+  var rm = num > 2
+    ? '<button class="pc-remove" onclick="remover(this)" title="Remove">×</button>'
+    : '';
+  var div = document.createElement('div');
+  div.className = 'paint-card';
+  div.setAttribute('data-idx', idx);
+  div.innerHTML =
+    '<div class="pc-head" data-c="' + p.c + '">' +
+      '<div class="pc-num">' + num + '</div>' +
+      '<input class="pc-name-in" type="text" placeholder="' + t('paint_default') + ' ' + num + '" value="' + t('paint_default') + ' ' + num + '"/>' +
+      rm +
+    '</div>' +
+    '<div class="pc-body"><div class="pc-grid">' +
+      '<div class="pc-field"><label>' + t('lbl_sv') + '</label><input type="number" name="sv" value="87" min="1" max="100" step="0.1"/><div class="hint">' + t('hint_sv') + '</div></div>' +
+      '<div class="pc-field"><label>' + t('lbl_dft') + '</label><input type="number" name="dft" value="125" min="1" max="2000" step="5"/><div class="hint">' + t('hint_dft') + '</div></div>' +
+      '<div class="pc-field" style="grid-column:1/-1"><label>' + t('lbl_price') + '</label><input type="number" name="price" value="" min="0" step="0.01" placeholder="0,00"/><div class="hint">' + t('hint_price') + '</div></div>' +
+    '</div></div>';
+  document.getElementById('paints-grid').appendChild(div);
+  paintCount++;
+  document.getElementById('btn-add').style.display = paintCount >= MAX ? 'none' : 'flex';
+}
+
+function remover(btn) {
+  btn.closest('.paint-card').remove();
+  paintCount--;
+  renumerar();
+  document.getElementById('btn-add').style.display = 'flex';
+}
+
+function renumerar() {
+  document.querySelectorAll('#paints-grid .paint-card').forEach(function(card, i) {
+    card.setAttribute('data-idx', i);
+    var head = card.querySelector('.pc-head');
+    head.setAttribute('data-c', PAL[i % PAL.length].c);
+    card.querySelector('.pc-num').textContent = i + 1;
+    var nameIn = card.querySelector('.pc-name-in');
+    if (nameIn.value.match(/^(Tinta|Paint) \d+$/)) nameIn.value = t('paint_default') + ' ' + (i + 1);
+    var rm = card.querySelector('.pc-remove');
+    if (i >= 2 && !rm) {
+      rm = document.createElement('button');
+      rm.className = 'pc-remove';
+      rm.setAttribute('onclick', 'remover(this)');
+      rm.textContent = '×';
+      head.appendChild(rm);
+    } else if (i < 2 && rm) { rm.remove(); }
+  });
+}
+
+function getPaints() {
+  return Array.from(document.querySelectorAll('#paints-grid .paint-card')).map(function(card, i) {
+    return {
+      name: card.querySelector('.pc-name-in').value.trim() || (t('paint_default') + ' ' + (i + 1)),
+      sv: parseFloat(card.querySelector('[name=sv]').value) || 0,
+      dft: parseFloat(card.querySelector('[name=dft]').value) || 0,
+      price: parseFloat(card.querySelector('[name=price]').value) || 0,
+      idx: i
+    };
+  });
+}
+
+/* ── CALC ── */
+var _area, _eff, _waste, _eta, _wasteF;
+
+function calcular() {
+  _area = parseFloat(document.getElementById('g-area').value) || 500;
+  _eff = parseFloat(document.getElementById('g-eff').value) || 75;
+  _waste = parseFloat(document.getElementById('g-waste').value) || 5;
+  _eta = _eff / 100;
+  _wasteF = 1 + (_waste / 100);
+
+  var paints = getPaints().filter(function(p) { return p.sv > 0 && p.dft > 0 && p.price > 0; });
+  if (paints.length < 2) { alert(t('alert_min')); return; }
+
+  lastResults = paints.map(function(p) {
+    var rt = (p.sv / 100 * 1000) / p.dft;
+    var rp = rt * _eta;
+    var wft = p.dft / (p.sv / 100);
+    var vol = ((_area / rp)) * _wasteF;
+    var cost_m2 = p.price / rp;
+    var total = p.price * vol;
+    return {name:p.name, sv:p.sv, dft:p.dft, price:p.price, idx:p.idx, rt:rt, rp:rp, wft:wft, vol:vol, cost_m2:cost_m2, total:total};
+  });
+
+  renderTable();
+  renderInfoBox();
+  renderLegend();
+  renderVis();
+  renderBreakdown();
+
+  document.getElementById('results-area').style.display = 'block';
+  document.getElementById('results-area').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderInfoBox() {
+  var winner = lastResults.reduce(function(a, b) { return a.cost_m2 < b.cost_m2 ? a : b; });
+  var others = lastResults.filter(function(r) { return r.name !== winner.name; }).sort(function(a, b) { return a.cost_m2 - b.cost_m2; });
+  var saving = others.length ? (others[0].total - winner.total).toFixed(2) : null;
+  document.getElementById('info-box').innerHTML =
+    t('analysis') + ': <strong>' + winner.name + '</strong> ' + t('lowest_cost') + ' — R$ ' + winner.cost_m2.toFixed(2) + '/m²' +
+    (saving ? ' — ' + t('saving') + ' R$ ' + saving + ' ' + t('total_saving') + ' ' + others[0].name + '.' : '.') +
+    ' | ' + t('area_label') + ': ' + _area + ' m² · η = ' + _eff + '% · ' + t('loss_label') + ': ' + _waste + '%.';
+}
+
+function renderLegend() {
+  var lg = document.getElementById('legend-row');
+  lg.innerHTML = '';
+  lastResults.forEach(function(r, i) {
+    var p = PAL[i % PAL.length];
+    lg.innerHTML += '<div class="legend-item"><div class="legend-dot ' + p.dot + '"></div>' + r.name + '</div>';
+  });
+}
+
+function renderTable() {
+  var thead = document.getElementById('thead-row');
+  thead.innerHTML = '<th style="width:220px">' + t('th_param') + '</th>';
+  lastResults.forEach(function(r, i) {
+    var p = PAL[i % PAL.length];
+    thead.innerHTML += '<th><span class="pill ' + p.pill + '">' + r.name + '</span><br><span style="font-family:var(--mono);font-size:10px;color:var(--dim)">SV ' + r.sv + '% · DFT ' + r.dft + 'µm</span></th>';
+  });
+
+  var rows = [
+    {key:'sv',      label:t('row_sv'),   unit:'%',    fmt:function(v){return v.toFixed(1)},          best:'max', fml:t('row_sv_fml')},
+    {key:'rt',      label:t('row_rt'),   unit:'m²/L', fmt:function(v){return v.toFixed(3)},          best:'max', fml:t('row_rt_fml')},
+    {key:'rp',      label:t('row_rp'),   unit:'m²/L', fmt:function(v){return v.toFixed(3)},          best:'max', fml:'RP = RT × η   (η = ' + _eff + '%)'},
+    {key:'wft',     label:t('row_wft'),  unit:'µm',   fmt:function(v){return v.toFixed(0)},          best:'none',fml:t('row_wft_fml')},
+    {key:'vol',     label:t('row_vol') + ' (+' + _waste + '%)', unit:'L', fmt:function(v){return v.toFixed(1)}, best:'min', fml:'V = (A ÷ RP) × ' + _wasteF.toFixed(2)},
+    {key:'cost_m2', label:t('row_cost'), unit:'R$',   fmt:function(v){return 'R$ ' + v.toFixed(2)},  best:'min', fml:t('row_cost_fml')},
+    {key:'total',   label:t('row_total'),unit:'R$',   fmt:function(v){return 'R$ ' + v.toFixed(2)},  best:'min', fml:t('row_total_fml')}
+  ];
+
+  var tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  rows.forEach(function(row) {
+    var vals = lastResults.map(function(r) { return r[row.key]; });
+    var bestVal = row.best === 'max' ? Math.max.apply(null, vals) : row.best === 'min' ? Math.min.apply(null, vals) : null;
+    var html = '<tr><td><span class="row-label">' + row.label + '</span><span class="formula-ref">' + row.fml + '</span></td>';
+    lastResults.forEach(function(r, i) {
+      var v = r[row.key];
+      var isBest = bestVal !== null && Math.abs(v - bestVal) < 0.00001;
+      var cls = isBest ? 'val-cell best' : 'val-cell';
+      var badge = isBest ? '<span class="badge-best">' + t('badge_best') + '</span>' : '';
+      html += '<td><span class="' + cls + '">' + row.fmt(v) + '</span>' + badge + '<br><span style="font-family:var(--mono);font-size:10px;color:var(--dim)">' + row.unit + '</span></td>';
+    });
+    tbody.innerHTML += html + '</tr>';
+  });
+}
+
+function renderVis() {
+  if (!lastResults.length) return;
+  var metric = document.getElementById('vis-metric').value;
+  var keyMap = {rt:'rt',rp:'rp',wft:'wft',vol:'vol',cost_m2:'cost_m2',total:'total',sv:'sv'};
+  var k = keyMap[metric];
+  var vals = lastResults.map(function(r) { return r[k]; });
+  var maxV = Math.max.apply(null, vals);
+  var html = '';
+  lastResults.forEach(function(r, i) {
+    var p = PAL[i % PAL.length];
+    var pct = maxV > 0 ? (vals[i] / maxV * 100) : 0;
+    var disp = (metric.indexOf('cost') !== -1 || metric === 'total') ? 'R$ ' + vals[i].toFixed(2) : vals[i].toFixed(2);
+    html += '<div class="vis-row"><div class="vis-label" title="' + r.name + '">' + r.name + '</div><div class="vis-bar-wrap"><div class="vis-bar ' + p.bar + '" style="width:' + pct.toFixed(1) + '%"><span>' + disp + '</span></div></div></div>';
+  });
+  document.getElementById('vis-area').innerHTML = html;
+}
+
+function renderBreakdown() {
+  var bk = document.getElementById('breakdown');
+  bk.innerHTML = '';
+  lastResults.forEach(function(r, i) {
+    var p = PAL[i % PAL.length];
+    bk.innerHTML +=
+      '<div class="bk-card">' +
+      '<div class="bk-card-title"><div class="bk-dot ' + p.dot + '"></div>' + r.name + '</div>' +
+      '<div class="bk-row"><span class="bk-label">' + t('bk_sv') + '</span><div><span class="bk-val">' + r.sv + '%</span><div class="bk-calc">' + t('bk_sv_calc') + '</div></div></div>' +
+      '<div class="bk-row"><span class="bk-label">' + t('bk_dft') + '</span><div><span class="bk-val">' + r.dft + ' µm</span><div class="bk-calc">' + t('bk_dft_calc') + '</div></div></div>' +
+      '<div class="bk-row"><span class="bk-label">' + t('bk_wft') + '</span><div><span class="bk-val">' + r.wft.toFixed(0) + ' µm</span><div class="bk-calc">' + r.dft + ' ÷ (' + r.sv + '/100) = ' + r.wft.toFixed(1) + '</div></div></div>' +
+      '<div class="bk-row"><span class="bk-label">' + t('bk_rt') + '</span><div><span class="bk-val">' + r.rt.toFixed(3) + ' m²/L</span><div class="bk-calc">(' + r.sv + '/100 × 1000) ÷ ' + r.dft + '</div></div></div>' +
+      '<div class="bk-row"><span class="bk-label">' + t('bk_rp') + ' (η=' + _eff + '%)</span><div><span class="bk-val">' + r.rp.toFixed(3) + ' m²/L</span><div class="bk-calc">' + r.rt.toFixed(3) + ' × ' + _eta.toFixed(2) + '</div></div></div>' +
+      '<div class="bk-row"><span class="bk-label">' + t('bk_vol') + ' (' + _area + ' m² +' + _waste + '%)</span><div><span class="bk-val">' + r.vol.toFixed(1) + ' L</span><div class="bk-calc">(' + _area + ' ÷ ' + r.rp.toFixed(3) + ') × ' + _wasteF.toFixed(2) + '</div></div></div>' +
+      '<div class="bk-row"><span class="bk-label">' + t('bk_price') + '</span><div><span class="bk-val">R$ ' + r.price.toFixed(2) + '/L</span></div></div>' +
+      '<div class="bk-row"><span class="bk-label">' + t('bk_cost') + '</span><div><span class="bk-val">R$ ' + r.cost_m2.toFixed(2) + '</span><div class="bk-calc">R$ ' + r.price.toFixed(2) + ' ÷ ' + r.rp.toFixed(3) + '</div></div></div>' +
+      '<div class="bk-row"><span class="bk-label">' + t('bk_total') + '</span><div><span class="bk-val">R$ ' + r.total.toFixed(2) + '</span><div class="bk-calc">' + r.vol.toFixed(1) + ' L × R$ ' + r.price.toFixed(2) + '</div></div></div>' +
+      '</div>';
+  });
+}
+
+function limpar() {
+  document.getElementById('results-area').style.display = 'none';
+  lastResults = [];
+}
+
+adicionarTinta();
+adicionarTinta();
+</script>
+</body>
+</html>
