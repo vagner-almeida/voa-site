@@ -50,13 +50,17 @@ body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);
 .lang-btn.active{background:#F47920;color:#fff;font-weight:bold}
 
 /* ── TABS ── */
-.tabs-bar{
+.tabs-bar-outer{
   background:var(--surface);
   border-bottom:2px solid #0057A8;
+  position:sticky;top:var(--header-h);z-index:9;
+  flex-shrink:0;
+}
+.tabs-bar{
+  max-width:920px;margin:0 auto;
   display:flex;overflow-x:auto;
   -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;flex-shrink:0;
-  position:sticky;top:var(--header-h);z-index:9;
+  scrollbar-width:none;
 }
 .tabs-bar::-webkit-scrollbar{display:none}
 .tab{
@@ -70,6 +74,9 @@ body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);
 }
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab:hover:not(.active){color:var(--text)}
+
+/* ── CONTENT WRAPPER ── */
+.content-wrap{max-width:920px;margin:0 auto;width:100%;}
 
 /* ── PANELS ── */
 .panel{display:none;padding:16px}
@@ -269,21 +276,40 @@ body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);
     </div>
     <span class="t2" id="hdr-t2">ISO 4628 · ASTM D610 · Escala Europeia</span>
   </div>
-  <div class="lang-toggle">
-    <button class="lang-btn active" id="lb-pt" onclick="setLang('pt')">PT</button>
-    <button class="lang-btn"        id="lb-en" onclick="setLang('en')">EN</button>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <a href="../index.html" style="
+      display:inline-flex;align-items:center;gap:5px;
+      background:rgba(255,255,255,0.13);
+      border:1px solid rgba(255,255,255,0.22);
+      color:#fff;
+      padding:5px 11px;
+      border-radius:6px;
+      font-family:'Courier New',monospace;
+      font-size:10px;
+      letter-spacing:0.07em;
+      text-transform:uppercase;
+      text-decoration:none;
+      white-space:nowrap;
+      transition:background 0.15s;
+    " onmouseover="this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(255,255,255,0.13)'">← Início</a>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="lb-pt" onclick="setLang('pt')">PT</button>
+      <button class="lang-btn"        id="lb-en" onclick="setLang('en')">EN</button>
+    </div>
   </div>
 </div>
 
-<!-- TABS -->
+<div class="tabs-bar-outer">
 <div class="tabs-bar">
   <button class="tab active" id="tab-btn-gen"  onclick="setTab('gen')"  data-pt="Gerador"         data-en="Generator">Gerador</button>
   <button class="tab"        id="tab-btn-scale" onclick="setTab('scale')" data-pt="Escala Re0–Re9"  data-en="Re0–Re9 Scale">Escala Re0–Re9</button>
   <button class="tab"        id="tab-btn-corr"  onclick="setTab('corr')"  data-pt="Correlação"      data-en="Correlation">Correlação</button>
   <button class="tab"        id="tab-btn-about" onclick="setTab('about')" data-pt="Sobre"           data-en="About">Sobre</button>
   <button class="tab"        id="tab-btn-report" onclick="setTab('report')" data-pt="Laudo"           data-en="Report">Laudo</button>
-</div>
+</div><!-- /tabs-bar -->
+</div><!-- /tabs-bar-outer -->
 
+<div class="content-wrap">
 <!-- ══════════ GERADOR ══════════ -->
 <div id="tab-gen" class="panel active">
 
@@ -909,5 +935,21 @@ init();
 <div id="tab-report" class="panel">
   <div class="rpt" id="rpt-content"></div>
 </div>
+</div><!-- /content-wrap -->
+
+<footer style="border-top:1px solid var(--border);background:var(--surface);padding:1.1rem 0;margin-top:0.5rem;">
+  <div style="max-width:920px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-family:'Courier New',monospace;font-weight:900;font-size:1rem;">
+        <span style="color:var(--voa-v);">V</span><span style="color:var(--voa-o);">O</span><span style="color:var(--voa-a);">A</span>
+      </span>
+      <span style="font-family:'Courier New',monospace;font-size:0.62rem;color:var(--text3);letter-spacing:0.03em;">
+        © <span id="ft-year"></span> VOA – Vagner Oliveira Almeida LTDA.
+      </span>
+    </div>
+    <a href="../index.html" style="font-family:'Courier New',monospace;font-size:0.65rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--voa-v);text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='.65'" onmouseout="this.style.opacity='1'">← Voltar ao site</a>
+  </div>
+</footer>
+<script>document.getElementById('ft-year').textContent=new Date().getFullYear();</script>
 </body>
 </html>
