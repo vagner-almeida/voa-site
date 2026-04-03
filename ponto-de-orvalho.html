@@ -301,18 +301,23 @@
         <a href="index.html#servicos">Serviços</a>
         <a href="index.html#contato">Contato</a>
       </div>
-      <a href="index.html" class="nav-home">← Início</a>
+      <div style="display:flex;align-items:center;gap:0.55rem;">
+        <div class="lang-sw">
+          <button id="btn-pt" class="active" onclick="setLang('pt')">PT</button>
+          <button id="btn-en" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="index.html" class="nav-home" id="nav-home-btn">← Início</a>
+      </div>
     </div>
   </div>
 </header>
 
 <div class="page-header">
   <div class="wrap">
-    <div class="ph-eye fu">Calculadora técnica · Condições de aplicação</div>
-    <h1 class="fu d1">Ponto de Orvalho</h1>
+    <div class="ph-eye fu"><span data-i18n="eye">Calculadora técnica · Condições de aplicação</span></div>
+    <h1 class="fu d1"><span data-i18n="h1">Ponto de Orvalho</span></h1>
     <p class="ph-desc fu d2">
-      Calcule o <strong>ponto de orvalho (Td)</strong> e o <strong>Delta T</strong> a partir da temperatura do ar e umidade relativa.
-      Avalie o risco de condensação superficial antes de iniciar a aplicação de tinta.
+      <span data-i18n="ph_desc">Calcule o <strong>ponto de orvalho (Td)</strong> e o <strong>Delta T</strong> a partir da temperatura do ar e umidade relativa. Avalie o risco de condensação superficial antes de iniciar a aplicação de tinta.</span>
     </p>
   </div>
 </div>
@@ -324,20 +329,20 @@
     <div class="card fu d3">
       <div class="card-header">
         <div class="card-header-icon icon-a">🌡️</div>
-        <div class="card-title">Entrada de dados</div>
-        <div class="card-sub">Fórmula de Magnus · Água · 0–50 °C</div>
+        <div class="card-title"><span data-i18n="card_in">Entrada de dados</span></div>
+        <div class="card-sub"><span data-i18n="card_sub">Fórmula de Magnus · Água · 0–50 °C</span></div>
       </div>
       <div class="card-body">
         <div class="input-grid">
           <div class="field">
-            <label for="temp">Temperatura do ar</label>
+            <label for="temp"><span data-i18n="lbl_t">Temperatura do ar</span></label>
             <div class="input-wrap">
               <input type="number" id="temp" step="0.1" placeholder="Ex: 28" min="-10" max="60" />
               <span class="input-unit">°C</span>
             </div>
           </div>
           <div class="field">
-            <label for="rh">Umidade relativa</label>
+            <label for="rh"><span data-i18n="lbl_rh">Umidade relativa</span></label>
             <div class="input-wrap">
               <input type="number" id="rh" step="1" placeholder="Ex: 75" min="1" max="100" />
               <span class="input-unit">%</span>
@@ -346,30 +351,30 @@
         </div>
 
         <div class="btn-row">
-          <button class="btn-calc" onclick="calcular()">→&nbsp; Calcular</button>
-          <button class="btn-clear" onclick="limpar()">Limpar</button>
+          <button class="btn-calc" onclick="calcular()"><span data-i18n="btn_calc">→&nbsp; Calcular</span></button>
+          <button class="btn-clear" onclick="limpar()"><span data-i18n="btn_clear">Limpar</span></button>
         </div>
 
         <!-- RESULTS -->
         <div class="results" id="results">
-          <div class="results-divider">Resultado</div>
+          <div class="results-divider"><span data-i18n="res_label">Resultado</span></div>
 
           <div class="kpi-grid">
             <div class="kpi">
               <div class="kpi-accent" id="kpi-accent-td" style="background:var(--a);"></div>
-              <div class="kpi-label">Ponto de orvalho (Td)</div>
+              <div class="kpi-label"><span data-i18n="kpi_td">Ponto de orvalho (Td)</span></div>
               <div class="kpi-val" id="out-td">—<span class="kpi-unit">°C</span></div>
             </div>
             <div class="kpi">
               <div class="kpi-accent" id="kpi-accent-dt" style="background:var(--o);"></div>
-              <div class="kpi-label">Delta T (ar − orvalho)</div>
+              <div class="kpi-label"><span data-i18n="kpi_dt">Delta T (ar − orvalho)</span></div>
               <div class="kpi-val" id="out-dt">—<span class="kpi-unit">°C</span></div>
             </div>
           </div>
 
           <!-- GAUGE -->
           <div class="gauge-wrap">
-            <div class="gauge-label-row"><span>ΔT crítico (0°C)</span><span>Atenção (3°C)</span><span>Seguro (≥ 5°C)</span></div>
+            <div class="gauge-label-row"><span><span data-i18n="g_low">ΔT crítico (0°C)</span></span><span><span data-i18n="g_mid">Atenção (3°C)</span></span><span><span data-i18n="g_ok">Seguro (≥ 5°C)</span></span></div>
             <div class="gauge-track">
               <div class="gauge-fill" id="gauge" style="width:0%;"></div>
             </div>
@@ -391,12 +396,12 @@
     <div class="card">
       <div class="card-header">
         <div class="card-header-icon icon-v">📐</div>
-        <div class="card-title">Referência técnica</div>
+        <div class="card-title"><span data-i18n="ref_title">Referência técnica</span></div>
       </div>
       <div class="card-body">
         <div class="info-grid">
           <div class="info-block">
-            <div class="info-title">Fórmula de Magnus</div>
+            <div class="info-title"><span data-i18n="magnus_title">Fórmula de Magnus</span></div>
             <div class="info-text">
               Utilizada para calcular o ponto de orvalho em condições normais (0–50 °C, água líquida).<br><br>
               <code>γ = (a·T)/(b+T) + ln(RH/100)</code><br>
@@ -405,7 +410,7 @@
             </div>
           </div>
           <div class="info-block">
-            <div class="info-title">Critérios ΔT de referência</div>
+            <div class="info-title"><span data-i18n="crit_title">Critérios ΔT de referência</span></div>
             <table class="ref-table">
               <thead>
                 <tr><th>Delta T (°C)</th><th>Status</th><th>Ação recomendada</th></tr>
@@ -430,7 +435,7 @@
             </table>
           </div>
           <div class="info-block">
-            <div class="info-title">Temperatura de superfície</div>
+            <div class="info-title"><span data-i18n="surf_title">Temperatura de superfície</span></div>
             <div class="info-text">
               O ΔT deve ser medido em relação à <strong>temperatura da superfície</strong>, não apenas do ar ambiente.
               Superfícies frias (especialmente em ambientes externos ou em tanques) podem ter temperatura
@@ -438,7 +443,7 @@
             </div>
           </div>
           <div class="info-block">
-            <div class="info-title">Medidas corretivas</div>
+            <div class="info-title"><span data-i18n="corr_title">Medidas corretivas</span></div>
             <div class="info-text">
               Quando o ΔT estiver abaixo do limite seguro, avalie:<br><br>
               → Aquecimento da superfície (heat gun, lâmpadas)<br>
@@ -463,12 +468,136 @@
         </div>
         <div class="ft-copy">© <span id="year"></span> VOA – Vagner Oliveira Almeida LTDA.</div>
       </div>
-      <a href="index.html" class="ft-back">← Voltar ao site</a>
+      <a href="index.html" class="ft-back"><span data-i18n="ft_back">← Voltar ao site</span></a>
     </div>
   </div>
 </footer>
 
 <script>
+
+  const STR = {
+    pt: {
+      eye: 'Calculadora técnica · Condições de aplicação',
+      h1: 'Ponto de Orvalho',
+      ph_desc: 'Calcule o ponto de orvalho (Td) e o Delta T a partir da temperatura do ar e umidade relativa. Avalie o risco de condensação superficial antes de iniciar a aplicação de tinta.',
+      card_in: 'Entrada de dados', card_sub: 'Fórmula de Magnus · Água · 0–50 °C',
+      lbl_t: 'Temperatura do ar', lbl_rh: 'Umidade relativa',
+      btn_calc: '→\u00a0 Calcular', btn_clear: 'Limpar',
+      res_label: 'Resultado',
+      kpi_td: 'Ponto de orvalho (Td)', kpi_dt: 'Delta T (ar − orvalho)',
+      g_low: 'ΔT crítico (0°C)', g_mid: 'Atenção (3°C)', g_ok: 'Seguro (≥ 5°C)',
+      ref_title: 'Referência técnica', magnus_title: 'Fórmula de Magnus',
+      crit_title: 'Critérios ΔT de referência', surf_title: 'Temperatura de superfície', corr_title: 'Medidas corretivas',
+      ft_back: '← Voltar ao site',
+      nav_home: '← Início',
+      alert_danger_title: 'ΔT crítico — risco elevado de condensação',
+      alert_danger_text: 'O Delta T está abaixo de 3 °C. Há risco significativo de condensação na superfície. Suspenda a aplicação até que as condições melhorem. Avalie aquecimento da superfície, desumidificação ou ventilação forçada.',
+      alert_warn_title: 'ΔT em zona de atenção — monitore as condições',
+      alert_warn_text: 'O Delta T está entre 3 °C e 5 °C. A aplicação deve ser avaliada com cautela. Meça também a temperatura da superfície. Monitore mudanças de temperatura e umidade durante o trabalho.',
+      alert_ok_title: 'ΔT seguro — condição favorável para aplicação',
+      alert_ok_text: 'O Delta T está acima de 5 °C, indicando risco baixo de condensação no ar ambiente. Verifique também a temperatura real da superfície, especialmente em espaços confinados ou expostos ao sol.',
+      ph_temp: 'Ex: 28', ph_rh: 'Ex: 75',
+      magnus_desc: 'Utilizada para calcular o ponto de orvalho em condições normais (0–50 °C, água líquida).',
+      th_delta: 'Delta T (°C)', th_status: 'Status', th_action: 'Ação recomendada',
+      td_crit: '< 3 °C', td_warn: '3 – 5 °C', td_ok: '≥ 5 °C',
+      status_crit: '● Crítico', status_warn: '● Atenção', status_ok: '● Seguro',
+      act_crit: 'Suspender aplicação', act_warn: 'Monitorar / avaliar', act_ok: 'Aplicação permitida',
+      surf_desc: 'O ΔT deve ser medido em relação à temperatura da superfície, não apenas do ar ambiente. Superfícies frias podem ter temperatura significativamente menor que o ar, aumentando o risco de condensação.',
+      corr_desc: 'Quando o ΔT estiver abaixo do limite seguro, avalie:',
+    },
+    en: {
+      eye: 'Technical calculator · Application conditions',
+      h1: 'Dew Point',
+      ph_desc: 'Calculate the dew point (Td) and Delta T from air temperature and relative humidity. Assess the risk of surface condensation before starting paint application.',
+      card_in: 'Input data', card_sub: 'Magnus formula · Water · 0–50 °C',
+      lbl_t: 'Air temperature', lbl_rh: 'Relative humidity',
+      btn_calc: '→\u00a0 Calculate', btn_clear: 'Clear',
+      res_label: 'Result',
+      kpi_td: 'Dew point (Td)', kpi_dt: 'Delta T (air − dew point)',
+      g_low: 'Critical ΔT (0°C)', g_mid: 'Caution (3°C)', g_ok: 'Safe (≥ 5°C)',
+      ref_title: 'Technical reference', magnus_title: 'Magnus formula',
+      crit_title: 'ΔT reference criteria', surf_title: 'Surface temperature', corr_title: 'Corrective measures',
+      ft_back: '← Back to site',
+      nav_home: '← Home',
+      alert_danger_title: 'Critical ΔT — high condensation risk',
+      alert_danger_text: 'Delta T is below 3 °C. There is significant risk of surface condensation. Suspend application until conditions improve. Consider surface heating, dehumidification or forced ventilation.',
+      alert_warn_title: 'ΔT in caution zone — monitor conditions',
+      alert_warn_text: 'Delta T is between 3 °C and 5 °C. Application should be carefully evaluated. Also measure surface temperature. Monitor temperature and humidity changes during work.',
+      alert_ok_title: 'Safe ΔT — favourable conditions for application',
+      alert_ok_text: 'Delta T is above 5 °C, indicating low condensation risk in ambient air. Also check actual surface temperature, especially in confined spaces or areas exposed to sunlight.',
+      ph_temp: 'e.g. 28', ph_rh: 'e.g. 75',
+      magnus_desc: 'Used to calculate the dew point under normal conditions (0–50 °C, liquid water).',
+      th_delta: 'Delta T (°C)', th_status: 'Status', th_action: 'Recommended action',
+      td_crit: '< 3 °C', td_warn: '3 – 5 °C', td_ok: '≥ 5 °C',
+      status_crit: '● Critical', status_warn: '● Caution', status_ok: '● Safe',
+      act_crit: 'Suspend application', act_warn: 'Monitor / assess', act_ok: 'Application permitted',
+      surf_desc: 'ΔT should be measured against the surface temperature, not just ambient air. Cold surfaces can be significantly colder than air, increasing condensation risk.',
+      corr_desc: 'When ΔT is below the safe threshold, consider:',
+    }
+  };
+
+  let LANG = 'pt';
+
+  function setLang(lang) {
+    LANG = lang;
+    const s = STR[lang];
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+    document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (s[key] !== undefined) el.textContent = s[key];
+    });
+    // placeholders
+    document.getElementById('temp').placeholder = s.ph_temp;
+    document.getElementById('rh').placeholder = s.ph_rh;
+    // nav home
+    document.getElementById('nav-home-btn').textContent = s.nav_home;
+    // page title
+    document.title = lang === 'pt' ? 'VOA | Calculadora de Ponto de Orvalho' : 'VOA | Dew Point Calculator';
+  }
+
+  // Override calcular to use translated alert messages
+  const _calcOrig = calcular;
+  function calcular() {
+    const T = parseFloat(document.getElementById('temp').value);
+    const RH = parseFloat(document.getElementById('rh').value);
+    const s = STR[LANG];
+    if (isNaN(T) || isNaN(RH)) { alert(LANG === 'pt' ? 'Informe valores numéricos para temperatura e umidade relativa.' : 'Enter numeric values for temperature and relative humidity.'); return; }
+    if (RH < 1 || RH > 100) { alert(LANG === 'pt' ? 'A umidade relativa deve estar entre 1% e 100%.' : 'Relative humidity must be between 1% and 100%.'); return; }
+    const a = 17.62, b = 243.12;
+    const gamma = (a * T) / (b + T) + Math.log(RH / 100);
+    const Td = (b * gamma) / (a - gamma);
+    const dT = T - Td;
+    document.getElementById('out-td').innerHTML = Td.toFixed(1).replace('.', ',') + '<span class="kpi-unit">°C</span>';
+    document.getElementById('out-dt').innerHTML = dT.toFixed(1).replace('.', ',') + '<span class="kpi-unit">°C</span>';
+    const pct = Math.min(100, Math.max(0, (dT / 10) * 100));
+    const gauge = document.getElementById('gauge');
+    gauge.style.width = pct + '%';
+    const alert = document.getElementById('alert-box');
+    const aTitle = document.getElementById('alert-title');
+    const aText = document.getElementById('alert-text');
+    const aIcon = document.getElementById('alert-icon');
+    const acTd = document.getElementById('kpi-accent-td');
+    const acDt = document.getElementById('kpi-accent-dt');
+    alert.className = 'alert';
+    gauge.className = 'gauge-fill';
+    if (dT < 3) {
+      alert.classList.add('danger'); gauge.classList.add('danger');
+      aIcon.textContent = '⛔'; aTitle.textContent = s.alert_danger_title; aText.textContent = s.alert_danger_text;
+      acTd.style.background = 'var(--a)'; acDt.style.background = 'var(--a)';
+    } else if (dT < 5) {
+      alert.classList.add('warn'); gauge.classList.add('warn');
+      aIcon.textContent = '⚠️'; aTitle.textContent = s.alert_warn_title; aText.textContent = s.alert_warn_text;
+      acTd.style.background = 'var(--o)'; acDt.style.background = 'var(--o)';
+    } else {
+      alert.classList.add('ok'); gauge.classList.add('ok');
+      aIcon.textContent = '✅'; aTitle.textContent = s.alert_ok_title; aText.textContent = s.alert_ok_text;
+      acTd.style.background = 'var(--v)'; acDt.style.background = 'var(--v)';
+    }
+    document.getElementById('results').classList.add('visible');
+  }
+
   document.getElementById('year').textContent = new Date().getFullYear();
 
   function calcular() {
