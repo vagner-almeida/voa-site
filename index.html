@@ -612,27 +612,21 @@
 </footer>
 
 <script>
-);
-    // update page title
-    document.title = lang === 'pt'
-      ? 'Vagner Almeida – Inspetor de Pintura & Especialista em Revestimentos'
-      : 'Vagner Almeida – Paint Inspector & Coating Specialist';
-  }
-
-
-  // ════ VOA i18n ════
+  // ════════════════════════════════════════
+  // VOA i18n — PT / EN
+  // ════════════════════════════════════════
   const I18N = {
     pt: {
-      'nav.about':'Sobre', 'nav.skills':'Habilidades', 'nav.tools':'Ferramentas',
-      'nav.services':'Serviços', 'nav.contact':'Contato', 'nav.cta':'Fale comigo',
+      'nav.about':'Sobre','nav.skills':'Habilidades','nav.tools':'Ferramentas',
+      'nav.services':'Serviços','nav.contact':'Contato','nav.cta':'Fale comigo',
       'hero.eyebrow':'Consultor independente · Inspeção de pintura',
-      'hero.h1':'Especialista em', 'hero.h1b':'revestimentos',
-      'hero.h1c':'e integridade', 'hero.h1d':'de ativos críticos.',
+      'hero.h1':'Especialista em','hero.h1b':'revestimentos',
+      'hero.h1c':'e integridade','hero.h1d':'de ativos críticos.',
       'hero.desc':'Mais de 10 anos de campo em FPSOs, navios e estruturas industriais. Inspeções estruturadas, documentação rastreável e suporte técnico independente para operadores, estaleiros e fabricantes de tinta.',
-      'hero.cta1':'→  Agendar conversa', 'hero.cta2':'◆  Ver ferramentas',
+      'hero.cta1':'→  Agendar conversa','hero.cta2':'◆  Ver ferramentas',
       'profile.role':'Inspetor de Pintura · Consultor',
-      'metrics.m1':'Anos em inspeção offshore & naval', 'metrics.m2':'TLI · slops · tanques de carga',
-      'metrics.m3':'Da especificação ao relatório final', 'metrics.m4':'Relatórios bilíngues e rastreáveis',
+      'metrics.m1':'Anos em inspeção offshore & naval','metrics.m2':'TLI · slops · tanques de carga',
+      'metrics.m3':'Da especificação ao relatório final','metrics.m4':'Relatórios bilíngues e rastreáveis',
       'skills.h2':'O que eu faço bem.',
       'sk1.title':'Inspeção instrumental & visual',
       'sk2.title':'Tank Lining Inspection (TLI)',
@@ -646,26 +640,23 @@
       'tools.t2title':'Calculadora de Ponto de Orvalho',
       'tools.t2btn':'◆  Abrir calculadora',
       'svc.h2':'Como posso ajudar.',
-      'svc1.title':'Inspeção de pintura & TLI',
-      'svc2.title':'Surveys e perícias',
-      'svc3.title':'Documentação & relatórios',
-      'svc4.title':'Suporte a projetos',
-      'svc5.title':'Claims & disputas técnicas',
-      'svc6.title':'Treinamentos & coaching',
+      'svc1.title':'Inspeção de pintura & TLI','svc2.title':'Surveys e perícias',
+      'svc3.title':'Documentação & relatórios','svc4.title':'Suporte a projetos',
+      'svc5.title':'Claims & disputas técnicas','svc6.title':'Treinamentos & coaching',
       'ct.h2':'Vamos conversar sobre seu projeto.',
       'ct.btn':'→  Enviar e-mail agora',
     },
     en: {
-      'nav.about':'About', 'nav.skills':'Skills', 'nav.tools':'Tools',
-      'nav.services':'Services', 'nav.contact':'Contact', 'nav.cta':'Get in touch',
+      'nav.about':'About','nav.skills':'Skills','nav.tools':'Tools',
+      'nav.services':'Services','nav.contact':'Contact','nav.cta':'Get in touch',
       'hero.eyebrow':'Independent coating consultant',
-      'hero.h1':'Specialist in', 'hero.h1b':'coatings',
-      'hero.h1c':'and asset', 'hero.h1d':'integrity.',
+      'hero.h1':'Specialist in','hero.h1b':'coatings',
+      'hero.h1c':'and asset','hero.h1d':'integrity.',
       'hero.desc':'Over 10 years of field experience in FPSOs, vessels and industrial structures. Structured inspections, traceable documentation and independent technical support for operators, shipyards and paint manufacturers.',
-      'hero.cta1':'→  Schedule a call', 'hero.cta2':'◆  View tools',
+      'hero.cta1':'→  Schedule a call','hero.cta2':'◆  View tools',
       'profile.role':'Paint Inspector · Coating Consultant',
-      'metrics.m1':'Years in offshore & marine inspection', 'metrics.m2':'TLI · slops · cargo tanks',
-      'metrics.m3':'From specification to final report', 'metrics.m4':'Bilingual and traceable reports',
+      'metrics.m1':'Years in offshore & marine inspection','metrics.m2':'TLI · slops · cargo tanks',
+      'metrics.m3':'From specification to final report','metrics.m4':'Bilingual and traceable reports',
       'skills.h2':'What I do well.',
       'sk1.title':'Instrumental & visual inspection',
       'sk2.title':'Tank Lining Inspection (TLI)',
@@ -679,12 +670,9 @@
       'tools.t2title':'Dew Point Calculator',
       'tools.t2btn':'◆  Open calculator',
       'svc.h2':'How I can help.',
-      'svc1.title':'Coating inspection & TLI',
-      'svc2.title':'Surveys and investigations',
-      'svc3.title':'Documentation & reports',
-      'svc4.title':'Project support',
-      'svc5.title':'Claims & technical disputes',
-      'svc6.title':'Training & coaching',
+      'svc1.title':'Coating inspection & TLI','svc2.title':'Surveys and investigations',
+      'svc3.title':'Documentation & reports','svc4.title':'Project support',
+      'svc5.title':'Claims & technical disputes','svc6.title':'Training & coaching',
       'ct.h2':"Let's talk about your project.",
       'ct.btn':'→  Send email now',
     }
@@ -704,7 +692,9 @@
       : 'Vagner Almeida – Paint Inspector & Coating Specialist';
   }
 
+  // ── init ──
   document.getElementById('year').textContent = new Date().getFullYear();
+
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -714,6 +704,7 @@
       }
     });
   }, { threshold: 0.07, rootMargin: '0px 0px -24px 0px' });
+
   document.querySelectorAll('.sk-card, .svc-card, .tool-card, .m-item').forEach((el, i) => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(14px)';
