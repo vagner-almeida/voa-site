@@ -39,6 +39,19 @@
 
     .wrap { max-width: var(--w); margin: 0 auto; padding: 0 1.5rem; }
 
+
+    /* LANG TOGGLE */
+    .lang-sw { display:flex; gap:2px; align-items:center; }
+    .lang-sw button {
+      background: none; border: 1.5px solid var(--border);
+      padding: 0.28rem 0.55rem; border-radius: 5px; cursor: pointer;
+      font-family: 'DM Mono', monospace; font-size: 0.66rem;
+      font-weight: 600; letter-spacing: 0.06em; color: var(--text3);
+      transition: all 0.15s;
+    }
+    .lang-sw button.active { background: var(--v); color: #fff; border-color: var(--v); }
+    .lang-sw button:not(.active):hover { border-color: var(--border2); color: var(--text); }
+
     /* HEADER */
     header {
       position: sticky; top: 0; z-index: 100;
@@ -347,14 +360,20 @@
       </div>
       <nav>
         <ul>
-          <li><a href="#sobre">Sobre</a></li>
-          <li><a href="#habilidades">Habilidades</a></li>
-          <li><a href="#ferramentas">Ferramentas</a></li>
-          <li><a href="#servicos">Serviços</a></li>
-          <li><a href="#contato">Contato</a></li>
+          <li><a href="#sobre" data-i18n="nav.about"><span data-i18n="nav.about">Sobre</span></a></li>
+          <li><a href="#habilidades" data-i18n="nav.skills"><span data-i18n="nav.skills">Habilidades</span></a></li>
+          <li><a href="#ferramentas" data-i18n="nav.tools"><span data-i18n="nav.tools">Ferramentas</span></a></li>
+          <li><a href="#servicos" data-i18n="nav.services"><span data-i18n="svc.eye"><span data-i18n="nav.services">Serviços</span></span></a></li>
+          <li><a href="#contato" data-i18n="nav.contact"><span data-i18n="ct.eye">Contato</span></a></li>
         </ul>
       </nav>
-      <a href="#contato" class="nav-cta">Fale comigo</a>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <div class="lang-sw">
+          <button id="btn-pt" class="active" onclick="setLang('pt')">PT</button>
+          <button id="btn-en" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="#contato" class="nav-cta" data-i18n="nav.cta">Fale comigo</a>
+      </div>
     </div>
   </div>
 </header>
@@ -363,31 +382,31 @@
   <div class="wrap">
     <div class="hero-inner">
       <div>
-        <div class="eyebrow-pill fu">Consultor independente · Inspeção de pintura</div>
-        <h1 class="fu d1">Especialista em<br /><strong>revestimentos</strong><br />e integridade<br />de ativos críticos.</h1>
-        <p class="hero-desc fu d2">Mais de 10 anos de campo em FPSOs, navios e estruturas industriais. Inspeções estruturadas, documentação rastreável e suporte técnico independente para operadores, estaleiros e fabricantes de tinta.</p>
+        <div class="eyebrow-pill fu"><span data-i18n="hero.eyebrow">Consultor independente · Inspeção de pintura</span></div>
+        <h1 class="fu d1"><span data-i18n="hero.h1a">Especialista em</span><br /><strong data-i18n="hero.h1b">revestimentos</strong><br /><span data-i18n="hero.h1c">e integridade</span><br /><span data-i18n="hero.h1d">de ativos críticos.</span></h1>
+        <p class="hero-desc fu d2"><span data-i18n="hero.desc">Mais de 10 anos de campo em FPSOs, navios e estruturas industriais. Inspeções estruturadas, documentação rastreável e suporte técnico independente para operadores, estaleiros e fabricantes de tinta.</span></p>
         <div class="hero-actions fu d3">
-          <a href="#contato" class="btn-primary">→&nbsp; Agendar conversa</a>
-          <a href="#ferramentas" class="btn-ghost">◆&nbsp; Ver ferramentas</a>
+          <a href="#contato" class="btn-primary"><span data-i18n="hero.cta1">→&nbsp; Agendar conversa</span></a>
+          <a href="#ferramentas" class="btn-ghost"><span data-i18n="hero.cta2">◆&nbsp; Ver ferramentas</span></a>
         </div>
       </div>
 
       <div class="profile-card fu d4">
         <div class="avatar">VA</div>
         <div class="p-name">Vagner Oliveira Almeida</div>
-        <div class="p-role">Paint Inspector · Coating Consultant</div>
+        <div class="p-role"><span data-i18n="profile.role">Paint Inspector · Coating Consultant</span></div>
         <div class="p-grid">
           <div class="pstat">
             <div class="pstat-v" style="color:var(--v);">10+</div>
-            <div class="pstat-l">Anos de campo</div>
+            <div class="pstat-l"><span data-i18n="profile.stat1">Anos de campo</span></div>
           </div>
           <div class="pstat">
             <div class="pstat-v" style="color:var(--o);">FPSO</div>
-            <div class="pstat-l">Foco offshore</div>
+            <div class="pstat-l"><span data-i18n="profile.stat2">Foco offshore</span></div>
           </div>
           <div class="pstat" style="grid-column:1/-1;">
-            <div class="pstat-v" style="font-size:0.92rem;">Brasil &amp; Internacional</div>
-            <div class="pstat-l">Projetos locais e globais</div>
+            <div class="pstat-v" style="font-size:0.92rem;"><span data-i18n="profile.stat3">Brasil &amp; Internacional</span></div>
+            <div class="pstat-l"><span data-i18n="profile.stat4">Projetos locais e globais</span></div>
           </div>
         </div>
         <div class="chips">
@@ -407,60 +426,60 @@
 <div class="metrics-row">
   <div class="wrap">
     <div class="metrics-grid">
-      <div class="m-item"><div class="m-num o">10+</div><div class="m-label">Anos em inspeção offshore &amp; naval</div></div>
-      <div class="m-item"><div class="m-num v">FPSO</div><div class="m-label">TLI · slops · tanques de carga</div></div>
-      <div class="m-item"><div class="m-num a">360°</div><div class="m-label">Da especificação ao relatório final</div></div>
-      <div class="m-item"><div class="m-num t">PT/EN</div><div class="m-label">Relatórios bilíngues e rastreáveis</div></div>
+      <div class="m-item"><div class="m-num o">10+</div><div class="m-label"><span data-i18n="metrics.m1">Anos em inspeção offshore &amp; naval</span></div></div>
+      <div class="m-item"><div class="m-num v">FPSO</div><div class="m-label"><span data-i18n="metrics.m2">TLI · slops · tanques de carga</span></div></div>
+      <div class="m-item"><div class="m-num a">360°</div><div class="m-label"><span data-i18n="metrics.m3">Da especificação ao relatório final</span></div></div>
+      <div class="m-item"><div class="m-num t">PT/EN</div><div class="m-label"><span data-i18n="metrics.m4">Relatórios bilíngues e rastreáveis</span></div></div>
     </div>
   </div>
 </div>
 
 <section id="habilidades">
   <div class="wrap">
-    <div class="s-eye">Habilidades técnicas</div>
-    <h2>O que eu faço bem.</h2>
-    <p class="s-lead">Combinação de experiência prática de campo com leitura crítica de normas, especificações contratuais e requisitos técnicos — do instrumento ao relatório final.</p>
+    <div class="s-eye"><span data-i18n="skills.eye">Habilidades técnicas</span></div>
+    <h2><span data-i18n="skills.h2">O que eu faço bem.</span></h2>
+    <p class="s-lead"><span data-i18n="skills.lead">Combinação de experiência prática de campo com leitura crítica de normas, especificações contratuais e requisitos técnicos — do instrumento ao relatório final.</span></p>
     <div class="skills-grid">
       <div class="sk-card">
         <div class="sk-bar" style="background:var(--o);"></div>
         <div class="sk-icon">🔍</div>
-        <div class="sk-title">Inspeção instrumental &amp; visual</div>
-        <div class="sk-desc">Medição de DFT com múltiplos instrumentos, pit gauge, testes de aderência (pull-off), avaliação de perfil de ancoragem e condições de aplicação — ponto de orvalho, temperatura de superfície.</div>
+        <div class="sk-title"><span data-i18n="sk1.title">Inspeção instrumental &amp; visual</span></div>
+        <div class="sk-desc"><span data-i18n="sk1.desc">Medição de DFT com múltiplos instrumentos, pit gauge, testes de aderência (pull-off), avaliação de perfil de ancoragem e condições de aplicação — ponto de orvalho, temperatura de superfície.</span></div>
         <div class="tags"><span class="tag">DFT</span><span class="tag">Pit gauge</span><span class="tag">Pull-off</span><span class="tag">Elcometer</span><span class="tag">PosiTector</span></div>
       </div>
       <div class="sk-card">
         <div class="sk-bar" style="background:var(--v);"></div>
         <div class="sk-icon">🛢️</div>
-        <div class="sk-title">Tank Lining Inspection (TLI)</div>
-        <div class="sk-desc">Inspeção estruturada por cells e bays em COTs, slops e tanques de água produzida em FPSOs e navios. Mapeamento de defeitos, evidências fotográficas e emissão de relatório final.</div>
+        <div class="sk-title"><span data-i18n="sk2.title">Tank Lining Inspection (TLI)</span></div>
+        <div class="sk-desc"><span data-i18n="sk2.desc">Inspeção estruturada por cells e bays em COTs, slops e tanques de água produzida em FPSOs e navios. Mapeamento de defeitos, evidências fotográficas e emissão de relatório final.</span></div>
         <div class="tags"><span class="tag">COT</span><span class="tag">Slops</span><span class="tag">Cells / Bays</span><span class="tag">FPSO</span></div>
       </div>
       <div class="sk-card">
         <div class="sk-bar" style="background:var(--a);"></div>
         <div class="sk-icon">📋</div>
-        <div class="sk-title">Normas &amp; avaliação de falhas</div>
-        <div class="sk-desc">Classificação de falhas conforme ISO 4628, ASTM D610 e escala europeia. Identificação de causas prováveis (root cause) e avaliação de extensão de reparo.</div>
+        <div class="sk-title"><span data-i18n="sk3.title">Normas &amp; avaliação de falhas</span></div>
+        <div class="sk-desc"><span data-i18n="sk3.desc">Classificação de falhas conforme ISO 4628, ASTM D610 e escala europeia. Identificação de causas prováveis (root cause) e avaliação de extensão de reparo.</span></div>
         <div class="tags"><span class="tag">ISO 4628</span><span class="tag">ASTM D610</span><span class="tag">Root cause</span><span class="tag">NACE</span><span class="tag">ISO 8501</span></div>
       </div>
       <div class="sk-card">
         <div class="sk-bar" style="background:var(--border2);"></div>
         <div class="sk-icon">📄</div>
-        <div class="sk-title">Documentação técnica &amp; relatórios</div>
-        <div class="sk-desc">Relatórios bilíngues, flash reports, databooks, croquis e timesheets. Suporte documental para claims, auditorias e negociações técnicas.</div>
+        <div class="sk-title"><span data-i18n="sk4.title">Documentação técnica &amp; relatórios</span></div>
+        <div class="sk-desc"><span data-i18n="sk4.desc">Relatórios bilíngues, flash reports, databooks, croquis e timesheets. Suporte documental para claims, auditorias e negociações técnicas.</span></div>
         <div class="tags"><span class="tag">Flash reports</span><span class="tag">Databooks</span><span class="tag">Croquis</span><span class="tag">EN / PT</span><span class="tag">Claims</span></div>
       </div>
       <div class="sk-card">
         <div class="sk-bar" style="background:var(--v);"></div>
         <div class="sk-icon">🔧</div>
-        <div class="sk-title">Especificação &amp; suporte a projetos</div>
-        <div class="sk-desc">Leitura crítica de especificações, P&amp;IDs, PINTs, procedimentos de aplicação e planos de inspeção e teste (PIT). Seleção de sistemas de coating.</div>
+        <div class="sk-title"><span data-i18n="sk5.title">Especificação &amp; suporte a projetos</span></div>
+        <div class="sk-desc"><span data-i18n="sk5.desc">Leitura crítica de especificações, P&amp;IDs, PINTs, procedimentos de aplicação e planos de inspeção e teste (PIT). Seleção de sistemas de coating.</span></div>
         <div class="tags"><span class="tag">PIT</span><span class="tag">PINT</span><span class="tag">P&amp;ID</span><span class="tag">Newbuilds</span><span class="tag">Dry docking</span></div>
       </div>
       <div class="sk-card">
         <div class="sk-bar" style="background:var(--o);"></div>
         <div class="sk-icon">🤝</div>
-        <div class="sk-title">Interface técnica &amp; claims</div>
-        <div class="sk-desc">Suporte técnico independente em disputas entre operador, estaleiro e fabricante de tinta. Organização de evidências e histórico para claims de pintura.</div>
+        <div class="sk-title"><span data-i18n="sk6.title">Interface técnica &amp; claims</span></div>
+        <div class="sk-desc"><span data-i18n="sk6.desc">Suporte técnico independente em disputas entre operador, estaleiro e fabricante de tinta. Organização de evidências e histórico para claims de pintura.</span></div>
         <div class="tags"><span class="tag">Operadores</span><span class="tag">Estaleiros</span><span class="tag">Fabricantes</span><span class="tag">Independente</span></div>
       </div>
     </div>
@@ -469,16 +488,16 @@
 
 <section class="tools-section" id="ferramentas">
   <div class="wrap">
-    <div class="s-eye">Ferramentas técnicas</div>
-    <h2>Recursos que eu desenvolvi.</h2>
-    <p class="s-lead">Aplicativos e calculadoras técnicas criadas para apoiar inspetores e equipes de pintura no campo e no escritório.</p>
+    <div class="s-eye"><span data-i18n="tools.eye">Ferramentas técnicas</span></div>
+    <h2><span data-i18n="tools.h2">Recursos que eu desenvolvi.</span></h2>
+    <p class="s-lead"><span data-i18n="tools.lead">Aplicativos e calculadoras técnicas criadas para apoiar inspetores e equipes de pintura no campo e no escritório.</span></p>
 
     <div class="tool-card">
       <div class="tool-stripe ts-blue"></div>
       <div>
-        <div class="tool-eye">App técnico · Gratuito</div>
-        <div class="tool-title">Avaliador de Grau de Alcance de Falhas</div>
-        <div class="tool-desc">Ferramenta para avaliação e classificação de falhas em revestimentos conforme <strong>ISO 4628</strong>, <strong>ASTM D610</strong> e a <strong>Escala Europeia</strong>. Padrões visuais de referência e geração de laudos técnicos.</div>
+        <div class="tool-eye"><span data-i18n="tools.t1eye">App técnico · Gratuito</span></div>
+        <div class="tool-title"><span data-i18n="tools.t1title">Avaliador de Grau de Alcance de Falhas</span></div>
+        <div class="tool-desc"><span data-i18n="tools.t1desc">Ferramenta para avaliação e classificação de falhas em revestimentos conforme <strong>ISO 4628</strong>, <strong>ASTM D610</strong> e a <strong>Escala Europeia</strong>. Padrões visuais de referência e geração de laudos técnicos.</span></div>
         <div class="chips">
           <span class="chip chip-v">ISO 4628</span>
           <span class="chip chip-o">ASTM D610</span>
@@ -487,17 +506,17 @@
         </div>
       </div>
       <div class="tool-cta">
-        <a href="avaliador/index.html" class="btn-launch blue">◆ &nbsp;Acessar avaliador</a>
-        <div class="t-note">Sem cadastro · Uso imediato</div>
+        <a href="avaliador/index.html" class="btn-launch blue"><span data-i18n="tools.t1btn">◆ &nbsp;Acessar avaliador</span></a>
+        <div class="t-note"><span data-i18n="tools.t1note">Sem cadastro · Uso imediato</span></div>
       </div>
     </div>
 
     <div class="tool-card">
       <div class="tool-stripe ts-mag"></div>
       <div>
-        <div class="tool-eye mag">Calculadora · Gratuita</div>
-        <div class="tool-title">Calculadora de Ponto de Orvalho</div>
-        <div class="tool-desc">Calcule o ponto de orvalho a partir de temperatura do ar e umidade relativa usando a <strong>fórmula de Magnus</strong>. Avalie risco de condensação com indicadores visuais de ΔT e alertas automáticos.</div>
+        <div class="tool-eye mag"><span data-i18n="tools.t2eye">Calculadora · Gratuita</span></div>
+        <div class="tool-title"><span data-i18n="tools.t2title">Calculadora de Ponto de Orvalho</span></div>
+        <div class="tool-desc"><span data-i18n="tools.t2desc">Calcule o ponto de orvalho a partir de temperatura do ar e umidade relativa usando a <strong>fórmula de Magnus</strong>. Avalie risco de condensação com indicadores visuais de ΔT e alertas automáticos.</span></div>
         <div class="chips">
           <span class="chip chip-a">Fórmula Magnus</span>
           <span class="chip chip-n">Delta T</span>
@@ -505,8 +524,8 @@
         </div>
       </div>
       <div class="tool-cta">
-        <a href="ponto-de-orvalho.html" class="btn-launch mag">◆ &nbsp;Abrir calculadora</a>
-        <div class="t-note">Acesso direto</div>
+        <a href="ponto-de-orvalho.html" class="btn-launch mag"><span data-i18n="tools.t2btn">◆ &nbsp;Abrir calculadora</span></a>
+        <div class="t-note"><span data-i18n="tools.t2note">Acesso direto</span></div>
       </div>
     </div>
   </div>
@@ -515,18 +534,18 @@
 <section id="servicos">
   <div class="wrap">
     <div class="s-eye">Serviços</div>
-    <h2>Como posso ajudar.</h2>
-    <p class="s-lead">Atuação como consultor técnico independente, do planejamento ao relatório final.</p>
+    <h2><span data-i18n="svc.h2">Como posso ajudar.</span></h2>
+    <p class="s-lead"><span data-i18n="svc.lead">Atuação como consultor técnico independente, do planejamento ao relatório final.</span></p>
     <div class="svc-grid">
-      <div class="svc-card"><div class="svc-num">01</div><div class="svc-title">Inspeção de pintura &amp; TLI</div><div class="svc-desc">Inspeção visual e instrumental em tanques, convés e estruturas com mapeamento por cells/bays, DFT, pit gauge e verificação de especificações.</div></div>
-      <div class="svc-card"><div class="svc-num">02</div><div class="svc-title">Surveys e perícias</div><div class="svc-desc">Avaliação independente de falhas, root cause e suporte técnico em discussões entre operador, estaleiro e fabricante de tinta.</div></div>
-      <div class="svc-card"><div class="svc-num">03</div><div class="svc-title">Documentação &amp; relatórios</div><div class="svc-desc">Relatórios bilíngues, flash reports, databooks, croquis e timesheets com rastreabilidade e alinhamento contratual.</div></div>
-      <div class="svc-card"><div class="svc-num">04</div><div class="svc-title">Suporte a projetos</div><div class="svc-desc">Leitura crítica de especificações, procedimentos de aplicação, seleção de sistemas de coating e planos de inspeção e teste.</div></div>
-      <div class="svc-card"><div class="svc-num">05</div><div class="svc-title">Claims &amp; disputas técnicas</div><div class="svc-desc">Organização de evidências, relatórios técnicos e histórico de inspeções para claims, disputas contratuais e negociações.</div></div>
-      <div class="svc-card"><div class="svc-num">06</div><div class="svc-title">Treinamentos &amp; coaching</div><div class="svc-desc">Capacitação prática para times de inspeção em critérios de aceitação, registro de defeitos e documentação de campo.</div></div>
+      <div class="svc-card"><div class="svc-num">01</div><div class="svc-title"><span data-i18n="svc1.title">Inspeção de pintura &amp; TLI</span></div><div class="svc-desc"><span data-i18n="svc1.desc">Inspeção visual e instrumental em tanques, convés e estruturas com mapeamento por cells/bays, DFT, pit gauge e verificação de especificações.</span></div></div>
+      <div class="svc-card"><div class="svc-num">02</div><div class="svc-title"><span data-i18n="svc2.title">Surveys e perícias</span></div><div class="svc-desc"><span data-i18n="svc2.desc">Avaliação independente de falhas, root cause e suporte técnico em discussões entre operador, estaleiro e fabricante de tinta.</span></div></div>
+      <div class="svc-card"><div class="svc-num">03</div><div class="svc-title"><span data-i18n="svc3.title">Documentação &amp; relatórios</span></div><div class="svc-desc"><span data-i18n="svc3.desc">Relatórios bilíngues, flash reports, databooks, croquis e timesheets com rastreabilidade e alinhamento contratual.</span></div></div>
+      <div class="svc-card"><div class="svc-num">04</div><div class="svc-title"><span data-i18n="svc4.title">Suporte a projetos</span></div><div class="svc-desc"><span data-i18n="svc4.desc">Leitura crítica de especificações, procedimentos de aplicação, seleção de sistemas de coating e planos de inspeção e teste.</span></div></div>
+      <div class="svc-card"><div class="svc-num">05</div><div class="svc-title"><span data-i18n="svc5.title">Claims &amp; disputas técnicas</span></div><div class="svc-desc"><span data-i18n="svc5.desc">Organização de evidências, relatórios técnicos e histórico de inspeções para claims, disputas contratuais e negociações.</span></div></div>
+      <div class="svc-card"><div class="svc-num">06</div><div class="svc-title"><span data-i18n="svc6.title">Treinamentos &amp; coaching</span></div><div class="svc-desc"><span data-i18n="svc6.desc">Capacitação prática para times de inspeção em critérios de aceitação, registro de defeitos e documentação de campo.</span></div></div>
     </div>
     <div class="sectors-wrap">
-      <div class="sec-label">Setores de atuação</div>
+      <div class="sec-label"><span data-i18n="sec.label">Setores de atuação</span></div>
       <div class="sectors-row">
         <span class="sec-pill">FPSO &amp; FSO</span>
         <span class="sec-pill">Navios &amp; estaleiros</span>
@@ -543,8 +562,8 @@
 <section class="contact-section" id="contato">
   <div class="wrap">
     <div class="s-eye">Contato</div>
-    <h2>Vamos conversar sobre seu projeto.</h2>
-    <p class="s-lead">Uma conversa técnica inicial já alinha escopo, expectativas e tipo de documentação necessária para o seu ativo.</p>
+    <h2><span data-i18n="ct.h2">Vamos conversar sobre seu projeto.</span></h2>
+    <p class="s-lead"><span data-i18n="ct.lead">Uma conversa técnica inicial já alinha escopo, expectativas e tipo de documentação necessária para o seu ativo.</span></p>
     <div class="ct-layout">
       <div>
         <div class="ct-row">
@@ -560,17 +579,17 @@
           <div><div class="ct-key">Atuação</div><div class="ct-val" style="color:var(--text2);">Brasil &amp; Internacional</div></div>
         </div>
         <div style="margin-top:1.4rem;">
-          <a href="mailto:vagner.almeida@yahoo.com" class="btn-primary">→&nbsp; Enviar e-mail agora</a>
+          <a href="mailto:vagner.almeida@yahoo.com" class="btn-primary"><span data-i18n="ct.btn">→&nbsp; Enviar e-mail agora</span></a>
         </div>
       </div>
       <div class="scope-box">
-        <div class="scope-head">Inclua no seu contato</div>
-        <div class="scope-item">Tipo de ativo — FPSO, navio, tanque industrial, etc.</div>
-        <div class="scope-item">Escopo desejado — TLI, survey, suporte a claim, documentação.</div>
-        <div class="scope-item">Localização do ativo e janela de trabalho prevista.</div>
-        <div class="scope-item">Idioma preferido para o relatório — PT ou EN.</div>
+        <div class="scope-head"><span data-i18n="ct.scopehead">Inclua no seu contato</span></div>
+        <div class="scope-item"><span data-i18n="ct.s1">Tipo de ativo — FPSO, navio, tanque industrial, etc.</span></div>
+        <div class="scope-item"><span data-i18n="ct.s2">Escopo desejado — TLI, survey, suporte a claim, documentação.</span></div>
+        <div class="scope-item"><span data-i18n="ct.s3">Localização do ativo e janela de trabalho prevista.</span></div>
+        <div class="scope-item"><span data-i18n="ct.s4">Idioma preferido para o relatório — PT ou EN.</span></div>
         <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--text3); line-height:1.55;">
-          A VOA retorna com uma sugestão de abordagem de inspeção e formatos de relatório possíveis.
+          <span data-i18n="ct.footer">A VOA retorna com uma sugestão de abordagem de inspeção e formatos de relatório possíveis.</span>
         </div>
       </div>
     </div>
@@ -596,6 +615,123 @@
 </footer>
 
 <script>
+
+  // ── i18n ──────────────────────────────────
+  const STRINGS = {
+    pt: {
+      'nav.about':'Sobre','nav.skills':'Habilidades','nav.tools':'Ferramentas',
+      'nav.services':'Serviços','nav.contact':'Contato','nav.cta':'Fale comigo',
+      'hero.eyebrow':'Consultor independente · Inspeção de pintura',
+      'hero.h1a':'Especialista em','hero.h1b':'revestimentos',
+      'hero.h1c':'e integridade','hero.h1d':'de ativos críticos.',
+      'hero.desc':'Mais de 10 anos de campo em FPSOs, navios e estruturas industriais. Inspeções estruturadas, documentação rastreável e suporte técnico independente para operadores, estaleiros e fabricantes de tinta.',
+      'hero.cta1':'→  Agendar conversa','hero.cta2':'◆  Ver ferramentas',
+      'profile.role':'Inspetor de Pintura · Consultor',
+      'profile.stat1':'Anos de campo','profile.stat2':'Foco offshore',
+      'profile.stat3':'Brasil & Internacional','profile.stat4':'Projetos locais e globais',
+      'metrics.m1':'Anos em inspeção offshore & naval','metrics.m2':'TLI · slops · tanques de carga',
+      'metrics.m3':'Da especificação ao relatório final','metrics.m4':'Relatórios bilíngues e rastreáveis',
+      'skills.eye':'Habilidades técnicas','skills.h2':'O que eu faço bem.',
+      'skills.lead':'Combinação de experiência prática de campo com leitura crítica de normas, especificações contratuais e requisitos técnicos — do instrumento ao relatório final.',
+      'sk1.title':'Inspeção instrumental & visual','sk1.desc':'Medição de DFT com múltiplos instrumentos, pit gauge, testes de aderência (pull-off), avaliação de perfil de ancoragem e condições de aplicação — ponto de orvalho, temperatura de superfície.',
+      'sk2.title':'Tank Lining Inspection (TLI)','sk2.desc':'Inspeção estruturada por cells e bays em COTs, slops e tanques de água produzida em FPSOs e navios. Mapeamento de defeitos, evidências fotográficas e emissão de relatório final.',
+      'sk3.title':'Normas & avaliação de falhas','sk3.desc':'Classificação de falhas conforme ISO 4628, ASTM D610 e escala europeia. Identificação de causas prováveis (root cause) e avaliação de extensão de reparo.',
+      'sk4.title':'Documentação técnica & relatórios','sk4.desc':'Relatórios bilíngues, flash reports, databooks, croquis e timesheets. Suporte documental para claims, auditorias e negociações técnicas.',
+      'sk5.title':'Especificação & suporte a projetos','sk5.desc':'Leitura crítica de especificações, P&IDs, PINTs, procedimentos de aplicação e planos de inspeção e teste (PIT). Seleção de sistemas de coating.',
+      'sk6.title':'Interface técnica & claims','sk6.desc':'Suporte técnico independente em disputas entre operador, estaleiro e fabricante de tinta. Organização de evidências e histórico para claims de pintura.',
+      'tools.eye':'Ferramentas técnicas','tools.h2':'Recursos que eu desenvolvi.',
+      'tools.lead':'Aplicativos e calculadoras técnicas criadas para apoiar inspetores e equipes de pintura no campo e no escritório.',
+      'tools.t1eye':'App técnico · Gratuito','tools.t1title':'Avaliador de Grau de Alcance de Falhas',
+      'tools.t1desc':'Ferramenta para avaliação e classificação de falhas em revestimentos conforme ISO 4628, ASTM D610 e a Escala Europeia. Padrões visuais de referência e geração de laudos técnicos.',
+      'tools.t1btn':'◆  Acessar avaliador','tools.t1note':'Sem cadastro · Uso imediato',
+      'tools.t2eye':'Calculadora · Gratuita','tools.t2title':'Calculadora de Ponto de Orvalho',
+      'tools.t2desc':'Calcule o ponto de orvalho a partir de temperatura do ar e umidade relativa usando a fórmula de Magnus. Avalie risco de condensação com indicadores visuais de ΔT e alertas automáticos.',
+      'tools.t2btn':'◆  Abrir calculadora','tools.t2note':'Acesso direto',
+      'svc.eye':'Serviços','svc.h2':'Como posso ajudar.',
+      'svc.lead':'Atuação como consultor técnico independente, do planejamento ao relatório final.',
+      'svc1.title':'Inspeção de pintura & TLI','svc1.desc':'Inspeção visual e instrumental em tanques, convés e estruturas com mapeamento por cells/bays, DFT, pit gauge e verificação de especificações.',
+      'svc2.title':'Surveys e perícias','svc2.desc':'Avaliação independente de falhas, root cause e suporte técnico em discussões entre operador, estaleiro e fabricante de tinta.',
+      'svc3.title':'Documentação & relatórios','svc3.desc':'Relatórios bilíngues, flash reports, databooks, croquis e timesheets com rastreabilidade e alinhamento contratual.',
+      'svc4.title':'Suporte a projetos','svc4.desc':'Leitura crítica de especificações, procedimentos de aplicação, seleção de sistemas de coating e planos de inspeção e teste.',
+      'svc5.title':'Claims & disputas técnicas','svc5.desc':'Organização de evidências, relatórios técnicos e histórico de inspeções para claims, disputas contratuais e negociações.',
+      'svc6.title':'Treinamentos & coaching','svc6.desc':'Capacitação prática para times de inspeção em critérios de aceitação, registro de defeitos e documentação de campo.',
+      'sec.label':'Setores de atuação',
+      'ct.eye':'Contato','ct.h2':'Vamos conversar sobre seu projeto.',
+      'ct.lead':'Uma conversa técnica inicial já alinha escopo, expectativas e tipo de documentação necessária para o seu ativo.',
+      'ct.btn':'→  Enviar e-mail agora','ct.scopehead':'Inclua no seu contato',
+      'ct.s1':'Tipo de ativo — FPSO, navio, tanque industrial, etc.',
+      'ct.s2':'Escopo desejado — TLI, survey, suporte a claim, documentação.',
+      'ct.s3':'Localização do ativo e janela de trabalho prevista.',
+      'ct.s4':'Idioma preferido para o relatório — PT ou EN.',
+      'ct.footer':'A VOA retorna com uma sugestão de abordagem de inspeção e formatos de relatório possíveis.',
+    },
+    en: {
+      'nav.about':'About','nav.skills':'Skills','nav.tools':'Tools',
+      'nav.services':'Services','nav.contact':'Contact','nav.cta':'Get in touch',
+      'hero.eyebrow':'Independent coating consultant',
+      'hero.h1a':'Specialist in','hero.h1b':'coatings',
+      'hero.h1c':'and asset','hero.h1d':'integrity.',
+      'hero.desc':'Over 10 years of field experience in FPSOs, vessels and industrial structures. Structured inspections, traceable documentation and independent technical support for operators, shipyards and paint manufacturers.',
+      'hero.cta1':'→  Schedule a call','hero.cta2':'◆  View tools',
+      'profile.role':'Paint Inspector · Coating Consultant',
+      'profile.stat1':'Years in the field','profile.stat2':'Offshore focus',
+      'profile.stat3':'Brazil & Global','profile.stat4':'Local and global projects',
+      'metrics.m1':'Years in offshore & marine inspection','metrics.m2':'TLI · slops · cargo tanks',
+      'metrics.m3':'From specification to final report','metrics.m4':'Bilingual and traceable reports',
+      'skills.eye':'Technical skills','skills.h2':'What I do well.',
+      'skills.lead':'Field experience combined with critical reading of standards, contractual specifications and technical requirements — from instrument to final report.',
+      'sk1.title':'Instrumental & visual inspection','sk1.desc':'DFT measurement with multiple instruments, pit gauge, adhesion testing (pull-off), surface profile assessment and application conditions — dew point, surface temperature.',
+      'sk2.title':'Tank Lining Inspection (TLI)','sk2.desc':'Structured cell and bay inspection of COTs, slops and produced-water tanks on FPSOs and vessels. Defect mapping, photo evidence and final report.',
+      'sk3.title':'Standards & failure assessment','sk3.desc':'Failure classification per ISO 4628, ASTM D610 and European scale. Root cause identification and repair extent assessment.',
+      'sk4.title':'Technical documentation & reports','sk4.desc':'Bilingual reports, flash reports, databooks, sketches and timesheets. Documentary support for claims, audits and technical negotiations.',
+      'sk5.title':'Specification & project support','sk5.desc':'Critical review of coating specs, P&IDs, painting documents, application procedures and inspection & test plans (ITP).',
+      'sk6.title':'Technical interface & claims','sk6.desc':'Independent technical support in disputes between operator, shipyard and paint manufacturer. Evidence and history compilation for coating claims.',
+      'tools.eye':'Technical tools','tools.h2':'Resources I developed.',
+      'tools.lead':'Technical apps and calculators built to support inspectors and coating teams in the field and office.',
+      'tools.t1eye':'Technical app · Free','tools.t1title':'Coating Failure Grade Evaluator',
+      'tools.t1desc':'Tool for evaluating and classifying coating failures per ISO 4628, ASTM D610 and the European Scale. Visual reference patterns and technical report generation.',
+      'tools.t1btn':'◆  Open evaluator','tools.t1note':'No sign-up · Instant access',
+      'tools.t2eye':'Calculator · Free','tools.t2title':'Dew Point Calculator',
+      'tools.t2desc':'Calculate the dew point from air temperature and relative humidity using the Magnus formula. Assess condensation risk with visual ΔT indicators and automatic alerts.',
+      'tools.t2btn':'◆  Open calculator','tools.t2note':'Direct access',
+      'svc.eye':'Services','svc.h2':'How I can help.',
+      'svc.lead':'Acting as an independent technical consultant, from planning through to the final report.',
+      'svc1.title':'Coating inspection & TLI','svc1.desc':'Visual and instrumental inspection of tanks, decks and structures with cell/bay mapping, DFT, pit gauge and specification verification.',
+      'svc2.title':'Surveys and investigations','svc2.desc':'Independent failure assessment, root cause analysis and technical support in discussions between operator, shipyard and paint manufacturer.',
+      'svc3.title':'Documentation & reports','svc3.desc':'Bilingual reports, flash reports, databooks, sketches and timesheets with traceability and contractual alignment.',
+      'svc4.title':'Project support','svc4.desc':'Critical review of specifications, application procedures, coating system selection and inspection & test plans.',
+      'svc5.title':'Claims & technical disputes','svc5.desc':'Evidence compilation, technical reports and inspection history to support coating claims, contract disputes and negotiations.',
+      'svc6.title':'Training & coaching','svc6.desc':'Practical training for inspection teams on acceptance criteria, defect recording and field documentation best practices.',
+      'sec.label':'Sectors',
+      'ct.eye':'Contact','ct.h2':'Let's talk about your project.',
+      'ct.lead':'An initial technical conversation already aligns scope, expectations and the type of documentation your asset will need.',
+      'ct.btn':'→  Send email now','ct.scopehead':'Include in your message',
+      'ct.s1':'Asset type — FPSO, vessel, industrial tank, etc.',
+      'ct.s2':'Desired scope — TLI, survey, claim support, documentation.',
+      'ct.s3':'Asset location and planned work window.',
+      'ct.s4':'Preferred report language — PT or EN.',
+      'ct.footer':'VOA will reply with a suggested inspection approach and possible report formats.',
+    }
+  };
+
+  let currentLang = 'pt';
+
+  function setLang(lang) {
+    currentLang = lang;
+    const s = STRINGS[lang];
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+    document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (s[key] !== undefined) el.textContent = s[key];
+    });
+    // update page title
+    document.title = lang === 'pt'
+      ? 'Vagner Almeida – Inspetor de Pintura & Especialista em Revestimentos'
+      : 'Vagner Almeida – Paint Inspector & Coating Specialist';
+  }
+
   document.getElementById('year').textContent = new Date().getFullYear();
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
