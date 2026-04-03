@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Avaliação de Grau de Alcance de Falhas</title>
+<style>
+:root{
+  --bg:#f2f4f7;--surface:#fff;--surface2:#e6eaf2;
+  --border:#cdd3dd;--border2:#adb5c4;
+  --text:#1a1d24;--text2:#5a6170;--text3:#94a0b0;
+  --voa-v:#0057A8;
+  --voa-o:#F47920;
+  --voa-a:#C2006B;
+  --accent:#F47920;--accent2:#c4620e;
+  --blue:#0057A8;--magenta:#C2006B;
+  --green:#27623a;
+  --r:6px;--rl:12px;
+  --header-h:58px;
+  --tabs-h:42px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;width:100%;overflow-x:hidden}
+body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);font-size:13px;display:flex;flex-direction:column;min-height:100vh}
+
+/* ── HEADER ── */
+.hdr{
+  background:#0057A8;color:#fff;
+  padding:0 16px;
+  height:var(--header-h);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;gap:8px;
+  position:sticky;top:0;z-index:10;
+}
+.hdr-top{display:flex;align-items:center;gap:8px;min-width:0}
+.voa-logo{display:flex;align-items:center;gap:1px;flex-shrink:0;line-height:1}
+.voa-v{font-size:20px;font-weight:900;color:#ffffff;font-family:"Courier New",monospace;letter-spacing:-1px}
+.voa-o{font-size:20px;font-weight:900;color:#F47920;font-family:"Courier New",monospace;letter-spacing:-1px}
+.voa-a{font-size:20px;font-weight:900;color:#C2006B;font-family:"Courier New",monospace;letter-spacing:-1px}
+.hdr-title{
+  display:flex;flex-direction:column;
+  min-width:0;
+}
+.hdr-title .t1{font-size:13px;color:#f0ede8;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-title .t2{font-size:10px;color:#888;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* LANG TOGGLE */
+.lang-toggle{display:flex;background:rgba(255,255,255,.1);border-radius:var(--rl);padding:2px;gap:2px;flex-shrink:0}
+.lang-btn{padding:4px 10px;font-size:10px;letter-spacing:.07em;border:none;background:transparent;color:#aaa;cursor:pointer;font-family:inherit;border-radius:calc(var(--rl) - 1px);transition:all .15s;white-space:nowrap}
+.lang-btn.active{background:#F47920;color:#fff;font-weight:bold}
+
+/* ── TABS ── */
+.tabs-bar{
+  background:var(--surface);
+  border-bottom:2px solid #0057A8;
+  display:flex;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;flex-shrink:0;
+  position:sticky;top:var(--header-h);z-index:9;
+}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab{
+  padding:0 14px;height:var(--tabs-h);
+  font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--text2);cursor:pointer;
+  border-bottom:2px solid transparent;
+  background:none;border-top:none;border-left:none;border-right:none;
+  font-family:inherit;white-space:nowrap;transition:all .15s;
+  flex-shrink:0;
+}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab:hover:not(.active){color:var(--text)}
+
+/* ── PANELS ── */
+.panel{display:none;padding:16px}
+.panel.active{display:block}
+
+/* ── MODE BAR ── */
+.mode-bar{
+  display:flex;flex-wrap:wrap;gap:4px;
+  background:#e8f0fb;border:1px solid #b8cfee;
+  border-radius:var(--rl);padding:4px;margin-bottom:14px;
+}
+.mode-btn{
+  flex:1 1 auto;min-width:0;
+  padding:7px 10px;font-size:10px;letter-spacing:.04em;text-transform:uppercase;
+  border:none;background:transparent;color:var(--text2);cursor:pointer;
+  font-family:inherit;border-radius:calc(var(--rl) - 2px);transition:all .15s;
+  white-space:nowrap;text-align:center;
+}
+.mode-btn.active{background:#0057A8;color:#fff;font-weight:bold;box-shadow:0 1px 4px rgba(0,87,168,.25)}
+
+/* ── CONTROLS ── */
+.controls-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:10px;background:var(--surface);
+  border:1px solid var(--border);border-top:3px solid #F47920;border-radius:var(--rl);
+  padding:14px;margin-bottom:14px;
+}
+.ctrl label{display:block;font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.ctrl select{
+  width:100%;background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--r);padding:7px 8px;font-size:12px;
+  font-family:inherit;color:var(--text);cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 8px center;
+  padding-right:24px;
+}
+.ctrl input[type=range]{width:100%;accent-color:var(--accent);height:20px;cursor:pointer}
+.ctrl .readout{font-size:12px;font-weight:bold;color:var(--accent);margin-top:4px}
+.ctrl-hidden{display:none!important}
+
+/* ── SINGLE CARD ── */
+.card-area{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:16px}
+.card-wrap{width:100%;max-width:420px}
+.cwrap{
+  position:relative;background:#fff;
+  border:1px solid var(--border2);border-radius:var(--r);
+  overflow:hidden;width:100%;aspect-ratio:1;
+}
+.cwrap canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+.card-meta{
+  background:var(--surface);border:1px solid var(--border);border-top:3px solid #C2006B;
+  border-radius:var(--r);padding:12px 14px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.card-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.card-re{font-size:22px;font-weight:bold;color:#0057A8}
+.card-pct{font-size:16px;color:var(--accent);font-weight:bold}
+.card-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.card-stds{display:flex;gap:6px;flex-wrap:wrap}
+.std-pill{font-size:10px;padding:3px 8px;border-radius:3px;border:1px solid var(--border);color:var(--text2);background:var(--bg)}
+
+/* ── ACTIONS ── */
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.btn{
+  font-size:11px;padding:9px 16px;border-radius:var(--r);
+  border:1px solid var(--border2);background:var(--surface);
+  color:var(--text);cursor:pointer;font-family:inherit;
+  letter-spacing:.03em;transition:background .1s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.btn:hover,.btn:active{background:var(--surface2)}
+.btn.primary{background:#F47920;color:#fff;border-color:#c4620e}
+.btn.primary:hover,.btn.primary:active{background:#d4660e}
+.btn.icon{padding:9px 12px;font-size:14px}
+
+/* ── SCALE GRID ── */
+.scale-note{font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5}
+.scale-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:10px;margin-bottom:16px}
+.scale-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--rl);padding:10px;
+  display:flex;gap:10px;align-items:flex-start;
+  cursor:pointer;transition:border-color .15s;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.scale-card:hover,.scale-card:active{border-color:#C2006B;border-width:1.5px}
+.scwrap{flex-shrink:0;width:60px;height:60px;position:relative;border:1px solid var(--border);border-radius:3px;background:#fff;overflow:hidden}
+.scwrap canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+.sc-info{flex:1;min-width:0}
+.sc-re{font-size:16px;font-weight:bold}.sc-pct{font-size:12px;color:var(--accent);font-weight:bold}
+.sc-desc{font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4}
+.sc-norms{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
+.norm-tag{font-size:9px;padding:2px 6px;border:1px solid var(--border);border-radius:2px;color:var(--text2);background:var(--bg)}
+.norm-tag.hi{border-color:var(--blue);color:var(--blue);background:#eef4fc}
+
+/* ── CORRELATION TABLE ── */
+.section-title{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#0057A8;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #0057A8}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:20px}
+.corr-table{width:100%;min-width:480px;border-collapse:collapse;background:var(--surface);border-radius:var(--rl);overflow:hidden;border:1px solid var(--border)}
+.corr-table th{background:var(--surface2);padding:7px 10px;text-align:left;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);border-bottom:1px solid var(--border);font-weight:normal;white-space:nowrap}
+.corr-table td{padding:7px 10px;font-size:12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.corr-table tr:last-child td{border-bottom:none}
+.re-chip{display:inline-block;background:#0057A8;color:#fff;padding:2px 8px;border-radius:2px;font-size:11px;font-weight:bold}
+.pct-bar-wrap{display:flex;align-items:center}.pct-bar{height:5px;background:var(--accent);border-radius:2px;min-width:2px}
+.na{color:var(--text3);font-size:11px}
+
+/* ── ABOUT ── */
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.about-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px;border-top:3px solid #0057A8}
+.about-card h4{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--text2);margin-bottom:9px}
+.about-card p{font-size:12px;color:var(--text);line-height:1.7;margin-bottom:7px}
+.about-card p:last-child{margin-bottom:0}
+.note-box{background:#fff8f0;border:1px solid #F47920;border-left:4px solid #F47920;border-radius:var(--r);padding:9px 11px;font-size:11px;color:#a04e10;line-height:1.6;margin-top:9px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:480px){
+  .hdr-title .t1{font-size:11px}
+  .hdr-title .t2{display:none}
+  .tab{font-size:10px;padding:0 10px}
+  .mode-btn{font-size:9px;padding:6px 7px}
+  .controls-grid{grid-template-columns:1fr 1fr}
+  .card-re{font-size:18px}.card-pct{font-size:14px}
+}
+
+/* ══ REPORT TAB ══ */
+/* ══ REPORT PREVIEW ══ */
+.rpt{font-family:'Courier New',monospace;font-size:11px;color:#1a1d24;background:#fff;padding:28px 32px;border:1px solid var(--border);border-radius:var(--rl);margin-bottom:14px;line-height:1.55}
+.rpt-header{display:grid;grid-template-columns:1fr auto;gap:16px;border-bottom:3px solid #0057A8;padding-bottom:14px;margin-bottom:18px}
+.rpt-brand-logo{display:flex;align-items:center;gap:2px;font-size:24px;font-weight:900;letter-spacing:-1px;line-height:1}
+.rpt-brand-logo .rv{color:#0057A8}.rpt-brand-logo .ro{color:#F47920}.rpt-brand-logo .ra{color:#C2006B}
+.rpt-brand-name{font-size:9px;color:#5a6170;letter-spacing:.08em;text-transform:uppercase;margin-top:3px}
+.rpt-brand-contact{font-size:9px;color:#5a6170;margin-top:2px;line-height:1.6}
+.rpt-docid{text-align:right}
+.rpt-docnum{font-size:12px;font-weight:700;color:#0057A8;letter-spacing:.04em}
+.rpt-docdate{font-size:9px;color:#5a6170;margin-top:2px}
+.rpt-status{display:inline-block;margin-top:5px;background:#F47920;color:#fff;font-size:8px;font-weight:700;letter-spacing:.1em;padding:2px 8px;border-radius:2px;text-transform:uppercase}
+.rpt-title{text-align:center;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid #d0d5df}
+.rpt-title h1{font-size:14px;font-weight:700;margin-bottom:2px}
+.rpt-title h2{font-size:10px;font-weight:400;color:#5a6170;letter-spacing:.05em;text-transform:uppercase}
+.rpt-sec{margin-bottom:18px}
+.rpt-sec-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.rpt-sec-num{width:20px;height:20px;border-radius:50%;background:#0057A8;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rpt-sec-head h3{font-size:10px;font-weight:700;color:#0057A8;letter-spacing:.06em;text-transform:uppercase}
+.rpt-info-table{width:100%;border-collapse:collapse;font-size:10px}
+.rpt-info-table td{padding:5px 8px;border:1px solid #d0d5df;vertical-align:top}
+.rpt-info-table td:first-child{background:#f2f4f7;color:#5a6170;font-weight:600;font-size:9px;letter-spacing:.05em;text-transform:uppercase;width:33%;white-space:nowrap}
+.rpt-grade-table{width:100%;border-collapse:collapse;font-size:10px}
+.rpt-grade-table th{background:#0057A8;color:#fff;padding:6px 8px;text-align:left;font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:600}
+.rpt-grade-table td{padding:6px 8px;border-bottom:1px solid #d0d5df;vertical-align:middle}
+.rpt-grade-table tr:nth-child(even) td{background:#f8f9fb}
+.rpt-chip{display:inline-block;background:#0057A8;color:#fff;padding:1px 7px;border-radius:2px;font-size:9px;font-weight:700}
+.rpt-pct{color:#F47920;font-weight:700;font-size:10px}
+.rpt-ok{color:#1a7a3a;font-weight:600;font-size:9px}
+.rpt-warn{color:#F47920;font-weight:600;font-size:9px}
+.rpt-bad{color:#C2006B;font-weight:600;font-size:9px}
+.rpt-canvas-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:10px 0}
+.rpt-canvas-card{border:1px solid #d0d5df;border-radius:3px;overflow:hidden;text-align:center}
+.rpt-canvas-card canvas{display:block;width:100%;aspect-ratio:1;background:#fff}
+.rpt-canvas-footer{padding:4px;background:#f2f4f7;border-top:1px solid #d0d5df;font-size:8.5px}
+.rpt-canvas-footer strong{color:#0057A8}.rpt-canvas-footer span{color:#F47920;font-weight:700}
+.rpt-gauge-wrap{margin:8px 0}
+.rpt-gauge-track{height:8px;background:#f2f4f7;border-radius:4px;overflow:hidden;border:1px solid #d0d5df}
+.rpt-gauge-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#27ae60,#F47920,#C2006B)}
+.rpt-gauge-labels{display:flex;justify-content:space-between;font-size:8px;color:#94a0b0;margin-top:3px}
+.rpt-obs{background:#f8f9fb;border:1px solid #d0d5df;border-left:3px solid #0057A8;border-radius:3px;padding:9px 11px;font-size:10px;line-height:1.65;margin-bottom:8px}
+.rpt-obs.warn{border-left-color:#F47920;background:#fff9f5}
+.rpt-obs.crit{border-left-color:#C2006B;background:#fff5f9}
+.rpt-notice{text-align:center;font-size:9px;color:#94a0b0;padding:10px;border-top:1px solid #d0d5df;margin-top:20px}
+.rpt-sig{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px;padding-top:14px;border-top:1px solid #d0d5df}
+.rpt-sig-box{text-align:center}
+.rpt-sig-line{border-top:1px solid #1a1d24;margin:28px 0 5px}
+.rpt-sig-name{font-size:10px;font-weight:600}
+.rpt-sig-role{font-size:8.5px;color:#5a6170}
+.rpt-footer{display:flex;justify-content:space-between;font-size:8px;color:#94a0b0;margin-top:14px;padding-top:10px;border-top:1px solid #d0d5df}
+.rpt-footer-logo{display:flex;align-items:center;gap:2px;font-weight:900}
+.rpt-footer-logo .rv{color:#0057A8}.rpt-footer-logo .ro{color:#F47920}.rpt-footer-logo .ra{color:#C2006B}
+@media print{.panel:not(.active){display:none!important}.no-print{display:none!important}}
+
+.rpt-notice-top{
+  background:#fff8f0;border:1px solid #F47920;border-left:4px solid #F47920;
+  border-radius:var(--r);padding:9px 12px;font-size:10px;color:#a04e10;
+  line-height:1.6;margin-bottom:14px;font-family:'Courier New',monospace;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-title">
+    <div class="hdr-top">
+      <span class="voa-logo"><span class="voa-v">V</span><span class="voa-o">O</span><span class="voa-a">A</span></span>
+      <span class="t1" id="hdr-t1">Avaliação de Grau de Alcance de Falhas</span>
+    </div>
+    <span class="t2" id="hdr-t2">ISO 4628 · ASTM D610 · Escala Europeia</span>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="lb-pt" onclick="setLang('pt')">PT</button>
+    <button class="lang-btn"        id="lb-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab active" id="tab-btn-gen"  onclick="setTab('gen')"  data-pt="Gerador"         data-en="Generator">Gerador</button>
+  <button class="tab"        id="tab-btn-scale" onclick="setTab('scale')" data-pt="Escala Re0–Re9"  data-en="Re0–Re9 Scale">Escala Re0–Re9</button>
+  <button class="tab"        id="tab-btn-corr"  onclick="setTab('corr')"  data-pt="Correlação"      data-en="Correlation">Correlação</button>
+  <button class="tab"        id="tab-btn-about" onclick="setTab('about')" data-pt="Sobre"           data-en="About">Sobre</button>
+  <button class="tab"        id="tab-btn-report" onclick="setTab('report')" data-pt="Laudo"           data-en="Report">Laudo</button>
+</div>
+
+<!-- ══════════ GERADOR ══════════ -->
+<div id="tab-gen" class="panel active">
+
+  <div class="mode-bar">
+    <button class="mode-btn active" id="mode-norma" onclick="setMode('norma')"
+      data-pt="Escala Europeia Re" data-en="European Scale Re">Escala Europeia Re</button>
+    <button class="mode-btn" id="mode-astm" onclick="setMode('astm')"
+      data-pt="ASTM D610" data-en="ASTM D610">ASTM D610</button>
+    <button class="mode-btn" id="mode-iso" onclick="setMode('iso')"
+      data-pt="ISO 4628-3" data-en="ISO 4628-3">ISO 4628-3</button>
+    <button class="mode-btn" id="mode-pct" onclick="setMode('pct')"
+      data-pt="Percentual livre" data-en="Free percentage">Percentual livre</button>
+  </div>
+
+  <div class="controls-grid">
+    <div class="ctrl">
+      <label data-pt="Tipo de padrão" data-en="Pattern type">Tipo de padrão</label>
+      <select id="g-type" onchange="renderGen()">
+        <option value="general">General (Gi)</option>
+        <option value="spot-general" selected>Spot-General (SGi)</option>
+        <option value="spot">Spot (Si)</option>
+        <option value="pinpoint">Pinpoint (Pi)</option>
+      </select>
+    </div>
+    <div class="ctrl" id="ctrl-re">
+      <label data-pt="Grau Re" data-en="Re Grade">Grau Re</label>
+      <input type="range" id="g-re" min="0" max="9" value="1" step="1" oninput="renderGen()">
+      <div class="readout" id="out-re">Re 1 — 0,05%</div>
+    </div>
+    <div class="ctrl ctrl-hidden" id="ctrl-astm">
+      <label data-pt="Rust Grade (ASTM)" data-en="Rust Grade (ASTM)">Rust Grade (ASTM)</label>
+      <select id="g-astm" onchange="renderGen()">
+        <option value="0">Grade 10 — &lt;0,01%</option>
+        <option value="1" selected>Grade 8 — 0,03–0,1%</option>
+        <option value="2">Grade 6 — 0,3–1%</option>
+        <option value="3">Grade 4 — 3–10%</option>
+        <option value="4">Grade 1 — 33–55%</option>
+      </select>
+    </div>
+    <div class="ctrl ctrl-hidden" id="ctrl-iso">
+      <label data-pt="Rust Grade (ISO)" data-en="Rust Grade (ISO)">Rust Grade (ISO)</label>
+      <select id="g-iso" onchange="renderGen()">
+        <option value="0">Ri 0 — 0%</option>
+        <option value="1" selected>Ri 1 — 0,05%</option>
+        <option value="2">Ri 2 — 0,5%</option>
+        <option value="3">Ri 3 — 1%</option>
+        <option value="4">Ri 4 — 8%</option>
+        <option value="5">Ri 5 — 40–50%</option>
+      </select>
+    </div>
+    <div class="ctrl ctrl-hidden" id="ctrl-pct">
+      <label data-pt="Área afetada %" data-en="Affected area %">Área afetada %</label>
+      <input type="range" id="g-pct" min="0" max="100" value="5" step="1" oninput="renderGen()">
+      <div class="readout" id="out-pct">5%</div>
+    </div>
+    <div class="ctrl">
+      <label data-pt="Variação (seed)" data-en="Variation (seed)">Variação (seed)</label>
+      <input type="range" id="g-seed" min="1" max="99" value="17" step="1" oninput="renderGen()">
+      <div class="readout" id="out-seed">17</div>
+    </div>
+  </div>
+
+  <div class="card-area">
+    <div class="card-wrap">
+      <div class="cwrap" id="g-cwrap"></div>
+      <div class="card-meta" id="g-meta"></div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="btn primary" onclick="exportCard()" data-pt="↓ Exportar PNG" data-en="↓ Export PNG">↓ Exportar PNG</button>
+    <button class="btn icon" onclick="document.getElementById('g-seed').value=Math.floor(Math.random()*99)+1;renderGen()" title="Novo padrão">⟳</button>
+    <button class="btn" onclick="setTab('scale')" data-pt="Escala completa →" data-en="Full scale →">Escala completa →</button>
+  </div>
+</div>
+
+<!-- ══════════ ESCALA ══════════ -->
+<div id="tab-scale" class="panel">
+  <p class="scale-note" id="scale-note"></p>
+  <div class="scale-grid" id="scale-cards"></div>
+</div>
+
+<!-- ══════════ CORRELAÇÃO ══════════ -->
+<div id="tab-corr" class="panel">
+  <div class="section-title" id="corr-title"></div>
+  <div class="table-scroll">
+    <table class="corr-table">
+      <thead>
+        <tr>
+          <th data-pt="Grau Europeu" data-en="European Grade">Grau Europeu</th>
+          <th data-pt="Área %" data-en="Area %">Área %</th>
+          <th data-pt="Visual" data-en="Visual">Visual</th>
+          <th>ASTM D610</th>
+          <th>ISO 4628-3</th>
+          <th data-pt="Descrição" data-en="Description">Descrição</th>
+        </tr>
+      </thead>
+      <tbody id="corr-body"></tbody>
+    </table>
+  </div>
+  <div class="about-grid" id="corr-notes"></div>
+</div>
+
+<!-- ══════════ SOBRE ══════════ -->
+<div id="tab-about" class="panel">
+  <div class="about-grid" id="about-cards"></div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   DADOS
+══════════════════════════════════════════ */
+const RE=[
+  {label:'Re 0',pct:'0%',       n:0,      bar:0,  astm:'10',iso:'Ri 0',
+   desc_pt:'Sem enferrujamento',                    desc_en:'No rusting'},
+  {label:'Re 1',pct:'0,05%',    n:0.0005, bar:1,  astm:'8', iso:'Ri 1',
+   desc_pt:'Traços mínimos — limite de detecção',   desc_en:'Minimal traces — visual detection limit'},
+  {label:'Re 2',pct:'0,5%',     n:0.005,  bar:3,  astm:'6', iso:'Ri 2',
+   desc_pt:'Muito leve — pontos isolados',          desc_en:'Very slight — isolated spots'},
+  {label:'Re 3',pct:'1,0%',     n:0.01,   bar:6,  astm:'6', iso:'Ri 3',
+   desc_pt:'Leve — área discreta afetada',          desc_en:'Slight — discrete area affected'},
+  {label:'Re 4',pct:'3,0%',     n:0.03,   bar:12, astm:'—', iso:'—',
+   desc_pt:'Moderado — sem equiv. ASTM/ISO',        desc_en:'Moderate — no direct ASTM/ISO equiv.'},
+  {label:'Re 5',pct:'8,0%',     n:0.08,   bar:22, astm:'4', iso:'Ri 4',
+   desc_pt:'Médio — deterioração visível',          desc_en:'Medium — visible deterioration'},
+  {label:'Re 6',pct:'15–20%',   n:0.175,  bar:38, astm:'—', iso:'—',
+   desc_pt:'Significativo — sem equiv. ASTM/ISO',   desc_en:'Significant — no direct ASTM/ISO equiv.'},
+  {label:'Re 7',pct:'40–50%',   n:0.45,   bar:65, astm:'1', iso:'Ri 5',
+   desc_pt:'Severo — falha ampla do revestimento',  desc_en:'Severe — extensive coating failure'},
+  {label:'Re 8',pct:'75–85%',   n:0.80,   bar:85, astm:'—', iso:'—',
+   desc_pt:'Muito severo — revestimento perdido',   desc_en:'Very severe — coating mostly lost'},
+  {label:'Re 9',pct:'~95%',     n:0.95,   bar:98, astm:'—', iso:'—',
+   desc_pt:'Completo — aço exposto generalizado',   desc_en:'Complete — widespread bare steel'},
+];
+const ASTM_LIST=[
+  {grade:'10',pct:'<0,01%',n:0.00008,re:0},
+  {grade:'8', pct:'0,03–0,1%',n:0.0005,re:1},
+  {grade:'6', pct:'0,3–1%',n:0.007,re:2},
+  {grade:'4', pct:'3–10%',n:0.06,re:5},
+  {grade:'1', pct:'33–55%',n:0.44,re:7},
+];
+const ISO_LIST=[
+  {grade:'Ri 0',pct:'0%',n:0,re:0},
+  {grade:'Ri 1',pct:'0,05%',n:0.0005,re:1},
+  {grade:'Ri 2',pct:'0,5%',n:0.005,re:2},
+  {grade:'Ri 3',pct:'1%',n:0.01,re:3},
+  {grade:'Ri 4',pct:'8%',n:0.08,re:5},
+  {grade:'Ri 5',pct:'40–50%',n:0.45,re:7},
+];
+
+const T={
+  hdr_t1:{pt:'Avaliação de Grau de Alcance de Falhas',en:'Coating Failure Grade Assessment'},
+  hdr_t2:{pt:'ISO 4628 · ASTM D610 · Escala Europeia',en:'ISO 4628 · ASTM D610 · European Scale'},
+  scale_note:{pt:'Escala Europeia de Grau de Enferrujamento. Clique em um grau para carregar no gerador.',en:'European Scale of Degree of Rusting. Click a grade to load it in the generator.'},
+  corr_title:{pt:'Tabela de Correlação de Normas',en:'Standards Correlation Table'},
+  no_equiv:{pt:'Sem equivalente direto',en:'No direct equivalent'},
+};
+
+/* ══════════════════════════════════════════
+   IDIOMA
+══════════════════════════════════════════ */
+let LANG='pt';
+function setLang(l){
+  LANG=l;
+  document.getElementById('lb-pt').classList.toggle('active',l==='pt');
+  document.getElementById('lb-en').classList.toggle('active',l==='en');
+  document.getElementById('hdr-t1').textContent=T.hdr_t1[l];
+  document.getElementById('hdr-t2').textContent=T.hdr_t2[l];
+  document.documentElement.lang=l==='pt'?'pt-BR':'en';
+  /* tabs */
+  document.querySelectorAll('.tab[data-pt]').forEach(el=>{el.textContent=el.dataset[l];});
+  /* mode btns */
+  document.querySelectorAll('.mode-btn[data-pt]').forEach(el=>{el.textContent=el.dataset[l]});
+  /* ctrl labels */
+  document.querySelectorAll('.ctrl label[data-pt]').forEach(el=>{el.textContent=el.dataset[l]});
+  /* action btns */
+  document.querySelectorAll('.btn[data-pt]').forEach(el=>{el.textContent=el.dataset[l]});
+  /* table headers */
+  document.querySelectorAll('.corr-table th[data-pt]').forEach(el=>{el.textContent=el.dataset[l]});
+  /* corr section */
+  document.getElementById('corr-title').textContent=T.corr_title[l];
+  document.getElementById('scale-note').textContent=T.scale_note[l];
+  /* rebuild dynamic content */
+  buildAbout();
+  buildCorrNotes();
+  buildCorrelation();
+  renderGen();
+}
+
+/* ══════════════════════════════════════════
+   RNG + CANVAS
+══════════════════════════════════════════ */
+function rng(s){let v=s|0;return()=>{v=(v*1664525+1013904223)&0xffffffff;return(v>>>0)/0xffffffff;};}
+
+function mkCanvas(wrap,px){
+  wrap.innerHTML='';
+  const dpr=Math.min(window.devicePixelRatio||1,3);
+  const cv=document.createElement('canvas');
+  cv.width=px*dpr;cv.height=px*dpr;
+  cv.style.position='absolute';cv.style.top='0';cv.style.left='0';
+  cv.style.width='100%';cv.style.height='100%';
+  wrap.appendChild(cv);
+  const ctx=cv.getContext('2d');
+  ctx.scale(dpr,dpr);
+  return ctx;
+}
+
+function draw(ctx,sz,pct,type,seed){
+  ctx.clearRect(0,0,sz,sz);
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,sz,sz);
+  if(pct>0){
+    const r=rng(seed);
+    ctx.fillStyle='#1a1917';
+    const area=sz*sz*pct;
+    if(type==='general'){
+      const b=Math.max(3,4+Math.sqrt(pct)*15);
+      const n=Math.max(1,Math.round(area/(b*b*0.56)));
+      for(let i=0;i<n;i++){
+        ctx.save();ctx.translate(r()*(sz-12)+4,r()*(sz-12)+4);ctx.rotate((r()-.5)*.6);
+        ctx.fillRect(-(r()*.7+.6)*b/2,-(r()*.6+.5)*b/2,(r()*.7+.6)*b,(r()*.6+.5)*b);
+        ctx.restore();
+      }
+    }else if(type==='spot-general'){
+      const ns=Math.max(1,Math.round(Math.sqrt(pct)*12+1));
+      const rv=Math.max(4,Math.sqrt(pct)*28);
+      const pos=[[.1,.1],[.9,.1],[.1,.9],[.9,.9],[.5,.1],[.1,.5],[.5,.9],[.9,.5],[.3,.3],[.7,.7]];
+      for(let i=0;i<ns;i++){const p=pos[Math.floor(r()*pos.length)];clust(ctx,r,p[0]*sz+(r()-.5)*20,p[1]*sz+(r()-.5)*20,rv);}
+      const sc=Math.round(area/30);
+      for(let i=0;i<sc;i++)ctx.fillRect(r()*(sz-6)+3-2,r()*(sz-6)+3-1.5,r()*4+2,r()*3+1.5);
+    }else if(type==='spot'){
+      const ns=Math.max(1,Math.round(Math.sqrt(pct)*8+.5));
+      const rv=Math.max(8,Math.sqrt(pct)*38);
+      for(let i=0;i<ns;i++)clust(ctx,r,r()*(sz-rv*2)+rv,r()*(sz-rv*2)+rv,rv*1.2);
+    }else{
+      const dp=Math.max(1.2,1.4+pct*3.5);
+      const n=Math.max(1,Math.round(area/(dp*dp*3)));
+      for(let i=0;i<n;i++){ctx.beginPath();ctx.arc(r()*(sz-4)+2,r()*(sz-4)+2,dp*(r()*.4+.8),0,Math.PI*2);ctx.fill();}
+    }
+  }
+  ctx.strokeStyle='#ccc';ctx.lineWidth=.75;ctx.strokeRect(.5,.5,sz-1,sz-1);
+}
+function clust(ctx,r,cx,cy,rv){
+  const n=Math.round(r()*3+2);
+  for(let i=0;i<n;i++){
+    const a=r()*Math.PI*2,d=r()*rv*.5;
+    ctx.save();ctx.translate(cx+Math.cos(a)*d,cy+Math.sin(a)*d);ctx.rotate((r()-.5)*.9);
+    ctx.fillRect(-(r()*rv*.5+rv*.2)/2,-(r()*rv*.35+rv*.12)/2,r()*rv*.5+rv*.2,r()*rv*.35+rv*.12);
+    ctx.restore();
+  }
+}
+
+/* ══════════════════════════════════════════
+   MODE
+══════════════════════════════════════════ */
+let MODE='norma';
+function setMode(m){
+  MODE=m;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('mode-'+m).classList.add('active');
+  ['ctrl-re','ctrl-astm','ctrl-iso','ctrl-pct'].forEach(id=>document.getElementById(id).classList.add('ctrl-hidden'));
+  ({norma:'ctrl-re',astm:'ctrl-astm',iso:'ctrl-iso',pct:'ctrl-pct'})[m] && document.getElementById(({norma:'ctrl-re',astm:'ctrl-astm',iso:'ctrl-iso',pct:'ctrl-pct'})[m]).classList.remove('ctrl-hidden');
+  renderGen();
+}
+
+/* ══════════════════════════════════════════
+   GET GRADE
+══════════════════════════════════════════ */
+function getGrade(){
+  const seed=parseInt(document.getElementById('g-seed').value);
+  const type=document.getElementById('g-type').value;
+  if(MODE==='norma'){
+    const i=parseInt(document.getElementById('g-re').value);
+    document.getElementById('out-re').textContent=RE[i].label+' — '+RE[i].pct;
+    return{n:RE[i].n,label:RE[i].label,pct:RE[i].pct,desc:RE[i]['desc_'+LANG],astm:RE[i].astm,iso:RE[i].iso,seed,type,showNorms:true};
+  }
+  if(MODE==='astm'){
+    const i=parseInt(document.getElementById('g-astm').value);
+    const g=ASTM_LIST[i],re=RE[g.re];
+    return{n:g.n,label:'Grade '+g.grade,pct:g.pct,desc:re['desc_'+LANG],astm:g.grade,iso:re.iso,seed,type,showNorms:true};
+  }
+  if(MODE==='iso'){
+    const i=parseInt(document.getElementById('g-iso').value);
+    const g=ISO_LIST[i],re=RE[g.re];
+    return{n:g.n,label:g.grade,pct:g.pct,desc:re['desc_'+LANG],astm:re.astm,iso:g.grade,seed,type,showNorms:true};
+  }
+  const v=parseInt(document.getElementById('g-pct').value);
+  document.getElementById('out-pct').textContent=v+'%';
+  const desc_pt='Área afetada (valor livre)',desc_en='Affected area (free value)';
+  return{n:v/100,label:v+'%',pct:v+'%',desc:LANG==='pt'?desc_pt:desc_en,astm:'—',iso:'—',seed,type,showNorms:false};
+}
+
+/* ══════════════════════════════════════════
+   RENDER GENERATOR
+══════════════════════════════════════════ */
+function renderGen(){
+  document.getElementById('out-seed').textContent=document.getElementById('g-seed').value;
+  const g=getGrade();
+  /* canvas — usa tamanho real do container */
+  const cwrap=document.getElementById('g-cwrap');
+  const sz=Math.min(cwrap.offsetWidth||300,600)||300;
+  const ctx=mkCanvas(cwrap,sz);
+  draw(ctx,sz,g.n,g.type,g.seed);
+  /* meta */
+  const ap=g.showNorms&&g.astm!=='—'?`<span class="std-pill">ASTM: ${g.astm}</span>`:'';
+  const ip=g.showNorms&&g.iso!=='—'?`<span class="std-pill">ISO: ${g.iso}</span>`:'';
+  document.getElementById('g-meta').innerHTML=`
+    <div class="card-top"><span class="card-re">${g.label}</span><span class="card-pct">${g.pct}</span></div>
+    <div class="card-desc">${g.desc}</div>
+    ${g.showNorms?`<div class="card-stds">${ap}${ip}</div>`:''}`;
+}
+
+/* ══════════════════════════════════════════
+   EXPORT
+══════════════════════════════════════════ */
+function exportCard(){
+  const g=getGrade();
+  const SZ=400;
+  const out=document.createElement('canvas');out.width=SZ;out.height=SZ+50;
+  const ctx=out.getContext('2d');
+  ctx.fillStyle='#f3f2ef';ctx.fillRect(0,0,SZ,SZ+50);
+  const tmp=document.createElement('canvas');tmp.width=SZ;tmp.height=SZ;
+  draw(tmp.getContext('2d'),SZ,g.n,g.type,g.seed);
+  ctx.drawImage(tmp,0,0);
+  ctx.fillStyle='#fff';ctx.fillRect(0,SZ,SZ,50);
+  ctx.fillStyle='#1a1917';ctx.font='bold 16px monospace';ctx.textAlign='center';
+  ctx.fillText(g.label,SZ/2,SZ+18);
+  ctx.fillStyle='#c0410f';ctx.font='13px monospace';
+  ctx.fillText(g.pct,SZ/2,SZ+36);
+  ctx.fillStyle='#65625c';ctx.font='11px monospace';
+  ctx.fillText('Coating Failure Grade Assessment · ISO 4628 / ASTM D610',SZ/2,SZ+50);
+  const a=document.createElement('a');a.download='coating_failure_grade.png';a.href=out.toDataURL();a.click();
+}
+
+/* ══════════════════════════════════════════
+   TAB
+══════════════════════════════════════════ */
+function setTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('tab-btn-'+id).classList.add('active');
+  if(id==='gen') setTimeout(renderGen,50);
+  if(id==='report') renderStaticReport();
+}
+
+/* ══════════════════════════════════════════
+   SCALE TAB
+══════════════════════════════════════════ */
+function buildScale(){
+  const grid=document.getElementById('scale-cards');grid.innerHTML='';
+  RE.forEach((re,i)=>{
+    const div=document.createElement('div');div.className='scale-card';
+    const cw=document.createElement('div');cw.className='scwrap';
+    const ctx=mkCanvas(cw,64);draw(ctx,64,re.n,'spot-general',42+i*7);
+    const info=document.createElement('div');info.className='sc-info';
+    const ah=re.astm!=='—'?`<span class="norm-tag hi">ASTM ${re.astm}</span>`:`<span class="norm-tag">${re.astm}</span>`;
+    const ih=re.iso!=='—'?`<span class="norm-tag hi">${re.iso}</span>`:`<span class="norm-tag">${re.iso}</span>`;
+    info.innerHTML=`<div style="display:flex;align-items:baseline;gap:6px"><span class="sc-re">${re.label}</span><span class="sc-pct">${re.pct}</span></div><div class="sc-desc">${re['desc_'+LANG]}</div><div class="sc-norms">${ah}${ih}</div>`;
+    div.appendChild(cw);div.appendChild(info);
+    div.onclick=()=>{setMode('norma');document.getElementById('g-re').value=i;setTab('gen');};
+    grid.appendChild(div);
+  });
+}
+
+/* ══════════════════════════════════════════
+   CORRELATION
+══════════════════════════════════════════ */
+function buildCorrelation(){
+  const tb=document.getElementById('corr-body');tb.innerHTML='';
+  RE.forEach(re=>{
+    const bw=Math.max(2,Math.round(re.bar*1.3));
+    const as=re.astm!=='—'?`<strong>${re.astm}</strong>`:`<span class="na">—</span>`;
+    const is=re.iso!=='—'?`<span style="color:var(--green);font-weight:bold">${re.iso}</span>`:`<span class="na">—</span>`;
+    tb.innerHTML+=`<tr><td><span class="re-chip">${re.label}</span></td><td style="font-weight:bold;color:var(--accent)">${re.pct}</td><td><div class="pct-bar-wrap"><div class="pct-bar" style="width:${bw}px"></div></div></td><td>${as}</td><td>${is}</td><td style="color:var(--text2);font-size:11px">${re['desc_'+LANG]}</td></tr>`;
+  });
+}
+
+/* ══════════════════════════════════════════
+   CORR NOTES
+══════════════════════════════════════════ */
+function buildCorrNotes(){
+  const c=document.getElementById('corr-notes');
+  const notes=LANG==='pt'?[
+    ['Escala Europeia — uso primário','A Escala Europeia (Re0–Re9) é a referência principal para avaliação visual de revestimentos. ASTM D610 e ISO 4628-3 são apresentadas como correlação.'],
+    ['Lógica invertida: Europeia vs ASTM','Escala Europeia: Re0 = sem ferrugem (melhor). ASTM D610: Grade 10 = sem ferrugem (melhor). A leitura é oposta — atenção redobrada.'],
+    ['Graus sem equivalente direto','Re4 (3%), Re6 (15–20%), Re8 (75–85%) e Re9 (~95%) não possuem equivalente direto em ASTM ou ISO. A escala europeia é mais granular para estágios avançados.'],
+  ]:[
+    ['European Scale — primary use','The European Scale (Re0–Re9) is the main reference for visual coating assessment. ASTM D610 and ISO 4628-3 are shown for cross-reference only.'],
+    ['Inverted logic: European vs ASTM','European Scale: Re0 = no rusting (best). ASTM D610: Grade 10 = no rusting (best). The reading is reversed — use caution.'],
+    ['Grades without direct equivalents','Re4 (3%), Re6 (15–20%), Re8 (75–85%) and Re9 (~95%) have no direct ASTM or ISO equivalent. The European scale is more granular for advanced degradation.'],
+  ];
+  c.innerHTML=notes.map(([h,p])=>`<div class="about-card"><h4>${h}</h4><p>${p}</p></div>`).join('');
+}
+
+/* ══════════════════════════════════════════
+   ABOUT
+══════════════════════════════════════════ */
+function buildAbout(){
+  const c=document.getElementById('about-cards');
+  const cards=LANG==='pt'?[
+    ['Sobre esta ferramenta','Gerador visual interativo de padrões de avaliação de grau de alcance de falhas em revestimentos anticorrosivos, baseado na Escala Europeia de Enferrujamento, ASTM D610 e ISO 4628-3.'],
+    ['Normas de referência','ASTM D610 — Avaliação de grau de enferrujamento em superfícies pintadas\nISO 4628-3 — Avaliação de degradação de revestimentos\nEscala Europeia (CEPE) — Padrão pictórico de referência'],
+    ['Tipos de padrão visual','General (Gi): distribuição uniforme e densa.\nSpot-General (SGi): manchas maiores com partículas esparsas.\nSpot (Si): manchas isoladas de maior diâmetro.\nPinpoint (Pi): microporos dispersos.'],
+    ['Modo percentual livre','O modo "Percentual livre" permite simular qualquer valor de 0 a 100% de área afetada sem vínculo a uma norma específica, útil para avaliações e treinamento.'],
+    ['Idealização e contato','Este aplicativo foi idealizado por <strong>Vagner Almeida</strong> — VOA LTDA.<br><br>📧 vagner.almeida@yahoo.com<br>📱 +55 51 99270-1366'],
+  ]:[
+    ['About this tool','Interactive visual generator for coating failure grade assessment patterns, based on the European Rusting Scale, ASTM D610 and ISO 4628-3.'],
+    ['Reference standards','ASTM D610 — Evaluating degree of rusting on painted steel surfaces\nISO 4628-3 — Assessment of coating degradation\nEuropean Scale (CEPE) — Pictorial reference standard'],
+    ['Visual pattern types','General (Gi): uniform dense distribution.\nSpot-General (SGi): larger spots with scattered particles.\nSpot (Si): isolated larger spots.\nPinpoint (Pi): scattered micropores.'],
+    ['Free percentage mode','The "Free percentage" mode lets you simulate any value from 0 to 100% affected area without tying to a specific standard — useful for assessment and training.'],
+    ['Concept & contact','This application was conceived by <strong>Vagner Almeida</strong> — VOA LTDA.<br><br>📧 vagner.almeida@yahoo.com<br>📱 +55 51 99270-1366'],
+  ];
+  c.innerHTML=cards.map(([h,p])=>`<div class="about-card"><h4>${h}</h4><p>${p.includes('<')?p:p.replace(/\n/g,'<br>')}</p></div>`).join('');
+}
+
+
+/* ══════════════════════════════════════════
+   REPORT TAB
+══════════════════════════════════════════ */
+
+
+function renderStaticReport(){
+  if(document.getElementById("rpt-content").innerHTML.trim()) return;
+  buildStaticReport();
+}
+
+/* ══════════════════════════════════════════
+   STATIC REPORT
+══════════════════════════════════════════ */
+function buildStaticReport(){
+  const areas=[
+    {name:'Área 1',re:1,type:'spot-general',seed:17},
+    {name:'Área 2',re:3,type:'general',     seed:46},
+    {name:'Área 3',re:4,type:'spot-general',seed:75},
+    {name:'Área 4',re:5,type:'general',     seed:104},
+  ];
+
+  function getStatus(r){
+    if(r<=1) return ['rpt-ok','✓ Aceitável / Acceptable'];
+    if(r<=3) return ['rpt-ok','✓ Monitorar / Monitor'];
+    if(r<=5) return ['rpt-warn','⚠ Reparo breve / Short-term repair'];
+    return ['rpt-bad','✗ Reparo imediato / Immediate repair'];
+  }
+
+  function getRec(r,name){
+    if(r<=1) return `${name}: Sem ação imediata. Próxima inspeção em 12 meses.`;
+    if(r<=3) return `${name}: Reparo pontual recomendado. Prazo: 6 meses.`;
+    if(r<=5) return `${name}: Reparo localizado com preparação de superfície. Prazo: 90 dias.`;
+    return `<span style="color:#C2006B;font-weight:700">${name}: Reparo imediato. Jateamento Sa 2½ + reaplicação do revestimento.</span>`;
+  }
+
+  const avgRe=Math.ceil(areas.reduce((s,a)=>s+a.re,0)/areas.length);
+  const gaugeW=Math.round((avgRe/9)*100);
+  const integrity=Math.max(0,Math.round(100-(avgRe/9)*100));
+
+  const tableRows=areas.map(a=>{
+    const [cls,txt]=getStatus(a.re); const re=RE[a.re];
+    return `<tr>
+      <td><strong>${a.name}</strong></td>
+      <td><span class="rpt-chip">${re.label}</span></td>
+      <td>${re.iso!=='—'?re.iso:'—'}</td>
+      <td>${re.astm!=='—'?re.astm:'—'}</td>
+      <td><span class="rpt-pct">${re.pct}</span></td>
+      <td>${a.type}</td>
+      <td><span class="${cls}">${txt}</span></td>
+    </tr>`;
+  }).join('');
+
+  const canvasCards=areas.map((a,i)=>
+    `<div class="rpt-canvas-card">
+      <canvas id="rptcv-${i}" style="display:block;width:100%;aspect-ratio:1"></canvas>
+      <div class="rpt-canvas-footer"><strong>${a.name}</strong> — <span>${RE[a.re].label} (${RE[a.re].pct})</span></div>
+    </div>`
+  ).join('');
+
+  const worst=areas.reduce((a,b)=>b.re>a.re?b:a);
+  const best =areas.reduce((a,b)=>b.re<a.re?b:a);
+  const obsText=`O sistema de revestimento apresenta condição variável entre as áreas inspecionadas. A área de menor severidade é ${best.name} (${RE[best.re].label}), enquanto ${worst.name} apresenta o maior grau de deterioração (${RE[worst.re].label} — ${RE[worst.re].pct}). Monitoramento contínuo e execução dos reparos dentro dos prazos indicados são recomendados.`;
+
+  document.getElementById('rpt-content').innerHTML=`
+    <div class="rpt-notice-top">
+      ⚠ Este é um modelo de laudo gerado pelo sistema VOA. Para mais informações de projetos personalizados, contacte o administrador.
+    </div>
+
+    <div class="rpt-header">
+      <div>
+        <div class="rpt-brand-logo"><span class="rv">V</span><span class="ro">O</span><span class="ra">A</span></div>
+        <div class="rpt-brand-name">VOA LTDA — Inspeção de Revestimentos</div>
+        <div class="rpt-brand-contact">vagner.almeida@yahoo.com &nbsp;·&nbsp; +55 51 99270-1366</div>
+      </div>
+      <div class="rpt-docid">
+        <div class="rpt-docnum">VOA-REV-2025-0001</div>
+        <div class="rpt-docdate">Emissão: 02/04/2025 &nbsp;·&nbsp; Rev. 0</div>
+        <div class="rpt-status">Modelo / Sample</div>
+      </div>
+    </div>
+
+    <div class="rpt-title">
+      <h1>Laudo Técnico de Avaliação de Grau de Alcance de Falhas em Revestimentos</h1>
+      <h2>Coating Failure Grade Assessment Report</h2>
+    </div>
+
+    <div class="rpt-sec">
+      <div class="rpt-sec-head"><div class="rpt-sec-num">1</div><h3>Identificação / Identification</h3></div>
+      <table class="rpt-info-table">
+        <tr><td>Projeto / Project</td><td><strong>Projeto Piloto</strong></td></tr>
+        <tr><td>Compartimento / Sector</td><td>Compartimento 4 — Setor Bombordo</td></tr>
+        <tr><td>Data / Date</td><td>02/04/2025</td></tr>
+        <tr><td>Inspetor / Inspector</td><td>Vagner Almeida — VOA LTDA</td></tr>
+        <tr><td>Normas / Standards</td><td>Escala Europeia (CEPE) · ISO 4628-3 · ASTM D610</td></tr>
+        <tr><td>Sistema / Coating system</td><td>Epóxi de alto sólidos — revestimento anticorrosivo</td></tr>
+      </table>
+    </div>
+
+    <div class="rpt-sec">
+      <div class="rpt-sec-head"><div class="rpt-sec-num">2</div><h3>Padrões Visuais / Visual Patterns</h3></div>
+      <p style="font-size:9px;color:#94a0b0;margin-bottom:8px">Padrões gerados pelo sistema VOA com base nos graus registrados em campo.</p>
+      <div class="rpt-canvas-row">${canvasCards}</div>
+    </div>
+
+    <div class="rpt-sec">
+      <div class="rpt-sec-head"><div class="rpt-sec-num">3</div><h3>Grau por Área / Grade per Area</h3></div>
+      <table class="rpt-grade-table">
+        <thead><tr>
+          <th>Área / Area</th><th>Grau Europeu</th><th>ISO 4628-3</th>
+          <th>ASTM D610</th><th>Área afetada</th><th>Padrão</th><th>Status</th>
+        </tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+
+    <div class="rpt-sec">
+      <div class="rpt-sec-head"><div class="rpt-sec-num">4</div><h3>Indicador Geral / Overall Indicator</h3></div>
+      <div class="rpt-gauge-wrap">
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:#5a6170;margin-bottom:3px">
+          <span>Ótimo / Excellent</span>
+          <span style="color:#C2006B;font-weight:700">Grau médio: ${RE[avgRe].label} · Integridade: ${integrity}%</span>
+          <span>Crítico / Critical</span>
+        </div>
+        <div class="rpt-gauge-track"><div class="rpt-gauge-fill" style="width:${gaugeW}%"></div></div>
+        <div class="rpt-gauge-labels"><span>Re 0</span><span>Re 2</span><span>Re 4</span><span>Re 6</span><span>Re 8</span><span>Re 9</span></div>
+      </div>
+      <table class="rpt-info-table" style="margin-top:10px;font-size:10px">
+        <tr><td>Grau médio arredondado / Avg. grade (rounded up)</td><td><strong>${RE[avgRe].label}</strong></td></tr>
+        <tr><td>Áreas inspecionadas / Inspected areas</td><td>4</td></tr>
+        <tr><td>Áreas críticas / Critical areas</td><td>${areas.filter(a=>a.re>=6).length}</td></tr>
+      </table>
+    </div>
+
+    <div class="rpt-sec">
+      <div class="rpt-sec-head"><div class="rpt-sec-num">5</div><h3>Observações / Observations</h3></div>
+      <div class="rpt-obs">${obsText}</div>
+    </div>
+
+    <div class="rpt-sec">
+      <div class="rpt-sec-head"><div class="rpt-sec-num">6</div><h3>Recomendações / Recommendations</h3></div>
+      <table class="rpt-info-table" style="font-size:10px">
+        ${areas.map(a=>`<tr><td>${getRec(a.re,a.name)}</td></tr>`).join('')}
+      </table>
+    </div>
+
+    <div class="rpt-sig">
+      <div class="rpt-sig-box">
+        <div class="rpt-sig-line"></div>
+        <div class="rpt-sig-name">Vagner Almeida</div>
+        <div class="rpt-sig-role">Inspetor Responsável / Lead Inspector<br>VOA LTDA</div>
+      </div>
+      <div class="rpt-sig-box">
+        <div class="rpt-sig-line"></div>
+        <div class="rpt-sig-name">____________________________</div>
+        <div class="rpt-sig-role">Aprovação Cliente / Client Approval</div>
+      </div>
+    </div>
+
+    <div class="rpt-notice">
+      ⚠ Este é um modelo de laudo gerado pelo sistema VOA. Para mais informações de projetos personalizados, contacte o administrador.
+    </div>
+
+    <div class="rpt-footer">
+      <div class="rpt-footer-logo">
+        <span class="rv">V</span><span class="ro">O</span><span class="ra">A</span>
+        <span style="margin-left:4px;font-weight:400">LTDA · vagner.almeida@yahoo.com · +55 51 99270-1366</span>
+      </div>
+      <div>VOA-REV-2025-0001 · Rev. 0 · 02/04/2025</div>
+    </div>
+  `;
+
+  /* draw canvases */
+  setTimeout(()=>{
+    areas.forEach((a,i)=>{
+      const cv=document.getElementById(`rptcv-${i}`);
+      if(!cv) return;
+      const sz=cv.offsetWidth||130;
+      const dpr=Math.min(window.devicePixelRatio||1,2);
+      cv.width=sz*dpr; cv.height=sz*dpr;
+      const ctx=cv.getContext('2d'); ctx.scale(dpr,dpr);
+      draw(ctx,sz,RE[a.re].n,a.type,a.seed);
+    });
+  },80);
+}
+
+/* ══════════════════════════════════════════
+   RESIZE
+══════════════════════════════════════════ */
+let resizeTimer;
+window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(renderGen,100);});
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+function init(){
+  setLang('pt');
+  buildScale();
+  buildCorrelation();
+  buildCorrNotes();
+  buildAbout();
+  setTimeout(renderGen,60);
+}
+init();
+</script>
+
+<!-- ══════════ LAUDO ══════════ -->
+<div id="tab-report" class="panel">
+  <div class="rpt" id="rpt-content"></div>
+</div>
+</body>
+</html>
