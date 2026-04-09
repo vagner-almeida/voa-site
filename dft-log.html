@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log de Medições de DFT | VOA Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:    #0057A8;
+    --orange:  #F47920;
+    --magenta: #C2006B;
+    --bg:      #f2f4f7;
+    --white:   #ffffff;
+    --border:  #cdd3dd;
+    --text:    #1a2332;
+    --muted:   #6b7a90;
+    --green:   #0a7d55;
+    --red:     #c0392b;
+    --yellow:  #b8860b;
+    --green-bg:#e6f4ef;
+    --red-bg:  #fdecea;
+    --yellow-bg:#fef9e7;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--white);
+    border-bottom: 3px solid var(--blue);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,87,168,.08);
+  }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-badge {
+    width: 36px; height: 36px; background: var(--blue); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace; color: #fff; font-size: 13px; font-weight: 500;
+  }
+  .logo-text { font-size: 17px; font-weight: 700; color: var(--blue); letter-spacing: -.3px; }
+  .logo-sub  { font-size: 11px; color: var(--muted); font-weight: 400; letter-spacing: .5px; }
+
+  .header-right { display: flex; align-items: center; gap: 12px; }
+
+  .lang-toggle { display: flex; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .lang-btn {
+    padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
+    cursor: pointer; border: none; background: var(--white); color: var(--muted); transition: all .2s;
+  }
+  .lang-btn.active { background: var(--orange); color: #fff; }
+
+  .back-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 8px; border: 1.5px solid var(--border);
+    background: var(--white); color: var(--blue); font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; transition: all .2s;
+  }
+  .back-btn:hover { border-color: var(--blue); background: #eef4fb; }
+
+  /* ── PAGE HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--blue) 0%, #003d7a 100%);
+    color: #fff; padding: 48px 32px 40px;
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ''; position: absolute; right: -60px; top: -60px;
+    width: 280px; height: 280px; border-radius: 50%;
+    background: rgba(244,121,32,.15); pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(244,121,32,.2); border: 1px solid rgba(244,121,32,.4);
+    border-radius: 20px; padding: 4px 12px; font-size: 11px;
+    font-family: 'DM Mono', monospace; letter-spacing: .8px; margin-bottom: 16px;
+    color: #ffd4a8;
+  }
+  .hero h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 800; line-height: 1.15; margin-bottom: 10px; }
+  .hero p  { font-size: 15px; opacity: .8; max-width: 560px; line-height: 1.6; }
+  .hero-standards {
+    display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap;
+  }
+  .std-badge {
+    padding: 4px 12px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+    border-radius: 20px; font-size: 11px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,.9);
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 28px;
+    box-shadow: 0 2px 16px rgba(0,0,0,.05);
+  }
+  .card-title {
+    font-size: 13px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+  }
+  .card-title::before {
+    content: ''; display: inline-block; width: 4px; height: 18px;
+    background: var(--orange); border-radius: 2px;
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  @media(max-width:700px){ .grid-2,.grid-3{ grid-template-columns:1fr; } }
+
+  /* ── FORM INPUTS ── */
+  .field label {
+    display: block; font-size: 12px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .field label .unit { text-transform: none; letter-spacing: 0; }
+  .field input, .field select {
+    width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: 'DM Mono', monospace; font-size: 14px; color: var(--text);
+    background: var(--white); transition: border-color .2s;
+    appearance: none;
+  }
+  .field input:focus, .field select:focus {
+    outline: none; border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(0,87,168,.1);
+  }
+  .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a90' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+  /* ── SPOTS TABLE ── */
+  .spots-section { margin-top: 28px; }
+  .spots-header {
+    display: grid;
+    grid-template-columns: 90px repeat(3,1fr) 90px 70px 70px 100px;
+    gap: 6px; padding: 8px 12px;
+    background: var(--bg); border-radius: 8px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--muted); margin-bottom: 6px;
+  }
+  .spot-row {
+    display: grid;
+    grid-template-columns: 90px repeat(3,1fr) 90px 70px 70px 100px;
+    gap: 6px; align-items: center;
+    padding: 8px 12px; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--white);
+    margin-bottom: 6px; transition: border-color .2s;
+  }
+  .spot-row:hover { border-color: var(--blue); }
+  .spot-label {
+    font-size: 12px; font-weight: 700; color: var(--blue);
+    font-family: 'DM Mono', monospace;
+  }
+  .spot-row input[type=number] {
+    width: 100%; padding: 8px 10px; border: 1.5px solid var(--border);
+    border-radius: 6px; font-family: 'DM Mono', monospace; font-size: 13px;
+    text-align: center; color: var(--text); transition: border-color .2s;
+  }
+  .spot-row input[type=number]:focus {
+    outline: none; border-color: var(--orange);
+    box-shadow: 0 0 0 2px rgba(244,121,32,.12);
+  }
+  .stat-cell {
+    font-family: 'DM Mono', monospace; font-size: 13px;
+    text-align: center; font-weight: 500; color: var(--muted);
+    transition: color .2s;
+  }
+  .stat-cell.computed { color: var(--text); font-weight: 600; }
+  .status-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+    font-family: 'DM Mono', monospace; letter-spacing: .3px; white-space: nowrap;
+  }
+  .pill-pass { background: var(--green-bg); color: var(--green); border: 1px solid #b6dfd1; }
+  .pill-fail { background: var(--red-bg);   color: var(--red);   border: 1px solid #f5c6c2; }
+  .pill-warn { background: var(--yellow-bg);color: var(--yellow);border: 1px solid #f5e3a3; }
+  .pill-nd   { background: var(--bg);       color: var(--muted); border: 1px solid var(--border); }
+
+  @media(max-width:860px){
+    .spots-header,.spot-row { grid-template-columns: 80px repeat(3,1fr) 80px; }
+    .spots-header .hide-sm,.spot-row .hide-sm { display: none; }
+  }
+
+  /* ── SUMMARY CARDS ── */
+  .summary-grid {
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-top: 24px;
+  }
+  @media(max-width:700px){ .summary-grid { grid-template-columns: 1fr 1fr; } }
+
+  .sum-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 18px; text-align: center;
+  }
+  .sum-label { font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .sum-value { font-family: 'DM Mono', monospace; font-size: 26px; font-weight: 500; color: var(--blue); }
+  .sum-unit  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .sum-card.verdict { border-color: var(--blue); background: #eef4fb; }
+  .sum-card.verdict .sum-value { font-size: 18px; font-weight: 700; }
+
+  /* ── CHART ── */
+  .chart-wrap { position: relative; height: 260px; margin-top: 8px; }
+  canvas#dftChart { display: block; }
+
+  /* ── CRITERIA BOX ── */
+  .criteria-box {
+    background: #eef4fb; border: 1.5px solid #c2d4ec;
+    border-radius: 10px; padding: 16px 20px; margin-top: 20px;
+  }
+  .criteria-box h4 { font-size: 12px; font-weight: 700; letter-spacing: .5px; color: var(--blue); margin-bottom: 10px; }
+  .criteria-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .criteria-list li { font-size: 12px; color: var(--text); display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
+  .criteria-list li::before { content: '→'; color: var(--orange); font-weight: 700; flex-shrink: 0; }
+
+  /* ── CALC BUTTON ── */
+  .btn-calc {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 14px 24px; border-radius: 10px; border: none;
+    background: linear-gradient(135deg, var(--blue), #0074d9);
+    color: #fff; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all .25s; margin-top: 24px; letter-spacing: .3px;
+    box-shadow: 0 4px 16px rgba(0,87,168,.25);
+  }
+  .btn-calc:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,87,168,.35); }
+  .btn-calc:active { transform: none; }
+
+  .btn-reset {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 20px; border-radius: 10px; border: 1.5px solid var(--border);
+    background: var(--white); color: var(--muted); font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; margin-top: 12px;
+  }
+  .btn-reset:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── RESULTS SECTION ── */
+  #results { display: none; }
+  #results.visible { display: block; animation: fadeUp .4s ease; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+
+  /* ── CUSTOM WORK NOTE ── */
+  .custom-note {
+    background: linear-gradient(135deg, #1a2332, #2a3a52);
+    border-radius: 14px; padding: 28px 32px;
+    display: flex; align-items: flex-start; gap: 20px; margin-top: 28px;
+    position: relative; overflow: hidden;
+  }
+  .custom-note::after {
+    content: ''; position: absolute; right: -40px; bottom: -40px;
+    width: 160px; height: 160px; border-radius: 50%;
+    background: rgba(244,121,32,.1); pointer-events: none;
+  }
+  .custom-note-icon {
+    width: 48px; height: 48px; flex-shrink: 0;
+    background: rgba(244,121,32,.15); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .custom-note-body h3 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .custom-note-body p  { font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.6; }
+  .custom-note-body a  {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 12px;
+    padding: 8px 18px; background: var(--orange); border-radius: 8px;
+    color: #fff; font-size: 13px; font-weight: 700; text-decoration: none;
+    transition: background .2s;
+  }
+  .custom-note-body a:hover { background: #d4661a; }
+
+  /* ── FOOTER ── */
+  .tool-footer {
+    text-align: center; margin-top: 48px; padding-top: 24px;
+    border-top: 1.5px solid var(--border); font-size: 11px; color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .section-gap { margin-top: 28px; }
+
+  /* ── PRINT ── */
+  .print-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 8px; border: 1.5px solid var(--border);
+    background: var(--white); color: var(--muted); font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; width: fit-content;
+  }
+  .print-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+  .verdict-pass { color: var(--green) !important; }
+  .verdict-fail { color: var(--red)   !important; }
+  .verdict-warn { color: var(--yellow)!important; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a class="logo" href="/">
+    <div class="logo-badge">VOA</div>
+    <div>
+      <div class="logo-text">VOA Tools</div>
+      <div class="logo-sub">COATING INSPECTION</div>
+    </div>
+  </a>
+  <div class="header-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('pt')" id="btn-pt">PT</button>
+      <button class="lang-btn"        onclick="setLang('en')" id="btn-en">EN</button>
+    </div>
+    <a class="back-btn" href="/">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      <span data-i18n="back">Voltar</span>
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-tag">⚡ <span data-i18n="heroTag">DFT MEASUREMENT LOG</span></div>
+    <h1 data-i18n="heroTitle">Log de Medições de<br>Espessura de Filme Seco</h1>
+    <p data-i18n="heroDesc">Registre 5 spots com 3 leituras cada. Calcule média, mínimo, máximo e avalie conformidade automática por SSPC PA-2 ou ISO 19840.</p>
+    <div class="hero-standards">
+      <span class="std-badge">SSPC PA-2</span>
+      <span class="std-badge">ISO 19840</span>
+      <span class="std-badge">5 Spots × 3 Leituras</span>
+      <span class="std-badge">DFT Chart</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container" style="margin-top:32px;">
+
+  <!-- CONFIG CARD -->
+  <div class="card">
+    <div class="card-title" data-i18n="configTitle">Configuração da Inspeção</div>
+    <div class="grid-3">
+      <div class="field">
+        <label data-i18n="labelNDFT">NDFT Nominal <span class="unit">(μm)</span></label>
+        <input type="number" id="ndft" placeholder="ex: 100" min="1" max="5000" step="1" value="100">
+      </div>
+      <div class="field">
+        <label data-i18n="labelStd">Norma de Avaliação</label>
+        <select id="standard" onchange="updateCriteria()">
+          <option value="sspc">SSPC PA-2</option>
+          <option value="iso">ISO 19840</option>
+        </select>
+      </div>
+      <div class="field">
+        <label data-i18n="labelProject">Projeto / Estrutura</label>
+        <input type="text" id="project" placeholder="ex: FPSO P-70 — Casco">
+      </div>
+    </div>
+
+    <!-- CRITERIA BOX -->
+    <div class="criteria-box" id="criteriaBox">
+      <h4 id="criteriaTitle">SSPC PA-2 — Critérios de Aceitação</h4>
+      <ul class="criteria-list" id="criteriaList">
+        <li id="c1"></li>
+        <li id="c2"></li>
+        <li id="c3"></li>
+      </ul>
+    </div>
+
+    <!-- SPOTS TABLE -->
+    <div class="spots-section section-gap">
+      <div class="card-title" data-i18n="spotsTitle">Leituras por Spot</div>
+      <div class="spots-header">
+        <span data-i18n="colSpot">Spot</span>
+        <span data-i18n="colR1">Leit. 1</span>
+        <span data-i18n="colR2">Leit. 2</span>
+        <span data-i18n="colR3">Leit. 3</span>
+        <span data-i18n="colMean">Média</span>
+        <span class="hide-sm" data-i18n="colMin">Mín</span>
+        <span class="hide-sm" data-i18n="colMax">Máx</span>
+        <span data-i18n="colStatus">Status</span>
+      </div>
+      <div id="spotRows"></div>
+    </div>
+
+    <button class="btn-calc" onclick="calculate()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+      <span data-i18n="btnCalc">Calcular &amp; Avaliar</span>
+    </button>
+    <button class="btn-reset" onclick="resetAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 109-9 9 9 0 00-9 9zM3 12h3m15 0h-3m-9-9v3m0 15v-3"/></svg>
+      <span data-i18n="btnReset">Limpar</span>
+    </button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results" class="section-gap">
+
+    <!-- SUMMARY -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+        <div class="card-title" style="margin-bottom:0" data-i18n="resultsSummary">Resumo da Medição</div>
+        <button class="print-btn" onclick="window.print()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+          <span data-i18n="btnPrint">Imprimir</span>
+        </button>
+      </div>
+      <div class="summary-grid">
+        <div class="sum-card">
+          <div class="sum-label" data-i18n="sumGrandMean">Média Geral</div>
+          <div class="sum-value" id="sumMean">—</div>
+          <div class="sum-unit">μm</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-label" data-i18n="sumGrandMin">Mínimo Global</div>
+          <div class="sum-value" id="sumMin">—</div>
+          <div class="sum-unit">μm</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-label" data-i18n="sumGrandMax">Máximo Global</div>
+          <div class="sum-value" id="sumMax">—</div>
+          <div class="sum-unit">μm</div>
+        </div>
+        <div class="sum-card verdict">
+          <div class="sum-label" data-i18n="sumVerdict">Veredicto</div>
+          <div class="sum-value" id="sumVerdict">—</div>
+          <div class="sum-unit" id="sumStdLabel"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="card section-gap">
+      <div class="card-title" data-i18n="chartTitle">Gráfico — Média por Spot vs NDFT</div>
+      <div class="chart-wrap">
+        <canvas id="dftChart"></canvas>
+      </div>
+    </div>
+
+    <!-- DETAIL TABLE -->
+    <div class="card section-gap">
+      <div class="card-title" data-i18n="detailTitle">Tabela Detalhada</div>
+      <div style="overflow-x:auto;">
+        <table id="detailTable" style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead id="detailHead"></thead>
+          <tbody id="detailBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /results -->
+
+  <!-- CUSTOM WORK NOTE -->
+  <div class="custom-note section-gap">
+    <div class="custom-note-icon">🔧</div>
+    <div class="custom-note-body">
+      <h3 data-i18n="noteTitle">Trabalhos Personalizados Disponíveis</h3>
+      <p data-i18n="noteDesc">Ferramentas e planilhas de inspeção sob medida podem ser desenvolvidas conforme as necessidades do seu projeto, norma ou cliente. Integrações com relatórios em PDF, exportação de dados e branding corporativo também estão disponíveis mediante solicitação.</p>
+      <a href="mailto:contato@voaltd.com">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span data-i18n="noteBtn">Solicitar desenvolvimento</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="tool-footer">
+    <div>VOA Tools · Desenvolvido por Vagner Oliveira Almeida · AMPP NACE CIP Lv.2 · SNQC CP Nível 2</div>
+    <div style="margin-top:4px;opacity:.6;" data-i18n="footerSub">Ferramenta de suporte à inspeção — não substitui julgamento profissional qualificado.</div>
+  </div>
+
+</div><!-- /container -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+// ── TRANSLATIONS ──────────────────────────────────────────────────────
+const T = {
+  pt: {
+    back:"Voltar", heroTag:"DFT MEASUREMENT LOG",
+    heroTitle:"Log de Medições de<br>Espessura de Filme Seco",
+    heroDesc:"Registre 5 spots com 3 leituras cada. Calcule média, mínimo, máximo e avalie conformidade automática por SSPC PA-2 ou ISO 19840.",
+    configTitle:"Configuração da Inspeção",
+    labelNDFT:"NDFT Nominal <span class=\"unit\">(μm)</span>", labelStd:"Norma de Avaliação", labelProject:"Projeto / Estrutura",
+    spotsTitle:"Leituras por Spot",
+    colSpot:"Spot", colR1:"Leit. 1", colR2:"Leit. 2", colR3:"Leit. 3",
+    colMean:"Média", colMin:"Mín", colMax:"Máx", colStatus:"Status",
+    btnCalc:"Calcular & Avaliar", btnReset:"Limpar",
+    resultsSummary:"Resumo da Medição", btnPrint:"Imprimir",
+    sumGrandMean:"Média Geral", sumGrandMin:"Mínimo Global", sumGrandMax:"Máximo Global", sumVerdict:"Veredicto",
+    chartTitle:"Gráfico — Média por Spot vs NDFT",
+    detailTitle:"Tabela Detalhada",
+    noteTitle:"Trabalhos Personalizados Disponíveis",
+    noteDesc:"Ferramentas e planilhas de inspeção sob medida podem ser desenvolvidas conforme as necessidades do seu projeto, norma ou cliente. Integrações com relatórios em PDF, exportação de dados e branding corporativo também estão disponíveis mediante solicitação.",
+    noteBtn:"Solicitar desenvolvimento",
+    footerSub:"Ferramenta de suporte à inspeção — não substitui julgamento profissional qualificado.",
+    passLabel:"APROVADO", failLabel:"REPROVADO", warnLabel:"ATENÇÃO",
+    ndLabel:"—",
+    thSpot:"Spot", thR1:"Leit. 1 (μm)", thR2:"Leit. 2 (μm)", thR3:"Leit. 3 (μm)",
+    thMean:"Média (μm)", thMin:"Mín (μm)", thMax:"Máx (μm)", thStatus:"Status",
+    sspcCriteriaTitle:"SSPC PA-2 — Critérios de Aceitação",
+    sspcC1:"Média de cada spot ≥ NDFT (100%)",
+    sspcC2:"Nenhuma leitura individual < 80% do NDFT",
+    sspcC3:"Avaliação por spot; todos os 5 spots devem ser aprovados",
+    isoCriteriaTitle:"ISO 19840 — Critérios de Aceitação",
+    isoC1:"Média geral de todas as leituras ≥ NDFT (100%)",
+    isoC2:"Nenhuma leitura individual < NDFT − 20% (mínimo 80%)",
+    isoC3:"Valores acima de 3× NDFT devem ser investigados",
+    chartNDFT:"NDFT", chartMean:"Média Spot",
+    errNDFT:"Informe o NDFT antes de calcular.",
+    errReadings:"Preencha todas as 15 leituras (5 spots × 3 medidas).",
+  },
+  en: {
+    back:"Back", heroTag:"DFT MEASUREMENT LOG",
+    heroTitle:"Dry Film Thickness<br>Measurement Log",
+    heroDesc:"Record 5 spots with 3 readings each. Automatically calculate mean, min, max and evaluate conformance per SSPC PA-2 or ISO 19840.",
+    configTitle:"Inspection Configuration",
+    labelNDFT:"Nominal DFT <span class=\"unit\">(μm)</span>", labelStd:"Evaluation Standard", labelProject:"Project / Structure",
+    spotsTitle:"Readings per Spot",
+    colSpot:"Spot", colR1:"Read. 1", colR2:"Read. 2", colR3:"Read. 3",
+    colMean:"Mean", colMin:"Min", colMax:"Max", colStatus:"Status",
+    btnCalc:"Calculate & Evaluate", btnReset:"Clear",
+    resultsSummary:"Measurement Summary", btnPrint:"Print",
+    sumGrandMean:"Overall Mean", sumGrandMin:"Global Min", sumGrandMax:"Global Max", sumVerdict:"Verdict",
+    chartTitle:"Chart — Spot Mean vs NDFT",
+    detailTitle:"Detailed Table",
+    noteTitle:"Custom Development Available",
+    noteDesc:"Bespoke inspection tools and spreadsheets can be built to match your project, standard, or client requirements. PDF report integration, data export, and corporate branding are also available on request.",
+    noteBtn:"Request development",
+    footerSub:"Inspection support tool — does not replace qualified professional judgment.",
+    passLabel:"PASS", failLabel:"FAIL", warnLabel:"CAUTION",
+    ndLabel:"—",
+    thSpot:"Spot", thR1:"Read. 1 (μm)", thR2:"Read. 2 (μm)", thR3:"Read. 3 (μm)",
+    thMean:"Mean (μm)", thMin:"Min (μm)", thMax:"Max (μm)", thStatus:"Status",
+    sspcCriteriaTitle:"SSPC PA-2 — Acceptance Criteria",
+    sspcC1:"Each spot mean ≥ NDFT (100%)",
+    sspcC2:"No individual reading < 80% of NDFT",
+    sspcC3:"Evaluation per spot; all 5 spots must pass",
+    isoCriteriaTitle:"ISO 19840 — Acceptance Criteria",
+    isoC1:"Overall mean of all readings ≥ NDFT (100%)",
+    isoC2:"No individual reading < NDFT − 20% (minimum 80%)",
+    isoC3:"Readings above 3× NDFT should be investigated",
+    chartNDFT:"NDFT", chartMean:"Spot Mean",
+    errNDFT:"Please enter NDFT before calculating.",
+    errReadings:"Fill in all 15 readings (5 spots × 3 readings).",
+  }
+};
+
+let currentLang = 'pt';
+let chartInstance = null;
+
+// ── LANGUAGE ──────────────────────────────────────────────────────────
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btn-pt').classList.toggle('active', lang==='pt');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (T[lang][k] !== undefined) el.innerHTML = T[lang][k];
+  });
+  updateCriteria();
+  updateSpotHeaders();
+  if (document.getElementById('results').classList.contains('visible')) calculate();
+}
+
+// ── CRITERIA BOX ──────────────────────────────────────────────────────
+function updateCriteria() {
+  const std = document.getElementById('standard').value;
+  const L = T[currentLang];
+  if (std === 'sspc') {
+    document.getElementById('criteriaTitle').textContent = L.sspcCriteriaTitle;
+    document.getElementById('c1').textContent = L.sspcC1;
+    document.getElementById('c2').textContent = L.sspcC2;
+    document.getElementById('c3').textContent = L.sspcC3;
+  } else {
+    document.getElementById('criteriaTitle').textContent = L.isoCriteriaTitle;
+    document.getElementById('c1').textContent = L.isoC1;
+    document.getElementById('c2').textContent = L.isoC2;
+    document.getElementById('c3').textContent = L.isoC3;
+  }
+}
+
+// ── SPOT ROWS ─────────────────────────────────────────────────────────
+function buildSpotRows() {
+  const container = document.getElementById('spotRows');
+  container.innerHTML = '';
+  for (let s = 1; s <= 5; s++) {
+    const row = document.createElement('div');
+    row.className = 'spot-row';
+    row.id = `spot-row-${s}`;
+    row.innerHTML = `
+      <div class="spot-label">Spot ${s}</div>
+      <input type="number" id="s${s}r1" placeholder="μm" min="0" max="9999" step="1" oninput="liveUpdate(${s})">
+      <input type="number" id="s${s}r2" placeholder="μm" min="0" max="9999" step="1" oninput="liveUpdate(${s})">
+      <input type="number" id="s${s}r3" placeholder="μm" min="0" max="9999" step="1" oninput="liveUpdate(${s})">
+      <span class="stat-cell" id="s${s}mean">—</span>
+      <span class="stat-cell hide-sm" id="s${s}min">—</span>
+      <span class="stat-cell hide-sm" id="s${s}max">—</span>
+      <span id="s${s}status"><span class="status-pill pill-nd">—</span></span>
+    `;
+    container.appendChild(row);
+  }
+}
+
+function updateSpotHeaders() {
+  const L = T[currentLang];
+  const hdr = document.querySelector('.spots-header');
+  if (!hdr) return;
+  const spans = hdr.querySelectorAll('span');
+  const keys = ['colSpot','colR1','colR2','colR3','colMean','colMin','colMax','colStatus'];
+  spans.forEach((sp, i) => { if (keys[i]) sp.textContent = L[keys[i]] || sp.textContent; });
+}
+
+// ── LIVE UPDATE ───────────────────────────────────────────────────────
+function liveUpdate(s) {
+  const v = ['r1','r2','r3'].map(r => parseFloat(document.getElementById(`s${s}${r}`).value));
+  const valid = v.filter(x => !isNaN(x));
+  if (valid.length === 0) {
+    document.getElementById(`s${s}mean`).textContent = '—';
+    document.getElementById(`s${s}min`).textContent  = '—';
+    document.getElementById(`s${s}max`).textContent  = '—';
+    document.getElementById(`s${s}status`).innerHTML = `<span class="status-pill pill-nd">—</span>`;
+    return;
+  }
+  const mean = valid.reduce((a,b)=>a+b,0)/valid.length;
+  const min  = Math.min(...valid);
+  const max  = Math.max(...valid);
+  document.getElementById(`s${s}mean`).textContent = mean.toFixed(1);
+  document.getElementById(`s${s}min`).textContent  = min.toFixed(0);
+  document.getElementById(`s${s}max`).textContent  = max.toFixed(0);
+  document.getElementById(`s${s}mean`).classList.add('computed');
+  document.getElementById(`s${s}min`).classList.add('computed');
+  document.getElementById(`s${s}max`).classList.add('computed');
+  const ndft = parseFloat(document.getElementById('ndft').value);
+  if (!isNaN(ndft) && valid.length === 3) {
+    const {ok, warn} = evaluateSpot(v, ndft, document.getElementById('standard').value);
+    renderPill(s, ok, warn);
+  }
+}
+
+function evaluateSpot(readings, ndft, std) {
+  const mean = readings.reduce((a,b)=>a+b,0)/readings.length;
+  const minR = Math.min(...readings);
+  const limit80 = ndft * 0.8;
+  let ok = true, warn = false;
+  if (std === 'sspc') {
+    if (mean < ndft) ok = false;
+    if (minR < limit80) ok = false;
+  } else {
+    // ISO: per-spot check still using 80% floor; overall mean checked globally
+    if (minR < limit80) ok = false;
+    if (mean < ndft) warn = !ok ? warn : true; // flag yellow if mean low
+  }
+  return { ok, warn };
+}
+
+function renderPill(s, ok, warn) {
+  const L = T[currentLang];
+  let cls, label;
+  if (ok && !warn)       { cls='pill-pass'; label=L.passLabel; }
+  else if (!ok)          { cls='pill-fail'; label=L.failLabel; }
+  else                   { cls='pill-warn'; label=L.warnLabel; }
+  document.getElementById(`s${s}status`).innerHTML = `<span class="status-pill ${cls}">${label}</span>`;
+}
+
+// ── CALCULATE ─────────────────────────────────────────────────────────
+function calculate() {
+  const L = T[currentLang];
+  const ndft = parseFloat(document.getElementById('ndft').value);
+  if (isNaN(ndft) || ndft <= 0) { alert(L.errNDFT); return; }
+  const std = document.getElementById('standard').value;
+
+  const spotData = [];
+  let allReadings = [];
+  let missingData = false;
+
+  for (let s = 1; s <= 5; s++) {
+    const vals = ['r1','r2','r3'].map(r => parseFloat(document.getElementById(`s${s}${r}`).value));
+    if (vals.some(v => isNaN(v))) { missingData = true; break; }
+    const mean = vals.reduce((a,b)=>a+b,0)/3;
+    spotData.push({ s, vals, mean, min:Math.min(...vals), max:Math.max(...vals) });
+    allReadings.push(...vals);
+  }
+
+  if (missingData) { alert(L.errReadings); return; }
+
+  // global stats
+  const grandMean = allReadings.reduce((a,b)=>a+b,0)/allReadings.length;
+  const grandMin  = Math.min(...allReadings);
+  const grandMax  = Math.max(...allReadings);
+  const limit80   = ndft * 0.8;
+
+  // per-spot status
+  let overallPass = true;
+  spotData.forEach(sp => {
+    const {ok, warn} = evaluateSpot(sp.vals, ndft, std);
+    sp.ok = ok; sp.warn = warn;
+    if (!ok) overallPass = false;
+    renderPill(sp.s, ok, warn);
+    ['mean','min','max'].forEach(k => {
+      const el = document.getElementById(`s${sp.s}${k}`);
+      el.textContent = sp[k].toFixed(k==='mean'?1:0);
+      el.classList.add('computed');
+    });
+  });
+
+  // ISO: global mean check
+  let isoGlobalFail = false;
+  if (std === 'iso' && grandMean < ndft) {
+    overallPass = false; isoGlobalFail = true;
+  }
+
+  // summary
+  document.getElementById('sumMean').textContent = grandMean.toFixed(1);
+  document.getElementById('sumMin').textContent  = grandMin.toFixed(0);
+  document.getElementById('sumMax').textContent  = grandMax.toFixed(0);
+  const vEl = document.getElementById('sumVerdict');
+  vEl.textContent = overallPass ? L.passLabel : L.failLabel;
+  vEl.className = 'sum-value ' + (overallPass ? 'verdict-pass' : 'verdict-fail');
+  document.getElementById('sumStdLabel').textContent = std === 'sspc' ? 'SSPC PA-2' : 'ISO 19840';
+
+  // detail table
+  buildDetailTable(spotData, L, ndft, limit80);
+
+  // show results FIRST so canvas has dimensions
+  const res = document.getElementById('results');
+  res.style.display = 'block';
+  res.classList.add('visible');
+
+  // build chart AFTER DOM paint
+  setTimeout(() => {
+    buildChart(spotData, ndft, L);
+    res.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 80);
+}
+
+// ── DETAIL TABLE ──────────────────────────────────────────────────────
+function buildDetailTable(spotData, L, ndft, limit80) {
+  const head = document.getElementById('detailHead');
+  const body = document.getElementById('detailBody');
+
+  head.innerHTML = `<tr style="background:var(--bg);">
+    ${[L.thSpot,L.thR1,L.thR2,L.thR3,L.thMean,L.thMin,L.thMax,L.thStatus]
+      .map(h=>`<th style="padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;
+                letter-spacing:.5px;color:var(--muted);text-align:center;border-bottom:2px solid var(--border);">${h}</th>`)
+      .join('')}
+  </tr>`;
+
+  body.innerHTML = spotData.map((sp, i) => {
+    const bg = i%2===0 ? 'var(--white)' : 'var(--bg)';
+    const pillCls = sp.ok ? 'pill-pass' : 'pill-fail';
+    const pillLbl = sp.ok ? L.passLabel : L.failLabel;
+    const cells = [
+      `<strong style="color:var(--blue);font-family:'DM Mono',monospace;">Spot ${sp.s}</strong>`,
+      ...sp.vals.map(v => {
+        const low = v < limit80;
+        return `<span style="font-family:'DM Mono',monospace;color:${low?'var(--red)':'var(--text)'};font-weight:${low?700:400};">${v.toFixed(0)}</span>`;
+      }),
+      `<strong style="font-family:'DM Mono',monospace;">${sp.mean.toFixed(1)}</strong>`,
+      `<span style="font-family:'DM Mono',monospace;">${sp.min.toFixed(0)}</span>`,
+      `<span style="font-family:'DM Mono',monospace;">${sp.max.toFixed(0)}</span>`,
+      `<span class="status-pill ${pillCls}">${pillLbl}</span>`
+    ];
+    return `<tr style="background:${bg};">
+      ${cells.map(c=>`<td style="padding:10px 14px;text-align:center;border-bottom:1px solid var(--border);">${c}</td>`).join('')}
+    </tr>`;
+  }).join('');
+
+  // Grand total row
+  const allVals = spotData.flatMap(sp=>sp.vals);
+  const gMean = allVals.reduce((a,b)=>a+b,0)/allVals.length;
+  const gMin  = Math.min(...allVals), gMax = Math.max(...allVals);
+  body.innerHTML += `<tr style="background:#eef4fb;border-top:2px solid var(--blue);">
+    <td style="padding:10px 14px;text-align:center;font-weight:700;color:var(--blue);font-size:12px;letter-spacing:.5px;">TOTAL</td>
+    <td colspan="3" style="padding:10px 14px;text-align:center;font-size:12px;color:var(--muted);">15 leituras</td>
+    <td style="padding:10px 14px;text-align:center;font-family:'DM Mono',monospace;font-weight:700;color:var(--blue);">${gMean.toFixed(1)}</td>
+    <td style="padding:10px 14px;text-align:center;font-family:'DM Mono',monospace;font-weight:700;">${gMin.toFixed(0)}</td>
+    <td style="padding:10px 14px;text-align:center;font-family:'DM Mono',monospace;font-weight:700;">${gMax.toFixed(0)}</td>
+    <td style="padding:10px 14px;text-align:center;">
+      <span class="status-pill" style="font-size:10px;background:#eef4fb;color:var(--blue);border:1px solid #c2d4ec;">NDFT: ${parseFloat(document.getElementById('ndft').value).toFixed(0)} μm</span>
+    </td>
+  </tr>`;
+}
+
+// ── CHART ─────────────────────────────────────────────────────────────
+function buildChart(spotData, ndft, L) {
+  if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+
+  const canvas = document.getElementById('dftChart');
+  // Reset canvas to clear any stale state
+  canvas.width  = canvas.offsetWidth  || 600;
+  canvas.height = canvas.offsetHeight || 260;
+  const ctx = canvas.getContext('2d');
+
+  const labels = spotData.map(sp => `Spot ${sp.s}`);
+  const means  = spotData.map(sp => parseFloat(sp.mean.toFixed(1)));
+  const colors = spotData.map(sp => sp.ok ? 'rgba(10,125,85,.75)' : 'rgba(192,57,43,.75)');
+  const borders= spotData.map(sp => sp.ok ? '#0a7d55' : '#c0392b');
+
+  chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: L.chartMean,
+          data: means,
+          backgroundColor: colors,
+          borderColor: borders,
+          borderWidth: 2,
+          borderRadius: 6,
+          borderSkipped: false,
+        },
+        {
+          label: L.chartNDFT + ` (${ndft} \u03BCm)`,
+          data: Array(5).fill(ndft),
+          type: 'line',
+          borderColor: '#F47920',
+          borderWidth: 2.5,
+          borderDash: [6,3],
+          pointRadius: 0,
+          fill: false,
+        },
+        {
+          label: `80% NDFT (${(ndft*.8).toFixed(0)} \u03BCm)`,
+          data: Array(5).fill(ndft*0.8),
+          type: 'line',
+          borderColor: '#C2006B',
+          borderWidth: 1.5,
+          borderDash: [4,4],
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: { font: { family: "'DM Mono', monospace", size: 11 }, color: '#6b7a90', boxWidth: 20 }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y} \u03BCm`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          suggestedMin: Math.max(0, ndft * 0.5),
+          suggestedMax: ndft * 1.5,
+          ticks: { font: { family: "'DM Mono', monospace", size: 11 }, color: '#6b7a90',
+            callback: v => v + '\u00A0\u03BCm' },
+          grid: { color: 'rgba(205,211,221,.5)' }
+        },
+        x: {
+          ticks: { font: { family: "'Syne', sans-serif", size: 12 }, color: '#1a2332', fontWeight: '600' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+}
+
+// ── RESET ─────────────────────────────────────────────────────────────
+function resetAll() {
+  document.getElementById('ndft').value    = '';
+  document.getElementById('project').value = '';
+  for (let s=1;s<=5;s++) {
+    ['r1','r2','r3'].forEach(r => { document.getElementById(`s${s}${r}`).value=''; });
+    document.getElementById(`s${s}mean`).textContent='—';
+    document.getElementById(`s${s}mean`).classList.remove('computed');
+    document.getElementById(`s${s}min`).textContent='—';
+    document.getElementById(`s${s}min`).classList.remove('computed');
+    document.getElementById(`s${s}max`).textContent='—';
+    document.getElementById(`s${s}max`).classList.remove('computed');
+    document.getElementById(`s${s}status`).innerHTML='<span class="status-pill pill-nd">—</span>';
+  }
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('results').style.display='none';
+  if (chartInstance) { chartInstance.destroy(); chartInstance=null; }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+buildSpotRows();
+updateCriteria();
+setLang('pt');
+</script>
+</body>
+</html>
