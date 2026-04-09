@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora WFT/DFT | VOA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:#0057A8; --orange:#F47920; --magenta:#C2006B;
+    --bg:#f2f4f7; --white:#ffffff; --border:#cdd3dd;
+    --text:#1a2233; --muted:#6b7a99; --success:#1db87a;
+    --danger:#e03e3e; --blue-light:#e8f0fa;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+  .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .topbar-left{display:flex;align-items:center;gap:16px}
+  .back-btn{display:flex;align-items:center;gap:7px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--blue);text-decoration:none;background:var(--blue-light);border:1px solid var(--border);border-radius:8px;padding:7px 14px;transition:all .18s}
+  .back-btn:hover{background:var(--blue);color:#fff}
+  .site-logo{font-size:17px;font-weight:800;color:var(--blue);letter-spacing:-0.5px}
+  .site-logo span{color:var(--orange)}
+  .lang-toggle{display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .lang-btn{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;padding:6px 13px;border:none;background:transparent;cursor:pointer;color:var(--muted);transition:all .18s;letter-spacing:.5px}
+  .lang-btn.active{background:var(--orange);color:#fff;border-radius:7px}
+
+  .hero{background:linear-gradient(135deg,var(--blue) 0%,#003d7a 100%);color:#fff;padding:40px 24px 36px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 1px,transparent 1px,transparent 28px)}
+  .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(244,121,32,.18);border:1px solid rgba(244,121,32,.4);color:#ffa95a;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:16px}
+  .hero h1{font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-0.5px;margin-bottom:10px}
+  .hero p{font-size:14px;opacity:.72;max-width:520px;margin:0 auto}
+
+  .main{max-width:1000px;margin:0 auto;padding:28px 16px 60px}
+
+  .mode-tabs{display:flex;background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px}
+  .mode-tab{flex:1;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:14px 10px;border:none;background:transparent;cursor:pointer;color:var(--muted);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+  .mode-tab.active{background:var(--blue);color:#fff}
+  .mode-tab:first-child{border-right:1px solid var(--border)}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:680px){.grid-2{grid-template-columns:1fr}}
+
+  .card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px}
+  .card-title{font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+  .card-title .dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
+
+  .field{margin-bottom:18px}
+  .field:last-child{margin-bottom:0}
+  .field label{display:block;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px}
+  .field label .unit{font-family:'DM Mono',monospace;font-weight:400;color:var(--orange);font-size:11px;margin-left:4px}
+  .input-wrap{position:relative}
+  .input-wrap input[type=number]{width:100%;font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--text);background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:12px 56px 12px 14px;outline:none;transition:border-color .18s,background .18s;-moz-appearance:textfield}
+  .input-wrap input[type=number]::-webkit-inner-spin-button,.input-wrap input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+  .input-wrap input[type=number]:focus{border-color:var(--blue);background:#fff}
+  .input-unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--muted);pointer-events:none}
+
+  .slider-wrap{display:flex;flex-direction:column;gap:8px}
+  .slider-row{display:flex;align-items:center;gap:12px}
+  .slider-value{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--blue);min-width:60px;text-align:right}
+  input[type=range]{flex:1;height:6px;cursor:pointer;-webkit-appearance:none;appearance:none;background:linear-gradient(to right,var(--orange) 0%,var(--orange) var(--pct,50%),var(--border) var(--pct,50%));border-radius:99px;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--white);border:3px solid var(--orange);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+  .slider-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.5px}
+
+  .rz-pill{display:inline-flex;align-items:center;gap:8px;background:var(--blue-light);border:1px solid #b8cde8;border-radius:8px;padding:9px 14px;margin-top:12px;font-family:'DM Mono',monospace;font-size:12px;color:var(--blue)}
+  .rz-pill strong{font-size:15px;color:var(--blue)}
+  .rz-pill .eq{opacity:.55;font-size:11px}
+
+  .viz-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:20px}
+  #viz-canvas{width:100%;border-radius:10px;background:#0e1a2e;display:block}
+  .viz-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
+  .legend-item{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+  .legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+
+  .results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin-bottom:20px}
+  .result-block{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden}
+  .result-block::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+  .result-block.c-orange::before{background:var(--orange)}
+  .result-block.c-blue::before{background:var(--blue)}
+  .result-block.c-magenta::before{background:var(--magenta)}
+  .result-block.c-green::before{background:var(--success)}
+  .result-block.c-gold::before{background:#f5a623}
+  .result-block.highlight{border-color:var(--orange);background:linear-gradient(135deg,#fff8f3,#fff)}
+  .rl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .rv{font-family:'DM Mono',monospace;font-size:26px;font-weight:500;color:var(--text);line-height:1}
+  .rv.big{font-size:32px}
+  .ru{font-size:12px;color:var(--muted);margin-top:4px;font-weight:600}
+  .rn{font-size:10px;color:var(--muted);margin-top:6px;font-style:italic}
+
+  .warn-bar{background:#fff8e1;border:1px solid #ffe082;border-left:4px solid #f5a623;border-radius:10px;padding:12px 16px;font-size:13px;color:#7a5c00;margin-bottom:16px;display:none;align-items:flex-start;gap:10px}
+  .warn-bar.show{display:flex}
+
+  /* TABLE */
+  .rtable-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;margin-top:20px}
+  .rtable-note{font-size:11px;color:var(--muted);font-style:italic;line-height:1.6;margin-bottom:16px;max-width:620px}
+  table.rft{width:100%;border-collapse:separate;border-spacing:0;font-family:'Syne',sans-serif;min-width:480px}
+  table.rft th{background:var(--bg);font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:2px solid var(--border);text-align:left;white-space:nowrap}
+  table.rft th:not(:first-child){text-align:center;border-left:1px solid var(--border)}
+  table.rft tr.rr{cursor:pointer;transition:background .12s}
+  table.rft tr.rr:hover td{background:#f6f8ff}
+  table.rft tr.rr.row-active td{background:var(--blue-light)!important}
+  table.rft td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);vertical-align:middle}
+  table.rft td:not(:first-child){text-align:center;border-left:1px solid var(--border)}
+  .grade-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 9px;border-radius:20px;white-space:nowrap;font-family:'DM Mono',monospace;margin-right:6px}
+  .g1{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7}
+  .g2{background:#fff8e1;color:#f57f17;border:1px solid #ffe082}
+  .g3{background:#fff3e0;color:#e65100;border:1px solid #ffcc80}
+  .g4{background:#fce4ec;color:#ad1457;border:1px solid #f48fb1}
+  .loss-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:500}
+  .pct-b{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:.3px}
+  .p-ok{background:#e8f5e9;color:#2e7d32}
+  .p-warn{background:#fff8e1;color:#f57f17}
+  .p-high{background:#fff3e0;color:#e65100}
+  .p-crit{background:#fce4ec;color:#ad1457}
+  td.cell-hi{background:rgba(244,121,32,.10)!important;outline:2px solid var(--orange);outline-offset:-2px;border-radius:4px}
+  td.cell-hi .loss-val{color:var(--orange)}
+  .mono{font-family:'DM Mono',monospace;font-size:12px}
+  .apply-hint{font-size:10px;color:var(--muted);text-align:center;margin-top:10px;font-style:italic}
+
+  /* INFO */
+  .info-accordion{margin-top:20px}
+  .info-btn{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 18px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--blue);cursor:pointer;transition:all .18s}
+  .info-btn:hover{background:var(--blue-light)}
+  .info-btn .chev{transition:transform .25s;font-size:16px}
+  .info-btn.open .chev{transform:rotate(180deg)}
+  .info-body{background:var(--white);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:0 18px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
+  .info-body.open{max-height:700px;padding:18px}
+  .fbox{background:#0e1a2e;border-radius:10px;padding:14px 18px;margin:10px 0;font-family:'DM Mono',monospace;font-size:13px;color:#7dd3fc;line-height:1.9}
+  .fbox .v{color:#fbbf24}
+  .fbox .c{color:#4a5568;font-size:11px}
+  .ilist{list-style:none}
+  .ilist li{padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;gap:10px}
+  .ilist li:last-child{border:none}
+  .ilist li::before{content:'→';color:var(--orange);font-weight:700;flex-shrink:0}
+
+  .page-footer{text-align:center;padding:20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);margin-top:40px}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .fade-in{animation:fadeUp .4s ease both}
+  .fade-in:nth-child(2){animation-delay:.07s}
+  .fade-in:nth-child(3){animation-delay:.13s}
+  .fade-in:nth-child(4){animation-delay:.18s}
+  @keyframes pulse-border{0%{border-color:var(--border)}50%{border-color:var(--orange)}100%{border-color:var(--border)}}
+  .upd{animation:pulse-border .5s ease}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-left">
+    <a href="index.html" class="back-btn">← <span data-i18n="back">Início</span></a>
+    <div class="site-logo">VOA<span>.</span></div>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('pt')">PT</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🎨 <span data-i18n="badge">Calculadora</span></div>
+  <h1 data-i18n="hero_title">Calculadora de Filme Úmido &amp; Seco</h1>
+  <p data-i18n="hero_sub">WFT ↔ DFT com correção de rugosidade superficial (Rz) — ISO 8503</p>
+</div>
+
+<div class="main">
+
+  <div class="mode-tabs fade-in">
+    <button class="mode-tab active" id="tab-dft" onclick="setMode('dft')">
+      <span>📐</span>
+      <div>
+        <div data-i18n="tab_dft_title">DFT → WFT</div>
+        <div style="font-size:10px;opacity:.7;font-weight:500;margin-top:2px" data-i18n="tab_dft_sub">Tenho a espessura seca desejada</div>
+      </div>
+    </button>
+    <button class="mode-tab" id="tab-wft" onclick="setMode('wft')">
+      <span>🖌️</span>
+      <div>
+        <div data-i18n="tab_wft_title">WFT → DFT</div>
+        <div style="font-size:10px;opacity:.7;font-weight:500;margin-top:2px" data-i18n="tab_wft_sub">Medi o filme úmido aplicado</div>
+      </div>
+    </button>
+  </div>
+
+  <div class="grid-2 fade-in" style="margin-bottom:20px">
+
+    <div class="card">
+      <div class="card-title"><div class="dot"></div><span data-i18n="card_paint">Parâmetros da Tinta</span></div>
+
+      <div class="field" id="field-dft">
+        <label><span data-i18n="label_dft">Espessura Seca Especificada (DFT)</span> <span class="unit">μm</span></label>
+        <div class="input-wrap">
+          <input type="number" id="inp-dft" value="200" min="1" max="5000" oninput="calc()">
+          <span class="input-unit">μm</span>
+        </div>
+      </div>
+
+      <div class="field" id="field-wft" style="display:none">
+        <label><span data-i18n="label_wft">Filme Úmido Medido (WFT)</span> <span class="unit">μm</span></label>
+        <div class="input-wrap">
+          <input type="number" id="inp-wft" value="400" min="1" max="10000" oninput="calc()">
+          <span class="input-unit">μm</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label><span data-i18n="label_vs">Sólidos em Volume</span> <span class="unit">%</span></label>
+        <div class="slider-wrap">
+          <div class="slider-row">
+            <input type="range" id="sl-vs" min="20" max="100" value="50" oninput="syncVs(this)">
+            <div class="slider-value" id="disp-vs">50<small style="font-size:13px">%</small></div>
+          </div>
+          <div class="slider-labels"><span>20%</span><span data-i18n="vs_mid">Típico</span><span>100%</span></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label><span data-i18n="label_price">Preço (opcional)</span> <span class="unit">R$/L ou $/L</span></label>
+        <div class="input-wrap">
+          <input type="number" id="inp-price" value="" min="0" placeholder="—" oninput="calc()">
+          <span class="input-unit">/L</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="dot" style="background:var(--blue)"></div><span data-i18n="card_rough">Rugosidade Superficial</span></div>
+
+      <div class="field">
+        <label><span data-i18n="label_rz">Rugosidade Rz (pico a vale)</span> <span class="unit">μm</span></label>
+        <div class="slider-wrap">
+          <div class="slider-row">
+            <input type="range" id="sl-rz" min="0" max="120" value="50" oninput="syncRz(this)">
+            <div class="slider-value" id="disp-rz">50<small style="font-size:10px">μm</small></div>
+          </div>
+          <div class="slider-labels">
+            <span data-i18n="rz_none">Liso (0)</span>
+            <span>60 μm</span>
+            <span data-i18n="rz_max">Agressivo (120)</span>
+          </div>
+        </div>
+        <div class="rz-pill">
+          <span>📐</span>
+          <span data-i18n="rz_loss_lbl">Perda estimada:</span>
+          <strong id="rz-loss-pill">25 μm</strong>
+          <span class="eq">= Rz ÷ 2</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:4px">
+        <label data-i18n="label_rz_ref">Referência — Grau ISO 8503</label>
+        <div id="iso-indicator" style="display:flex;flex-direction:column;gap:5px;margin-top:6px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn-bar" id="warnBar">
+    <span style="font-size:18px;flex-shrink:0">⚠️</span>
+    <span id="warnText"></span>
+  </div>
+
+  <div class="viz-card fade-in">
+    <div class="card-title"><div class="dot" style="background:var(--magenta)"></div><span data-i18n="card_viz">Seção Transversal — Visualização do Filme</span></div>
+    <canvas id="viz-canvas" height="200"></canvas>
+    <div class="viz-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#4a4a4a"></div><span data-i18n="leg_steel">Aço</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#888"></div><span data-i18n="leg_profile">Perfil de ancoragem (Rz)</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#cc1a1a"></div><span data-i18n="leg_wet">Filme úmido (WFT)</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e8a0a0"></div><span data-i18n="leg_dry">Filme seco (DFT)</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(29,184,122,.8)"></div><span data-i18n="leg_net">DFT efetivo (acima dos picos)</span></div>
+    </div>
+  </div>
+
+  <div class="results-grid fade-in">
+    <div class="result-block c-orange highlight">
+      <div class="rl" id="r-main-lbl" data-i18n="res_wft">WFT Necessário</div>
+      <div class="rv big" id="r-main">—</div>
+      <div class="ru">μm</div>
+    </div>
+    <div class="result-block c-blue">
+      <div class="rl" data-i18n="res_loss">Perda no Perfil (Rz÷2)</div>
+      <div class="rv" id="r-loss">—</div>
+      <div class="ru">μm DFT</div>
+    </div>
+    <div class="result-block c-magenta">
+      <div class="rl" data-i18n="res_net">DFT Efetivo (picos)</div>
+      <div class="rv" id="r-net">—</div>
+      <div class="ru">μm</div>
+    </div>
+    <div class="result-block c-green">
+      <div class="rl" data-i18n="res_cov">Rendimento Teórico</div>
+      <div class="rv" id="r-cov">—</div>
+      <div class="ru">m²/L</div>
+      <div class="rn" data-i18n="res_cov_note">sem perdas de aplicação</div>
+    </div>
+    <div class="result-block c-gold" id="r-cost-block" style="display:none">
+      <div class="rl" data-i18n="res_cost">Custo/m²</div>
+      <div class="rv" id="r-cost">—</div>
+      <div class="ru">/m²</div>
+    </div>
+    <div class="result-block">
+      <div class="rl" data-i18n="res_wft_min">WFT Mínimo Aceitável</div>
+      <div class="rv" id="r-wft-min">—</div>
+      <div class="ru">μm</div>
+      <div class="rn" data-i18n="res_wft_min_note">inclui compensação Rz÷2</div>
+    </div>
+  </div>
+
+  <!-- REDUCTION TABLE -->
+  <div class="rtable-card fade-in">
+    <div class="card-title" style="margin-bottom:8px">
+      <div class="dot" style="background:var(--magenta)"></div>
+      <span data-i18n="rtable_title">Tabela de Redução por Grau de Rugosidade — ISO 8503</span>
+    </div>
+    <p class="rtable-note" data-i18n="rtable_note">Perda estimada = Rz médio ÷ 2 (aproximação geométrica para perfil triangular simétrico). A % é relativa ao DFT atual. Clique em uma linha para aplicar o Rz do grau na calculadora.</p>
+    <div style="overflow-x:auto">
+      <table class="rft">
+        <thead>
+          <tr>
+            <th data-i18n="th_grade">Grau ISO 8503</th>
+            <th data-i18n="th_rz_range">Rz (μm)</th>
+            <th data-i18n="th_rz_mid">Rz médio</th>
+            <th data-i18n="th_loss">Perda (Rz÷2)</th>
+            <th data-i18n="th_pct">% do DFT</th>
+            <th data-i18n="th_wft_extra">WFT extra*</th>
+          </tr>
+        </thead>
+        <tbody id="rfBody"></tbody>
+      </table>
+    </div>
+    <div class="apply-hint" data-i18n="rtable_click">↑ Clique em uma linha para aplicar o Rz médio na calculadora</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:6px;font-style:italic" data-i18n="rtable_foot">* WFT extra = Perda ÷ (VS/100) — volume adicional de tinta para compensar o perfil de âncora</div>
+  </div>
+
+  <!-- INFO -->
+  <div class="info-accordion fade-in">
+    <button class="info-btn" id="infoBtn" onclick="toggleInfo()">
+      <span data-i18n="info_title">📘 Fórmulas e Referências Técnicas</span>
+      <span class="chev">▼</span>
+    </button>
+    <div class="info-body" id="infoBody">
+      <div class="fbox">
+        <span class="c">/* Conversão básica */</span><br>
+        <span class="v">WFT</span> = DFT ÷ (VS / 100)<br>
+        <span class="v">DFT</span> = WFT × (VS / 100)<br><br>
+        <span class="c">/* Correção de rugosidade — aproximação geométrica (perfil triangular) */</span><br>
+        Perda = <span class="v">Rz ÷ 2</span><br>
+        WFT<sub>total</sub> = (DFT<sub>spec</sub> + Rz/2) ÷ (VS/100)<br>
+        DFT<sub>efetivo</sub> = DFT<sub>total</sub> − Rz/2<br><br>
+        <span class="c">/* Rendimento */</span><br>
+        <span class="v">RT</span> = (VS/100 × 1000) ÷ WFT → m²/L
+      </div>
+      <ul class="ilist">
+        <li data-i18n="info1">DFT = Dry Film Thickness | Espessura de Filme Seco</li>
+        <li data-i18n="info2">WFT = Wet Film Thickness | Espessura de Filme Úmido</li>
+        <li data-i18n="info3">Rz = altura média pico-a-vale (ISO 4287 / ISO 8503-2)</li>
+        <li data-i18n="info4">A aproximação Rz÷2 assume perfil triangular simétrico — o volume dos vales equivale à metade do Rz</li>
+        <li data-i18n="info5">Na prática, a perda real depende do perfil e da viscosidade — consulte o TDS do fabricante</li>
+        <li data-i18n="info6">ISO 8503: Fine = Rz 25–40 μm | Medium = Rz 40–70 μm | Coarse = Rz 70–100 μm</li>
+        <li data-i18n="info7">Referências: ISO 8503-2, ISO 19840, SSPC-PA 2, NACE SP0178</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer class="page-footer">
+  VOA — Vagner Oliveira Almeida LTDA. · <span data-i18n="footer_cert">AMPP NACE Coating Inspector Level 2 · SNQC CP Nível 2</span>
+</footer>
+
+<script>
+let lang = 'pt';
+let mode = 'dft';
+
+const GRADES = [
+  {id:'g1', rzMin:25,  rzMax:40,  rzMid:32,  cls:'g1'},
+  {id:'g2', rzMin:40,  rzMax:70,  rzMid:55,  cls:'g2'},
+  {id:'g3', rzMin:70,  rzMax:100, rzMid:85,  cls:'g3'},
+  {id:'g4', rzMin:100, rzMax:150, rzMid:120, cls:'g4'},
+];
+
+const T = {
+  pt:{
+    back:'Início', badge:'Calculadora',
+    hero_title:'Calculadora de Filme Úmido & Seco',
+    hero_sub:'WFT ↔ DFT com correção de rugosidade superficial (Rz) — ISO 8503',
+    tab_dft_title:'DFT → WFT', tab_dft_sub:'Tenho a espessura seca desejada',
+    tab_wft_title:'WFT → DFT', tab_wft_sub:'Medi o filme úmido aplicado',
+    card_paint:'Parâmetros da Tinta', card_rough:'Rugosidade Superficial',
+    card_viz:'Seção Transversal — Visualização do Filme',
+    label_dft:'Espessura Seca Especificada (DFT)', label_wft:'Filme Úmido Medido (WFT)',
+    label_vs:'Sólidos em Volume', label_price:'Preço (opcional)',
+    label_rz:'Rugosidade Rz (pico a vale)', label_rz_ref:'Referência — Grau ISO 8503',
+    rz_loss_lbl:'Perda estimada:',
+    vs_mid:'Típico', rz_none:'Liso (0)', rz_max:'Agressivo (120)',
+    leg_steel:'Aço', leg_profile:'Perfil de ancoragem (Rz)', leg_wet:'Filme úmido (WFT)',
+    leg_dry:'Filme seco (DFT)', leg_net:'DFT efetivo (acima dos picos)',
+    res_wft:'WFT Necessário', res_dft:'DFT Resultante',
+    res_loss:'Perda no Perfil (Rz÷2)', res_net:'DFT Efetivo (picos)',
+    res_cov:'Rendimento Teórico', res_cov_note:'sem perdas de aplicação',
+    res_cost:'Custo/m²', res_wft_min:'WFT Mínimo Aceitável',
+    res_wft_min_note:'inclui compensação Rz÷2',
+    rtable_title:'Tabela de Redução por Grau de Rugosidade — ISO 8503',
+    rtable_note:'Perda estimada = Rz médio ÷ 2 (aproximação geométrica para perfil triangular simétrico). A % é relativa ao DFT atual. Clique em uma linha para aplicar o Rz do grau na calculadora.',
+    rtable_click:'↑ Clique em uma linha para aplicar o Rz médio na calculadora',
+    rtable_foot:'* WFT extra = Perda ÷ (VS/100) — volume adicional de tinta para compensar o perfil de âncora',
+    th_grade:'Grau ISO 8503', th_rz_range:'Rz (μm)', th_rz_mid:'Rz médio',
+    th_loss:'Perda (Rz÷2)', th_pct:'% do DFT', th_wft_extra:'WFT extra*',
+    g1_name:'Fino',       g1_iso:'G Fine / S Fine',
+    g2_name:'Médio',      g2_iso:'G Medium / S Medium',
+    g3_name:'Grosso',     g3_iso:'G Coarse / S Coarse',
+    g4_name:'Muito Grosso', g4_iso:'Acima da ISO 8503',
+    info_title:'📘 Fórmulas e Referências Técnicas',
+    info1:'DFT = Dry Film Thickness | Espessura de Filme Seco',
+    info2:'WFT = Wet Film Thickness | Espessura de Filme Úmido',
+    info3:'Rz = altura média pico-a-vale (ISO 4287 / ISO 8503-2)',
+    info4:'A aproximação Rz÷2 assume perfil triangular simétrico — volume dos vales = metade do Rz',
+    info5:'Na prática, a perda depende do perfil e da viscosidade — consulte o TDS do fabricante',
+    info6:'ISO 8503: Fine = Rz 25–40 μm | Medium = Rz 40–70 μm | Coarse = Rz 70–100 μm',
+    info7:'Referências: ISO 8503-2, ISO 19840, SSPC-PA 2, NACE SP0178',
+    footer_cert:'AMPP NACE Coating Inspector Level 2 · SNQC CP Nível 2',
+    iso_cur:'← Rz atual',
+    warn_lowvs:'Sólidos em volume muito baixos (<30%). Verifique os dados técnicos da tinta.',
+    warn_losshigh:'A perda no perfil ultrapassa 30% do DFT. Considere aumentar o DFT nominal ou reduzir a rugosidade.',
+    warn_netlow:'DFT efetivo sobre os picos pode estar abaixo do especificado.',
+  },
+  en:{
+    back:'Home', badge:'Calculator',
+    hero_title:'Wet Film & Dry Film Calculator',
+    hero_sub:'WFT ↔ DFT with surface roughness correction (Rz) — ISO 8503',
+    tab_dft_title:'DFT → WFT', tab_dft_sub:'I have the target dry film thickness',
+    tab_wft_title:'WFT → DFT', tab_wft_sub:'I measured the applied wet film',
+    card_paint:'Paint Parameters', card_rough:'Surface Roughness',
+    card_viz:'Cross-Section — Film Visualization',
+    label_dft:'Specified Dry Film Thickness (DFT)', label_wft:'Measured Wet Film (WFT)',
+    label_vs:'Volume Solids', label_price:'Price (optional)',
+    label_rz:'Roughness Rz (peak-to-valley)', label_rz_ref:'Reference — ISO 8503 Grade',
+    rz_loss_lbl:'Estimated loss:',
+    vs_mid:'Typical', rz_none:'Smooth (0)', rz_max:'Aggressive (120)',
+    leg_steel:'Steel', leg_profile:'Anchor profile (Rz)', leg_wet:'Wet film (WFT)',
+    leg_dry:'Dry film (DFT)', leg_net:'Effective DFT (above peaks)',
+    res_wft:'Required WFT', res_dft:'Resulting DFT',
+    res_loss:'Profile Loss (Rz÷2)', res_net:'Effective DFT (peaks)',
+    res_cov:'Theoretical Coverage', res_cov_note:'no application losses',
+    res_cost:'Cost/m²', res_wft_min:'Minimum Acceptable WFT',
+    res_wft_min_note:'includes Rz÷2 correction',
+    rtable_title:'Reduction Table by Roughness Grade — ISO 8503',
+    rtable_note:'Estimated loss = mean Rz ÷ 2 (geometric approximation — symmetric triangular profile). % is relative to current DFT. Click a row to apply its Rz to the calculator.',
+    rtable_click:'↑ Click any row to apply that grade\'s mean Rz to the calculator',
+    rtable_foot:'* Extra WFT = Loss ÷ (VS/100) — additional paint volume to compensate for anchor profile',
+    th_grade:'ISO 8503 Grade', th_rz_range:'Rz (μm)', th_rz_mid:'Mean Rz',
+    th_loss:'Loss (Rz÷2)', th_pct:'% of DFT', th_wft_extra:'Extra WFT*',
+    g1_name:'Fine',       g1_iso:'G Fine / S Fine',
+    g2_name:'Medium',     g2_iso:'G Medium / S Medium',
+    g3_name:'Coarse',     g3_iso:'G Coarse / S Coarse',
+    g4_name:'Very Coarse',g4_iso:'Beyond ISO 8503',
+    info_title:'📘 Formulas & Technical References',
+    info1:'DFT = Dry Film Thickness',
+    info2:'WFT = Wet Film Thickness',
+    info3:'Rz = mean peak-to-valley height (ISO 4287 / ISO 8503-2)',
+    info4:'Rz÷2 approximation assumes a symmetric triangular profile — valley volume equals half the Rz',
+    info5:'In practice, actual loss depends on profile shape and paint viscosity — refer to manufacturer\'s TDS',
+    info6:'ISO 8503: Fine = Rz 25–40 μm | Medium = Rz 40–70 μm | Coarse = Rz 70–100 μm',
+    info7:'References: ISO 8503-2, ISO 19840, SSPC-PA 2, NACE SP0178',
+    footer_cert:'AMPP NACE Coating Inspector Level 2 · SNQC CP Level 2',
+    iso_cur:'← current Rz',
+    warn_lowvs:'Very low volume solids (<30%). Please verify paint technical data.',
+    warn_losshigh:'Profile loss exceeds 30% of DFT. Consider increasing nominal DFT or reducing roughness.',
+    warn_netlow:'Effective DFT above peaks may be below specification.',
+  }
+};
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (T[l][k] !== undefined) el.textContent = T[l][k];
+  });
+  updateModeLabel();
+  refreshIso(parseFloat(document.getElementById('sl-rz').value)||0);
+  refreshTable();
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('tab-dft').classList.toggle('active', m==='dft');
+  document.getElementById('tab-wft').classList.toggle('active', m==='wft');
+  document.getElementById('field-dft').style.display = m==='dft'?'':'none';
+  document.getElementById('field-wft').style.display = m==='wft'?'':'none';
+  updateModeLabel(); calc();
+}
+function updateModeLabel() {
+  document.getElementById('r-main-lbl').textContent = mode==='dft' ? T[lang].res_wft : T[lang].res_dft;
+}
+
+function syncVs(el) {
+  const v = parseFloat(el.value);
+  el.style.setProperty('--pct', ((v-20)/80*100)+'%');
+  document.getElementById('disp-vs').innerHTML = v+'<small style="font-size:13px">%</small>';
+  calc();
+}
+function syncRz(el) {
+  const v = parseFloat(el.value);
+  el.style.setProperty('--pct', (v/120*100)+'%');
+  document.getElementById('disp-rz').innerHTML = v+'<small style="font-size:10px">μm</small>';
+  document.getElementById('rz-loss-pill').textContent = Math.round(v/2)+' μm';
+  refreshIso(v);
+  calc();
+}
+
+function refreshIso(rz) {
+  const wrap = document.getElementById('iso-indicator');
+  wrap.innerHTML = '';
+  GRADES.forEach(g => {
+    const active = rz >= g.rzMin && rz <= g.rzMax;
+    const row = document.createElement('div');
+    row.style.cssText = `display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;
+      background:${active?'var(--blue-light)':'transparent'};
+      border:1px solid ${active?'var(--blue)':'transparent'};transition:all .2s;`;
+    row.innerHTML = `
+      <span class="grade-badge ${g.cls}">${T[lang][g.id+'_name']}</span>
+      <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">${g.rzMin}–${g.rzMax} μm</span>
+      <span style="font-size:11px;color:var(--muted)">${T[lang][g.id+'_iso']}</span>
+      ${active?`<span style="margin-left:auto;font-size:10px;font-weight:700;color:var(--blue)">${T[lang].iso_cur}</span>`:''}
+    `;
+    wrap.appendChild(row);
+  });
+}
+
+function calc() {
+  const vs    = parseFloat(document.getElementById('sl-vs').value)||50;
+  const rz    = parseFloat(document.getElementById('sl-rz').value)||0;
+  const price = parseFloat(document.getElementById('inp-price').value)||0;
+  const loss  = rz / 2;
+
+  let mainVal, dft, wft, netDft;
+  if (mode === 'dft') {
+    dft     = parseFloat(document.getElementById('inp-dft').value)||0;
+    wft     = (dft + loss) / (vs/100);
+    netDft  = dft;
+    mainVal = wft;
+  } else {
+    wft     = parseFloat(document.getElementById('inp-wft').value)||0;
+    dft     = wft * (vs/100);
+    netDft  = dft - loss;
+    mainVal = dft;
+  }
+
+  const wftMin   = mode==='dft' ? wft : Math.max(0, (netDft<0 ? loss/(vs/100) : wft));
+  const coverage = wft > 0 ? (vs/100*1000)/wft : 0;
+
+  disp('r-main',   mainVal);
+  disp('r-loss',   loss);
+  disp('r-net',    Math.max(0, netDft));
+  document.getElementById('r-net').style.color = netDft < 0 ? 'var(--danger)' : '';
+  disp('r-cov',    coverage, 2);
+  disp('r-wft-min',wftMin);
+
+  if (price > 0) {
+    document.getElementById('r-cost-block').style.display = '';
+    disp('r-cost', coverage > 0 ? price/coverage : 0, 2);
+  } else {
+    document.getElementById('r-cost-block').style.display = 'none';
+  }
+
+  const warns = [];
+  if (vs < 30) warns.push(T[lang].warn_lowvs);
+  if (loss > 0 && dft > 0 && loss/dft > 0.30) warns.push(T[lang].warn_losshigh);
+  if (mode==='wft' && netDft < 0) warns.push(T[lang].warn_netlow);
+  const wb = document.getElementById('warnBar');
+  document.getElementById('warnText').textContent = warns.join(' | ');
+  wb.classList.toggle('show', warns.length > 0);
+
+  drawViz(rz, loss, wft, dft, netDft);
+  refreshTable();
+}
+
+function disp(id, val, dp=0) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = isFinite(val) && val >= 0 ? (dp ? val.toFixed(dp) : Math.round(val)) : '—';
+  el.classList.remove('upd'); void el.offsetWidth; el.classList.add('upd');
+}
+
+function pctCls(p) {
+  if (p < 10) return 'p-ok';
+  if (p < 20) return 'p-warn';
+  if (p < 35) return 'p-high';
+  return 'p-crit';
+}
+
+function refreshTable() {
+  const vs  = parseFloat(document.getElementById('sl-vs').value)||50;
+  const rz  = parseFloat(document.getElementById('sl-rz').value)||0;
+  let dft = 0;
+  if (mode==='dft') dft = parseFloat(document.getElementById('inp-dft').value)||0;
+  else dft = (parseFloat(document.getElementById('inp-wft').value)||0)*(vs/100);
+
+  const tbody = document.getElementById('rfBody');
+  tbody.innerHTML = '';
+  GRADES.forEach(g => {
+    const loss     = g.rzMid / 2;
+    const wftExtra = vs > 0 ? loss/(vs/100) : 0;
+    const pct      = dft > 0 ? loss/dft*100 : 0;
+    const inRange  = rz >= g.rzMin && rz <= g.rzMax;
+
+    const tr = document.createElement('tr');
+    tr.className = 'rr' + (inRange ? ' row-active' : '');
+    tr.onclick = () => { const s=document.getElementById('sl-rz'); s.value=g.rzMid; syncRz(s); };
+
+    tr.innerHTML = `
+      <td>
+        <span class="grade-badge ${g.cls}">${T[lang][g.id+'_name']}</span>
+        <span style="font-size:11px;color:var(--muted)">${T[lang][g.id+'_iso']}</span>
+      </td>
+      <td class="mono">${g.rzMin}–${g.rzMax}</td>
+      <td class="mono">${g.rzMid}</td>
+      <td class="${inRange?'cell-hi':''}"><span class="loss-val">${Math.round(loss)} μm</span></td>
+      <td>${dft>0?`<span class="pct-b ${pctCls(pct)}">${pct.toFixed(0)}%</span>`:'<span style="color:var(--muted)">—</span>'}</td>
+      <td class="mono">${Math.round(wftExtra)} μm</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function drawViz(rz, loss, wft, dft, netDft) {
+  const canvas = document.getElementById('viz-canvas');
+  const W = canvas.offsetWidth||800, H = 200;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  const maxVal = Math.max(wft, 300);
+  const scale  = (H*0.55)/maxVal;
+  const baseY  = H*0.78;
+  const rzPx   = rz * scale;
+
+  // ── Background ──
+  ctx.fillStyle='#1a1a1a'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=1;
+  for(let i=1;i<5;i++){const y=H*0.1*i;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+  // ── Steel body — dark gray ──
+  ctx.fillStyle='#3d3d3d'; ctx.fillRect(0,baseY,W,H-baseY);
+  // steel surface grain lines
+  ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=1;
+  for(let i=0;i<6;i++){const y=baseY+6+i*6;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+  // ── Angular roughness profile ──
+  // Use sharp sawtooth / triangular zigzag — NO bezier curves
+  const numPeaks = 22;
+  const segW = W / numPeaks;
+
+  // Generate peak heights with seeded random for consistency
+  let r = Math.round(rz * 17 + 42);
+  const rand = () => { r=(r*1664525+1013904223)&0xffffffff; return (r>>>0)/0xffffffff; };
+  const peaks = []; // x, y pairs for peak tips
+  const valleys = []; // valley base y values between peaks
+  for(let i=0;i<=numPeaks;i++){
+    const h = rzPx * (0.45 + 0.55*rand());
+    peaks.push({ x: i*segW, y: baseY - h });
+  }
+
+  // Build angular profile: valley at baseY, peak at midpoint between valleys
+  ctx.beginPath();
+  ctx.moveTo(0, baseY);
+  for(let i=0;i<numPeaks;i++){
+    const x0 = i*segW;
+    const x1 = (i+0.5)*segW;  // peak tip x
+    const x2 = (i+1)*segW;    // next valley x
+    const peakY = (peaks[i].y + peaks[i+1].y) / 2; // tip height average
+    ctx.lineTo(x0, baseY);    // valley
+    ctx.lineTo(x1, peakY);   // peak tip (sharp angle)
+    ctx.lineTo(x2, baseY);    // next valley
+  }
+  ctx.lineTo(W, baseY);
+  ctx.lineTo(W, H);
+  ctx.lineTo(0, H);
+  ctx.closePath();
+
+  // Fill profile with gray gradient
+  const profileGrad = ctx.createLinearGradient(0, baseY-rzPx, 0, baseY);
+  profileGrad.addColorStop(0, '#909090');
+  profileGrad.addColorStop(1, '#5a5a5a');
+  ctx.fillStyle = profileGrad;
+  ctx.fill();
+
+  // Profile outline for crispness
+  ctx.beginPath();
+  ctx.moveTo(0, baseY);
+  for(let i=0;i<numPeaks;i++){
+    const x0=i*segW, x1=(i+0.5)*segW, x2=(i+1)*segW;
+    const peakY=(peaks[i].y+peaks[i+1].y)/2;
+    ctx.lineTo(x0,baseY); ctx.lineTo(x1,peakY); ctx.lineTo(x2,baseY);
+  }
+  ctx.strokeStyle='#b0b0b0'; ctx.lineWidth=1.2; ctx.stroke();
+
+  // Average peak height for reference
+  const tipYs = [];
+  for(let i=0;i<numPeaks;i++) tipYs.push((peaks[i].y+peaks[i+1].y)/2);
+  const avgPeakY = tipYs.reduce((a,b)=>a+b,0)/tipYs.length;
+  const avgY = avgPeakY; // this IS the average tip Y coordinate
+
+  // ── WFT layer — vivid red ──
+  const wftTop = baseY - wft*scale;
+  const wftGrad = ctx.createLinearGradient(0, wftTop, 0, baseY);
+  wftGrad.addColorStop(0, 'rgba(200,20,20,0.55)');
+  wftGrad.addColorStop(1, 'rgba(200,20,20,0.20)');
+  ctx.fillStyle = wftGrad;
+  ctx.fillRect(0, wftTop, W, wft*scale);
+  ctx.strokeStyle='rgba(210,30,30,0.95)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(0,wftTop); ctx.lineTo(W,wftTop); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // ── DFT layer — pastel rose ──
+  const dftTop = baseY - dft*scale;
+  const dftHeight = dft*scale - (baseY-avgY);
+  if(dftHeight > 0){
+    const dftGrad = ctx.createLinearGradient(0, dftTop, 0, avgY);
+    dftGrad.addColorStop(0, 'rgba(232,160,160,0.45)');
+    dftGrad.addColorStop(1, 'rgba(232,160,160,0.15)');
+    ctx.fillStyle = dftGrad;
+    ctx.fillRect(0, dftTop, W, dftHeight);
+  }
+  ctx.strokeStyle='rgba(200,120,120,0.85)'; ctx.lineWidth=2; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(0,dftTop); ctx.lineTo(W,dftTop); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // ── Net DFT line (effective above peaks) — green ──
+  const netPx = Math.max(0, netDft)*scale;
+  const netTop = avgY - netPx;
+  if(netDft>0){
+    ctx.strokeStyle='rgba(29,184,122,0.9)'; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(0,netTop); ctx.lineTo(W,netTop); ctx.stroke();
+  }
+
+  // ── Labels ──
+  const F="'DM Mono',monospace";
+  lbl(ctx, W-10, wftTop, `WFT ${Math.round(wft)}μm`, 'rgba(220,60,60,1)', F, 'right');
+  if(dftTop < wftTop-14) lbl(ctx, W-10, dftTop, `DFT ${Math.round(dft)}μm`, 'rgba(210,140,140,1)', F, 'right');
+  if(netDft>0 && netTop<dftTop-14) lbl(ctx, 10, netTop, `Net ${Math.round(netDft)}μm`, 'rgba(29,184,122,1)', F, 'left');
+
+  // ── Rz arrow ──
+  if(rz>0){
+    arw(ctx, 40, baseY, 40, avgY, '#aaa');
+    ctx.fillStyle='#bbb'; ctx.font=`bold 10px ${F}`; ctx.textAlign='left';
+    ctx.fillText(`Rz ${rz}μm`, 50, (baseY+avgY)/2+4);
+  }
+  // ── Rz÷2 loss arrow ──
+  if(loss>0 && loss*scale>4){
+    arw(ctx, 90, avgY, 90, avgY-loss*scale, 'rgba(210,140,140,0.9)');
+    ctx.fillStyle='rgba(210,140,140,1)'; ctx.font=`10px ${F}`; ctx.textAlign='left';
+    ctx.fillText(`Rz÷2 = ${Math.round(loss)}μm`, 100, avgY-loss*scale/2+4);
+  }
+
+  // ── Steel label ──
+  ctx.fillStyle='rgba(255,255,255,0.18)'; ctx.font=`10px ${F}`; ctx.textAlign='left';
+  ctx.fillText('STEEL', 10, baseY+16);
+}
+
+function lbl(ctx,x,y,t,c,f,a){ctx.fillStyle=c;ctx.font=`bold 11px ${f}`;ctx.textAlign=a;ctx.fillText(t,x,y-5)}
+function arw(ctx,x1,y1,x2,y2,c){
+  ctx.strokeStyle=c;ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1),h=6;
+  ctx.fillStyle=c;
+  [[x2,y2,a],[x1,y1,Math.PI+a]].forEach(([x,y,ang])=>{
+    ctx.beginPath();ctx.moveTo(x,y);
+    ctx.lineTo(x-h*Math.cos(ang-.4),y-h*Math.sin(ang-.4));
+    ctx.lineTo(x-h*Math.cos(ang+.4),y-h*Math.sin(ang+.4));
+    ctx.fill();
+  });
+}
+
+function toggleInfo(){document.getElementById('infoBtn').classList.toggle('open');document.getElementById('infoBody').classList.toggle('open')}
+
+(function init(){
+  document.getElementById('sl-vs').style.setProperty('--pct',((50-20)/80*100)+'%');
+  const slRz=document.getElementById('sl-rz');
+  slRz.style.setProperty('--pct',(50/120*100)+'%');
+  refreshIso(50);
+  calc();
+  window.addEventListener('resize',calc);
+})();
+</script>
+</body>
+</html>
