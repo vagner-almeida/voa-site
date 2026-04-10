@@ -350,7 +350,7 @@
         WFT<sub>total</sub> = (DFT<sub>spec</sub> + Rz/2) ÷ (VS/100)<br>
         DFT<sub>efetivo</sub> = DFT<sub>total</sub> − Rz/2<br><br>
         <span class="c">/* Rendimento */</span><br>
-        <span class="v">RT</span> = (VS/100 × 1000) ÷ WFT → m²/L
+        <span class="v">RT</span> = (VS/100 × 1000) ÷ DFT → m²/L
       </div>
       <ul class="ilist">
         <li data-i18n="info1">DFT = Dry Film Thickness | Espessura de Filme Seco</li>
@@ -550,7 +550,7 @@ function calc() {
   }
 
   const wftMin   = mode==='dft' ? wft : Math.max(0, (netDft<0 ? loss/(vs/100) : wft));
-  const coverage = wft > 0 ? (vs/100*1000)/wft : 0;
+  const coverage = dft > 0 ? (vs/100*1000)/dft : 0;
 
   disp('r-main',   mainVal);
   disp('r-loss',   loss);
